@@ -1,5 +1,8 @@
 package com.demo.test;
 
+import com.demo.main.AlgorithmQuestion;
+import com.demo.main.LinkedListQuestion;
+
 /**
  * @author KaiKoo
  * @date 2020/2/7 16:48
@@ -26,7 +29,7 @@ public class MainTest {
 //        TreeQuestion.isTree1SubStuctOfTree2Test();
 //        AlgorithmQuestion.printRectangleClockwiseTest();
 //        DesignQuestion.stackWithMinTest();
-//        LinkedListQuestion.complexLinkedListCloneTest();
+        LinkedListQuestion.complexLinkedListCloneTest();
 //        TreeQuestion.convertBinaryTreeToDoubleLinkedListTest();
 //        RecursionQuestion.characterCombinationTest();
 //        AlgorithmQuestion.findNumberAppearMoreThanHalfTimesTest();
@@ -40,12 +43,13 @@ public class MainTest {
 //        AlgorithmQuestion.findContinuousSequenceSumEqualsNTest();
 //        RecursionQuestion.printProbabilityOfPointSumTest();
 //        BitOperation.addByBitOperation();
-//        AlgorithmQuestion.josephusCircleTest();
+        AlgorithmQuestion.josephusCircleTest();
 //        AlgorithmQuestion.findDuplicatedNumberInArrayTest();
 //        TreeQuestion.getNextNodeInInorderSearchTest();
 //        SlidingWindow.maxInWindowsTest();
 //        DynamicPrograming.cutRopeTest();
 //        DynamicPrograming.regexMatchTest();
+        LinkedListQuestion.josephusCircleTest();
     }
 
 }

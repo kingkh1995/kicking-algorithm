@@ -10,7 +10,7 @@ package com.demo.main;
 /*
     f(i)={pData[i]          (i=0或不满足给定条件)
          {f(i-1)+pData[i]   (i!=0或满足给定条件)
-    求出所有的f(i)值最后获取极值
+    从前往后计算出所有的f(i)值
  */
 public class DynamicPrograming {
 
@@ -21,7 +21,7 @@ public class DynamicPrograming {
      */
     public int findGreatestSumOfSubArray(int[] arr) {
         if (arr == null || arr.length < 1) {
-            throw new IllegalStateException("invalid input");
+            throw new IllegalArgumentException("invalid input");
         }
         int sum = arr[0];
         int ans = sum;
@@ -38,10 +38,10 @@ public class DynamicPrograming {
     }
 
     /*
-    切绳子 根据数学规律，应该分为2和3的组合，并且2的个数小于三个，因为 2*2*2<3*3
+    切绳子
      */
     /*
-    解题思路：使用动态规划解决问题
+    解题思路：使用动态规划解决问题，拆分为子问题，最大乘积为拆成两端之后各段最大乘积的乘积
      */
     public long cutRope(int n) {
         //因为至少切成两段，所有2和3时需要特殊处理

@@ -6,6 +6,9 @@ import java.util.Queue;
 
 /**
  * 设计实现类问题
+ * 栈，队列操作
+ * 返回异常：add，remove，element，push，pop
+ * 返回特殊值：offer，poll，peek
  *
  * @author KaiKoo
  * @date 2020/2/27 23:36
@@ -75,7 +78,7 @@ public class DesignQuestion {
 
         //pop直接从queue1出
         public T pop() {
-            return queue1.poll();
+            return queue1.remove();
         }
     }
 
@@ -92,7 +95,8 @@ public class DesignQuestion {
         public void push(T t) {
             stack.push(t);
             //push时同时存储push该值后的当前最小值
-            T minTop = minStack.peekFirst();
+            //element() = peek() = peekfirst()
+            T minTop = minStack.element();
             minStack.push(minTop == null || minTop.compareTo(t) > 0 ? t : minTop);
         }
 
@@ -103,11 +107,11 @@ public class DesignQuestion {
         }
 
         public T top() {
-            return stack.peekFirst();
+            return stack.element();
         }
 
         public T min() {
-            return minStack.peekFirst();
+            return minStack.element();
         }
     }
 

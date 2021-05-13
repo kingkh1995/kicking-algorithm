@@ -1,10 +1,5 @@
 package com.demo.main;
 
-import java.util.ArrayList;
-import java.util.Deque;
-import java.util.LinkedList;
-import java.util.List;
-
 /**
  * 算法题，突破常规思维
  *
@@ -138,7 +133,7 @@ public class AlgorithmQuestion {
     顺时针打印一个二维数组
      */
     /*
-    解题思路：需要注意最后一圈可能的特殊情况，(长n高2)3步 (长1高n)2步 (长n高1)1步
+    解题思路：边界条件，最后一圈所有的情况：(长n高2)3步 (长1高n)2步 (长n高1)1步
      */
     public void printRectangleClockwise(int[][] rectangle) {
         int row = rectangle.length;
@@ -148,16 +143,17 @@ public class AlgorithmQuestion {
             for (int i = n; i < column - n; i++) {
                 System.out.print(rectangle[n][i] + " ");
             }
+            // 边界条件判断
             for (int j = 1 + n; j < row - n; j++) {
                 System.out.print(rectangle[j][column - n - 1] + " ");
             }
-            //防止重复打印行
+            // 边界条件判断
             if (n < row - n - 1) {
                 for (int k = column - n - 2; k >= n; k--) {
                     System.out.print(rectangle[row - n - 1][k] + " ");
                 }
             }
-            //防止重复打印列
+            // 边界条件判断
             if (n < column - n - 1) {
                 for (int l = row - n - 2; l >= 1 + n; l--) {
                     System.out.print(rectangle[l][n] + " ");
@@ -167,10 +163,10 @@ public class AlgorithmQuestion {
     }
 
     /*
-    未排序数组(设数字均大于0) 中 可能 有一个数字出现的次数超过数组长度的一半，请找出这个数字
+    未排序数组(设数字均大于0)中*可能*有一个数字出现的次数超过数组长度的一半，请找出这个数字
      */
     /*
-    解题思路：只需要循环两次，时间复杂度o(n)
+    解题思路：最多遍历两遍，时间复杂度o(n)
      */
     public int findNumberAppearMoreThanHalfTimes(int[] array) {
         int ans = array[0];
@@ -179,14 +175,17 @@ public class AlgorithmQuestion {
         for (int n : array) {
             if (count == 0) {
                 ans = n;
-            }
-            if (ans == n) {
+                count++;
+            } else if (ans == n) {
                 count++;
             } else {
                 count--;
             }
         }
-        //需要对ans再判断一次，因为可能不存在
+        // 此时结果，可能0（不存在该数字直接返回），大于等于1（需要再次遍历，判断一次）、
+        if (count == 0) {
+            return count;
+        }
         count = 0;
         for (int n : array) {
             if (n == ans) {
@@ -202,15 +201,15 @@ public class AlgorithmQuestion {
     获取第i个丑数，丑数的因子只能为2,3,5 第一个丑数是1
      */
     /*
-    解题思路：利用空间换取时间，丑数必定是之前的丑数乘以2或3或5
+    解题思路：利用空间换取时间，之前的丑数乘以2，3，5必然是丑数
      */
     public int getKthUglyNumber(int k) {
         if (k < 1) {
             return 0;
         }
-        //保存从小到大的k个丑数
         int[] arr = new int[k];
         arr[0] = 1;
+        //计算出从小到大的k个丑数
         for (int i = 1, start2 = 0, start3 = 0, start5 = 0; i < k; i++) {
             arr[i] = Math.min(Math.min(arr[start2] * 2, arr[start3] * 3), arr[start5] * 5);
             if (arr[start2] * 2 == arr[i]) {
@@ -255,7 +254,10 @@ public class AlgorithmQuestion {
     }
 
     /*
-    约瑟夫问题
+    约瑟夫问题 总人数 n，每次计数到 m 则淘汰，最后剩下的人是第几位
+     */
+    /*
+    解法1：直接根据公式解出
      */
     public int josephusCircle(int n, int m) {
         if (n < 1 || m < 1) {
@@ -265,14 +267,14 @@ public class AlgorithmQuestion {
         for (int i = 2; i <= n; i++) {
             last = (last + m) % i;
         }
-        return last;
+        return last + 1;
     }
 
     /*
     在一个长度为n的数组里的所有数字都在0到n-1的范围内。 数组中某些数字是重复的，找出数组中任意一个重复的数字。
      */
     /*
-    时间复杂度：o(n)
+    时间复杂度：o(n)，虽然是嵌套循环但是每个元素最多只会被判断一次。
      */
     public int findDuplicatedNumberInArray(int[] arr) {
         int length = arr.length;
@@ -287,6 +289,25 @@ public class AlgorithmQuestion {
             }
         }
         return arr[length - 1];
+    }
+
+    /*
+    切绳子
+     */
+    /*
+    解题思路：根据数学规律，应该分为2和3的组合，并且2的个数小于三个，因为 2*2*2<3*3
+     */
+    public long cutRope(int n) {
+        long ans = 1;
+        for (; n >= 3; n -= 3) {
+            ans *= 3;
+        }
+        if (n == 1) {
+            return ans / 3 * 4;
+        } else if (n == 2) {
+            return ans * 2;
+        }
+        return ans;
     }
 
     //测试用例
@@ -353,9 +374,7 @@ public class AlgorithmQuestion {
     }
 
     public static void josephusCircleTest() {
-        for (int i = 10; i < 20; i++) {
-            System.out.println(ALGORITHM_QUESTION.josephusCircle(i, 6));
-        }
+        System.out.println(ALGORITHM_QUESTION.josephusCircle(41, 5));
     }
 
     public static void findDuplicatedNumberInArrayTest() {

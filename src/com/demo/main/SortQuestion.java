@@ -21,8 +21,8 @@ public class SortQuestion {
     如果数字小于堆顶数字，则删除堆顶并插入该数字，这一操作时间复杂度为o(logk)，故时间复杂度为o(nlogk)
      */
     /*
-    解题思路：非海量数据且可以改变数组顺序时使用快速排序思想，因为无法一次性把海量数据导入内存。
-    时间复杂度o(n)
+    解题思路：非海量数据，只需找出，无需排序，且有重复数据数据 使用三分快速排序
+    时间复杂度o(klogn)
      */
     public List<Integer> findLeastKNumber(int[] arr, int k) {
         List<Integer> list = new ArrayList<>(k);
@@ -36,8 +36,9 @@ public class SortQuestion {
             int index2;
             //循环终止条件，k在pivot区间内
             do {
-                index1 = partition(arr, start, end)[0];
-                index2 = partition(arr, start, end)[1];
+                int[] indexs = partition(arr, start, end);
+                index1 = indexs[0];
+                index2 = indexs[1];
                 //pivot区间在k左边，重排区间右侧开始到数组尾端
                 //pivot区间在右边，重排数组前端开始到区间左侧
                 if (k > index2) {
@@ -53,7 +54,7 @@ public class SortQuestion {
         return list;
     }
 
-    //三分单向快排
+    //三向切分快速排序
     private int[] partition(int[] arr, int start, int end) {
         //选择start作为pivot
         int pivot = arr[start];
