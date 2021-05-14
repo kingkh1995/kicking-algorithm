@@ -298,16 +298,30 @@ public class AlgorithmQuestion {
     解题思路：根据数学规律，应该分为2和3的组合，并且2的个数小于三个，因为 2*2*2<3*3
      */
     public long cutRope(int n) {
-        long ans = 1;
-        for (; n >= 3; n -= 3) {
-            ans *= 3;
-        }
         if (n == 1) {
+            return 1;
+        }
+        long ans = (long) Math.pow(3, n / 3);
+        int mod = n % 3;
+        if (mod == 1) {
             return ans / 3 * 4;
-        } else if (n == 2) {
+        } else if (mod == 2) {
             return ans * 2;
         }
         return ans;
+    }
+
+    /*
+    替换空格 将空格替换成%20
+     */
+    /*
+    解题思路：先遍历原字符串，匹配到空格则往字符串末尾添加两个空字符，遍历到原字符串尾端时，
+        之后从新字符串尾部反向遍历，将原字符移到末尾并替换空格
+        时间复杂度：o(n)
+     */
+    public String replaceSpace(String s) {
+        char[] chars = s.toCharArray();
+        return null;
     }
 
     //测试用例

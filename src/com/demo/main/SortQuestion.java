@@ -34,19 +34,21 @@ public class SortQuestion {
             int end = arr.length;
             int index1;
             int index2;
-            //循环终止条件，k在pivot区间内
-            do {
+            while (true) {
                 int[] indexs = partition(arr, start, end);
                 index1 = indexs[0];
                 index2 = indexs[1];
-                //pivot区间在k左边，重排区间右侧开始到数组尾端
-                //pivot区间在右边，重排数组前端开始到区间左侧
-                if (k > index2) {
+                if (index2 < k - 1) {
+                    //pivot区间在k左边，重排区间右侧开始到数组尾端
                     start = index2 + 1;
-                } else {
+                } else if (index1 > k - 1) {
+                    //pivot区间在k右边，重排数组前端开始到区间左侧
                     end = index1;
+                } else {
+                    //循环终止条件，k在pivot区间内
+                    break;
                 }
-            } while (k < index1 - 1 || k > index2);
+            }
         }
         for (int i = 0; i < k; i++) {
             list.add(arr[i]);
@@ -54,14 +56,18 @@ public class SortQuestion {
         return list;
     }
 
-    //三向切分快速排序
-    private int[] partition(int[] arr, int start, int end) {
+    //三向切分单向快速排序，含头不含尾
+    private static int[] partition(int[] arr, int start, int end) {
+        if (end - start < 1) {
+            return new int[]{start, end - 1};
+        }
         //选择start作为pivot
         int pivot = arr[start];
-        //（start->i）小于pivot的数字 （i->k）等于pivot的数字 （k->j）还未排序的数字 （j->end）大于pivot的数字
+        //（start->i）小于pivot的数字 [i->k）等于pivot的数字 （k->j]还未排序的数字 （j->end）大于pivot的数字
+        // k从i下一个元素开始遍历，如果小于则将元素换到pivot区间左边，然后将pivot区间前端右移一位，如果大于则将元素移到pivot区间右边，并将pivot区间左移一位。
         int i = start, j = end - 1, k = start + 1;
-        //循环终止条件 k==j
-        while (k < j) {
+        //循环终止条件，数字全部排序完成，即k>j
+        while (k <= j) {
             if (arr[k] < pivot) {
                 swap(arr, k, i);
                 i++;
@@ -73,14 +79,16 @@ public class SortQuestion {
                 j--;
             }
         }
-        //返回pivot区间的索引
+        //返回等于pivot的区间
         return new int[]{i, j};
     }
 
     public static void swap(int[] arr, int i1, int i2) {
-        int temp = arr[i1];
-        arr[i1] = arr[i2];
-        arr[i2] = temp;
+        if (i1 != i2) {
+            int temp = arr[i1];
+            arr[i1] = arr[i2];
+            arr[i2] = temp;
+        }
     }
 
     /*

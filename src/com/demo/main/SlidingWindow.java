@@ -26,16 +26,15 @@ public class SlidingWindow {
         if (s == null || s == "") {
             return 0;
         }
+        //用ans记录下窗口滑动过程中窗口长度的最大值
         int ans = 0;
         //假设字符集为ASCII码(0-127)，这个数组用来代替map
         int[] index = new int[128];
         //i为窗口的前端，j为窗口的后端
         for (int i = 0, j = 0; j < s.length(); j++) {
-            //找到该字符在目标字符串s中的位置（索引加上1）
-            //默认为0，即到目前为止还没出现过该字符串
+            ///用数组记录下该字符上一次出现的索引加1，如果为0表示该字符串未出现过
             int charindex = index[s.charAt(j)];
-            //如果当前窗口中存在该字符，则窗口前端右滑至位置的右侧
-            //此处故给前端索引i赋值字符位置和当前i的大值，而字符位置即为该位置右侧的索引
+            //如果该字符出现过，需要将窗口前端设为该字符上次出现位置的右边和当前窗口前端的最大值，因为字符串是不允许重复的。
             i = Math.max(charindex, i);
             //结果为当前窗口长度和遍历中的结果的大值
             ans = Math.max(ans, j - i + 1);
@@ -49,7 +48,7 @@ public class SlidingWindow {
     给定一个数组和滑动窗口的大小，找出所有滑动窗口里数值的最大值。
      */
     /*
-    解题思路：使用一个deque维护一个窗口，遍历数组并按大小顺序存放元素的下标
+    解题思路：使用一个deque维护一个窗口，遍历数组将元素依次加入队列中，大值往队首加，小值往队尾加。
     时间复杂度：o(n)
      */
     public List<Integer> maxInWindows(int[] arr, int size) {
@@ -61,10 +60,10 @@ public class SlidingWindow {
                 deque.pollFirst();
             }
             if (deque.isEmpty() || arr[i] > arr[deque.peekFirst()]) {
-                //如果大于则插入对首
+                //如果大于则插入队首
                 deque.addFirst(i);
             } else {
-                //否则插入对尾，并删除所有比它小的数字，因为之前比它还小的数都没有意义了
+                //否则插入队尾，并删除所有比它小的数字，因为之前比它还小的数都没有意义了
                 while (arr[i] > arr[deque.peekLast()]) {
                     deque.pollLast();
                 }
