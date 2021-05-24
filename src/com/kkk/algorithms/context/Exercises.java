@@ -4,6 +4,6 @@ package com.kkk.algorithms.context;
  *
  * @author KaiKoo
  */
-public class Excercises {
+public class Exercises {
 
 }

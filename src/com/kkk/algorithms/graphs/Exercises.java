@@ -4,6 +4,6 @@ package com.kkk.algorithms.graphs;
  *
  * @author KaiKoo
  */
-public class Excercises {
+public class Exercises {
 
 }
