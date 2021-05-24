@@ -1,4 +1,4 @@
-package com.demo.main;
+package com.kkk.aim2offer;
 
 /**
  * 算法题，突破常规思维

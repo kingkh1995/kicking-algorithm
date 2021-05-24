@@ -1,4 +1,4 @@
-package com.demo.main;
+package com.kkk.aim2offer;
 
 /**
  * 位运算 重要的技巧：{ (n - 1) & n } 一个整数减去1再与原来的整数做与运算的结果为把原整数二进制表示的 最右边的1 变成0

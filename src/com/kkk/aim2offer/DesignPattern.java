@@ -1,4 +1,4 @@
-package com.demo.main;
+package com.kkk.aim2offer;
 
 /**
  * 设计模式
