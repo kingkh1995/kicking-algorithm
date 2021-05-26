@@ -149,4 +149,14 @@ public class Exercises {
         }
     }
 
+    /**
+     * 1.2.6
+     * 回环变位 字符串s循环移动任意位置后得到t 判断两个字符串是否互为回环变位
+     */
+    // 仅使用 length() indexOf() 方法
+    public static boolean circularRotation(String s, String t) {
+        // 拼接两个t必然包含s
+        return s.length() == t.length() && (t + t).indexOf(s) >= 0;
+    }
+
 }
