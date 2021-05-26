@@ -97,10 +97,10 @@ public class Exercises {
      */
     public static int rank(int key, int[] a) {
         int lo = 0, hi = a.length - 1;
-        // 终止条件 lo = hi
-        while (lo < hi) {
+        // 等于情况下，向左遍历直到第一个不等于（小于）key的元素
+        // 其余情况下等同于二分查找
+        while (lo <= hi) {
             int mid = lo + (hi - lo) / 2;
-            // 等于情况下，向左遍历直到第一个不等于（小于）key的元素
             if (a[mid] == key) {
                 while (--mid >= 0 & a[mid] == key) {
                 }
@@ -111,8 +111,8 @@ public class Exercises {
                 hi = mid - 1;
             }
         }
-        // 处理key值不存在的情况
-        return a[lo] < key ? lo + 1 : lo;
+        // 根据算法原理可知low就是小于key的个数
+        return lo;
     }
 
     public static int count(int key, int[] a) {
@@ -126,7 +126,7 @@ public class Exercises {
     // 1.1.29
     public static void rankTest() {
         int n = 50;
-        int key = 22;
+        int key = 20;
         List<Integer> ints = new ArrayList<>(n);
         for (int i = 0; i < n; i++) {
             ints.add(ThreadLocalRandom.current().nextInt(30));
