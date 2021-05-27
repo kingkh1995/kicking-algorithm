@@ -33,7 +33,7 @@ public class TreeQuestion {
     }
 
     /*
-    根据前序遍历（或后序遍历）和中序遍历重构二叉树（无重复节点）
+    根据前序遍历（或后序遍历）和中序遍历重构二叉树（无重复结点）
      */
     public TreeNode reconstructBinaryTree(int[] preorder, int[] inorder) {
         return reconstruct(preorder, 0, preorder.length, inorder, 0, inorder.length);
@@ -42,10 +42,10 @@ public class TreeQuestion {
     private TreeNode reconstruct(int[] preorder, int pre1, int pre2, int[] inorder, int in1,
             int in2) {
         if (pre1 < pre2) {
-            //前序遍历第一个为根节点，后序遍历最后一个为根节点
+            //前序遍历第一个为根结点，后序遍历最后一个为根结点
             int root = preorder[pre1];
             TreeNode treeNode = new TreeNode(root);
-            //从中序遍历中找到根节点设为pivot
+            //从中序遍历中找到根结点设为pivot
             int pivot = in1;
             for (; pivot < in2; pivot++) {
                 if (inorder[pivot] == root) {
@@ -74,7 +74,7 @@ public class TreeQuestion {
         if (treeNode != null) {
             //仅仅使用一个队列
             Queue<TreeNode> queue = new LinkedList();
-            //根节点入队列
+            //根结点入队列
             queue.add(treeNode);
             //边出边入直到队列为空
             while (!queue.isEmpty()) {
@@ -100,11 +100,11 @@ public class TreeQuestion {
         if (treeNode != null) {
             Deque<TreeNode> stack1 = new LinkedList();
             Deque<TreeNode> stack2 = new LinkedList();
-            //根节点入栈
+            //根结点入栈
             stack1.push(treeNode);
             //边出边入直到两栈均为空
             while (!stack1.isEmpty() || !stack2.isEmpty()) {
-                //两个栈左右节点入栈顺序相反
+                //两个栈左右结点入栈顺序相反
                 while (!stack1.isEmpty()) {
                     TreeNode pop = stack1.pop();
                     System.out.print(pop.val);
@@ -140,7 +140,7 @@ public class TreeQuestion {
     public void printLeftViewOfTree(TreeNode treeNode) {
         if (treeNode != null) {
             Queue<TreeNode> queue = new LinkedList();
-            //根节点入队列
+            //根结点入队列
             queue.add(treeNode);
             int count = 1;
             int child = 0;
@@ -156,7 +156,7 @@ public class TreeQuestion {
                     queue.add(remove.left);
                     child++;
                 }
-                //每层仅剩最后一个节点时打印
+                //每层仅剩最后一个结点时打印
                 if (count == 0) {
                     System.out.print(remove.val);
                     count = child;
@@ -179,7 +179,7 @@ public class TreeQuestion {
         }
     }
 
-    //从根节点开始树1是不是树2的子结构
+    //从根结点开始树1是不是树2的子结构
     private boolean isTree1SubStuctOfTree2FromRoot(TreeNode treeNode1, TreeNode treeNode2) {
         if (treeNode1 == null) {
             return true;
@@ -198,13 +198,13 @@ public class TreeQuestion {
     public TreeNode convertBinaryTreeToDoubleLinkedList(TreeNode root) {
         if (root != null) {
             if (root.right != null) {
-                //next直接设置为 rightDLList 的头节点
+                //next直接设置为 rightDLList 的头结点
                 TreeNode rightDLListHead = convertBinaryTreeToDoubleLinkedList(root.right);
                 root.right = rightDLListHead;
                 rightDLListHead.left = root;
             }
             if (root.left != null) {
-                //pre则遍历 leftDLList 找到其尾节点
+                //pre则遍历 leftDLList 找到其尾结点
                 TreeNode leftDLListHead = convertBinaryTreeToDoubleLinkedList(root.left);
                 TreeNode leftDLListEnd = leftDLListHead;
                 while (leftDLListEnd.right != null) {
@@ -212,7 +212,7 @@ public class TreeQuestion {
                 }
                 root.left = leftDLListEnd;
                 leftDLListEnd.right = root;
-                //返回 leftDLList 的头节点
+                //返回 leftDLList 的头结点
                 return leftDLListHead;
             } else {
                 //左子树为空时直接返回root
@@ -223,7 +223,7 @@ public class TreeQuestion {
     }
 
     /*
-    给定一个二叉树和其中的一个节点，请找出中序遍历顺序的下一个节点并且返回。（每个节点包含父节点的指针）
+    给定一个二叉树和其中的一个结点，请找出中序遍历顺序的下一个结点并且返回。（每个结点包含父结点的指针）
      */
     /*
     解题思路：存在四种情况
@@ -232,24 +232,24 @@ public class TreeQuestion {
         if (node == null) {
             return null;
         } else if (node.right != null) {
-            //如果存在右子树，那么找到第一个左节点
+            //如果存在右子树，那么找到第一个左结点
             node = node.right;
             while (node.left != null) {
                 node = node.left;
             }
             return node;
         } else if (node.parent == null) {
-            //如果不存在右子树，且为根节点
+            //如果不存在右子树，且为根结点
             return null;
         } else if (node == node.parent.left) {
-            //如果自身为左节点
+            //如果自身为左结点
             return node.parent;
         } else {
-            //如果自身为右节点，向上寻找，直到第一个左节点的父节点
+            //如果自身为右结点，向上寻找，直到第一个左结点的父结点
             do {
                 node = node.parent;
             } while (node.parent != null && node == node.parent.right);
-            //返回该节点的父节点
+            //返回该结点的父结点
             return node.parent;
         }
     }

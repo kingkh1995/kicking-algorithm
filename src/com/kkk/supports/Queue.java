@@ -32,4 +32,8 @@ public class Queue<Item> implements Iterable<Item> {
         return queue.size();
     }
 
+    public Item peek() {
+        return queue.peekFirst();
+    }
+
 }

@@ -32,4 +32,8 @@ public class Stack<Item> implements Iterable<Item> {
         return stack.size();
     }
 
+    public Item peek() {
+        return stack.peekFirst();
+    }
+
 }

@@ -1,5 +1,6 @@
 package com.kkk.algorithms.fundamentals;
 
+import com.kkk.supports.Stack;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -157,6 +158,40 @@ public class Exercises {
     public static boolean circularRotation(String s, String t) {
         // 拼接两个t必然包含s
         return s.length() == t.length() && (t + t).indexOf(s) >= 0;
+    }
+
+    /**
+     * 1.3.3
+     * 将 0-9 顺序入栈，判断出栈序列是否可能
+     */
+    public static boolean isPopSequence(int[] arr) {
+        Stack<Integer> stack = new Stack<>();
+        int i = 0;
+        for (int n : arr) {
+            // 如果栈为空 或 当前出栈不匹配 则入栈
+            while (stack.isEmpty() || stack.peek() != n) {
+                // 入栈完毕还是不匹配则 return
+                if (i > 9) {
+                    return false;
+                }
+                stack.push(i++);
+            }
+            // 匹配则出栈
+            stack.pop();
+        }
+        return true;
+    }
+
+    // 1.3.3
+    public static void isPopSequenceTest() {
+        System.out.println(isPopSequence(new int[]{4, 3, 2, 1, 0, 9, 8, 7, 6, 5}));
+        System.out.println(isPopSequence(new int[]{4, 6, 8, 7, 5, 3, 2, 9, 0, 1}));
+        System.out.println(isPopSequence(new int[]{2, 5, 6, 7, 4, 8, 9, 3, 1, 0}));
+        System.out.println(isPopSequence(new int[]{4, 3, 2, 1, 0, 5, 6, 7, 8, 9}));
+        System.out.println(isPopSequence(new int[]{1, 2, 3, 4, 5, 6, 9, 8, 7, 0}));
+        System.out.println(isPopSequence(new int[]{0, 4, 6, 5, 3, 8, 1, 7, 2, 9}));
+        System.out.println(isPopSequence(new int[]{1, 4, 7, 9, 8, 6, 5, 3, 0, 2}));
+        System.out.println(isPopSequence(new int[]{2, 1, 4, 3, 6, 5, 8, 7, 9, 0}));
     }
 
 }
