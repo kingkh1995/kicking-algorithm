@@ -1,39 +1,44 @@
 package com.kkk.supports;
 
-import java.util.Iterator;
-import java.util.LinkedList;
-
 /**
  *
  * @author KaiKoo
  */
-public class Stack<Item> implements Iterable<Item> {
+public class Stack {
 
-    private LinkedList<Item> stack = new LinkedList<>();
+    private int count = 0;
 
-    @Override
-    public Iterator<Item> iterator() {
-        return stack.iterator();
+    private Node top = null;
+
+    public void push(int i) {
+        count++;
+        Node node = new Node(i);
+        node.next = this.top;
+        this.top = node;
     }
 
-    public void push(Item item) {
-        stack.addFirst(item);
-    }
-
-    public void pop() {
-        stack.removeFirst();
+    public int pop() {
+        if (count == 0) {
+            throw new UnsupportedOperationException();
+        }
+        count--;
+        Node node = this.top;
+        this.top = node.next;
+        return node.val;
     }
 
     public boolean isEmpty() {
-        return stack.isEmpty();
+        return count == 0;
     }
 
     public int size() {
-        return stack.size();
+        return count;
     }
 
-    public Item peek() {
-        return stack.peekFirst();
+    public int peek() {
+        if (count == 0) {
+            throw new UnsupportedOperationException();
+        }
+        return this.top.val;
     }
-
 }

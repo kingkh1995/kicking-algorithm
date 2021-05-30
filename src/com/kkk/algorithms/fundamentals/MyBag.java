@@ -1,4 +1,4 @@
-package com.kkk.supports;
+package com.kkk.algorithms.fundamentals;
 
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -7,7 +7,7 @@ import java.util.LinkedList;
  *
  * @author KaiKoo
  */
-public class Bag<Item> implements Iterable<Item> {
+public class MyBag<Item> implements Iterable<Item> {
 
     private LinkedList<Item> bag = new LinkedList<>();
 

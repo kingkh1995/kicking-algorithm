@@ -9,7 +9,7 @@ import com.kkk.algorithms.fundamentals.Exercises;
 public class MainTest {
 
     public static void main(String[] args) {
-        Exercises.isPopSequenceTest();
+        Exercises.reverseTest();
     }
 
 }

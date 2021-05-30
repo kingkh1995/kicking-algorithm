@@ -1,9 +1,10 @@
 package com.kkk.algorithms.fundamentals;
 
+import com.kkk.supports.Node;
+import com.kkk.supports.Queue;
 import com.kkk.supports.Stack;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import com.kkk.supports.Utils;
+import java.util.Arrays;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
@@ -128,26 +129,18 @@ public class Exercises {
     public static void rankTest() {
         int n = 50;
         int key = 20;
-        List<Integer> ints = new ArrayList<>(n);
-        for (int i = 0; i < n; i++) {
-            ints.add(ThreadLocalRandom.current().nextInt(30));
-        }
         int[] arr = new int[n];
-        Collections.sort(ints);
-        for (int i = 0; i < n; i++) {
-            arr[i] = ints.get(i);
-            System.out.print(arr[i] + "-");
+        for (int i = 0; i < arr.length; i++) {
+            arr[i] = ThreadLocalRandom.current().nextInt(30);
         }
-        System.out.println();
+        Arrays.sort(arr);
+        System.out.println(Arrays.toString(arr));
         int rank = rank(key, arr);
         int count = count(key, arr);
         System.out.println(rank);
         System.out.println(count);
         // 打印出等于key的元素
-        for (int i = rank; i < arr.length && i < rank + count; i++) {
-            arr[i] = ints.get(i);
-            System.out.print(arr[i] + "-");
-        }
+        System.out.println(Arrays.toString(Arrays.copyOfRange(arr, rank, rank + count)));
     }
 
     /**
@@ -165,7 +158,7 @@ public class Exercises {
      * 将 0-9 顺序入栈，判断出栈序列是否可能
      */
     public static boolean isPopSequence(int[] arr) {
-        Stack<Integer> stack = new Stack<>();
+        Stack stack = new Stack();
         int i = 0;
         for (int n : arr) {
             // 如果栈为空 或 当前出栈不匹配 则入栈
@@ -192,6 +185,94 @@ public class Exercises {
         System.out.println(isPopSequence(new int[]{0, 4, 6, 5, 3, 8, 1, 7, 2, 9}));
         System.out.println(isPopSequence(new int[]{1, 4, 7, 9, 8, 6, 5, 3, 0, 2}));
         System.out.println(isPopSequence(new int[]{2, 1, 4, 3, 6, 5, 8, 7, 9, 0}));
+    }
+
+    /**
+     * 1.3.30
+     * 反转链表
+     */
+    // 迭代方法
+    public static Node reverse1(Node t) {
+        // 指向剩余未反转链表的首结点
+        Node first = t;
+        // 指向反转链表的首结点
+        Node reverse = null;
+        // 循环终止条件 所有链表都反转完
+        while (first != null) {
+            // 指向剩余结点的第二个结点
+            Node second = first.next;
+            // 将当前首结点移到反转链表上
+            first.next = reverse;
+            // 反转链表首结点变成当前首节点
+            reverse = first;
+            // 未反转链表首结点后移
+            first = second;
+        }
+        return reverse;
+    }
+
+    // 递归方法
+    public static Node reverse2(Node first) {
+        if (first == null || first.next == null) {
+            return first;
+        }
+        // 记录下一个结点，将剩余的链表反转后，该结点就是最后一个结点
+        Node second = first.next;
+        // 反转剩余链表得到首结点
+        Node rest = reverse2(second);
+        // 将当前first移到反转链表最后面
+        second.next = first;
+        first.next = null;
+        return rest;
+    }
+
+    //1.3.30
+    public static void reverseTest() {
+        Node node = new Node(1);
+        Node first = node;
+        for (int i = 2; i <= 10; i++) {
+            Node temp = new Node(i);
+            node.next = temp;
+            node = temp;
+        }
+        first = reverse1(first);
+        Utils.printNode(first);
+        first = reverse2(first);
+        Utils.printNode(first);
+        first = reverse2(first);
+        Utils.printNode(first);
+        first = reverse1(first);
+        Utils.printNode(first);
+    }
+
+    /**
+     * 1.3.37
+     * 约瑟夫问题 使用队列 （41个人到3则出列，最后剩16、31）
+     */
+    public static int[] josephus(int n, int m) {
+        int[] arr = new int[n];
+        Queue queue = new Queue();
+        // 从 1 开始
+        for (int i = 1; i <= n; i++) {
+            queue.enqueue(i);
+        }
+        for (int count = 0, i = 0; i < n; ) {
+            int out = queue.dequeue();
+            count++;
+            if (count == m) {
+                count = 0;
+                arr[i++] = out;
+            } else {
+                queue.enqueue(out);
+            }
+        }
+        return arr;
+    }
+
+    // 1.3.37
+    public static void josephusTest() {
+        System.out.println(Arrays.toString(josephus(7, 2)));
+        System.out.println(Arrays.toString(josephus(41, 3)));
     }
 
 }
