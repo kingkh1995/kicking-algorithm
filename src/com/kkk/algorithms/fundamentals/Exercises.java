@@ -275,4 +275,43 @@ public class Exercises {
         System.out.println(Arrays.toString(josephus(41, 3)));
     }
 
+    /**
+     * 1.4.15
+     * 平方级别算法实现 3-sum
+     */
+    public static int count3Sum(int[] arr) {
+        Arrays.sort(arr);
+        int count = 0;
+        for (int i = 0; i < arr.length - 2; i++) {
+            int lo = i + 1;
+            int hi = arr.length - 1;
+            while (lo < hi) {
+                int sum = arr[i] + arr[lo] + arr[hi];
+                if (sum > 0) {
+                    hi--;
+                } else if (sum < 0) {
+                    lo++;
+                } else {
+                    System.out.println(arr[i] + "+" + arr[lo] + "+" + arr[hi]);
+                    count++;
+                    lo++;
+                    hi--;
+                }
+            }
+        }
+        return count;
+    }
+
+    /**
+     * 1.4.18
+     * 数组的局部最小值
+     * 使用二分法，一直在较小相邻元素的半边查找即可
+     * 将数组看作函数图像求极小值试试，就可以明白该方法是正确的。
+     */
+    /**
+     * 1.4.20
+     * 双调查找，一个双调数组是先递增再递减
+     * 所以先用1.4.18的方法先找到极大值，然后在左右区间分别二分查找
+     */
+
 }
