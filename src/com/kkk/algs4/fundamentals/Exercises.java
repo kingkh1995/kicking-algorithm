@@ -1,9 +1,10 @@
 package com.kkk.algs4.fundamentals;
 
+import com.kkk.supports.ArrayUtils;
 import com.kkk.supports.Node;
+import com.kkk.supports.NodeUtils;
 import com.kkk.supports.Queue;
 import com.kkk.supports.Stack;
-import com.kkk.supports.Utils;
 import java.util.Arrays;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -12,6 +13,8 @@ import java.util.concurrent.ThreadLocalRandom;
  * @author KaiKoo
  */
 public class Exercises {
+
+    //==============================================================================================
 
     /**
      * 1.1.9
@@ -37,7 +40,6 @@ public class Exercises {
         return new String(chars, index, 32 - index);
     }
 
-    // 1.1.9
     public static void toBinaryStringTest() {
         int i = ThreadLocalRandom.current().nextInt();
         System.out.println(i);
@@ -46,6 +48,8 @@ public class Exercises {
         System.out.println(Integer.toBinaryString(-i));
         System.out.println(Exercises.toBinaryString(-i));
     }
+
+    //==============================================================================================
 
     /**
      * 1.1.27
@@ -83,8 +87,6 @@ public class Exercises {
         return matrix[n][k];
     }
 
-
-    // 1.1.27
     public static void binomialTest() {
         System.out.println(binomial(10, 5, 0.25D));
         System.out.println(betterBinomial(10, 5, 0.25D));
@@ -92,6 +94,8 @@ public class Exercises {
 //        System.out.println(binomial(100, 50, 0.25D));
         System.out.println(betterBinomial(100, 50, 0.25D));
     }
+
+    //==============================================================================================
 
     /**
      * 1.1.29
@@ -125,18 +129,19 @@ public class Exercises {
         return num;
     }
 
-    // 1.1.29
     public static void rankTest() {
         int key = 20;
-        int[] arr = Utils.randomSortedArr(50, 0, 30);
-        Utils.printArray(arr);
+        int[] arr = ArrayUtils.randomSortedArr(50, 0, 30);
+        ArrayUtils.printArray(arr);
         int rank = rank(key, arr);
         int count = count(key, arr);
         System.out.println(rank);
         System.out.println(count);
         // 打印出等于key的元素
-        Utils.printArray(Arrays.copyOfRange(arr, rank, rank + count));
+        ArrayUtils.printArray(Arrays.copyOfRange(arr, rank, rank + count));
     }
+
+    //==============================================================================================
 
     /**
      * 1.2.6
@@ -147,6 +152,8 @@ public class Exercises {
         // 拼接两个t必然包含s
         return s.length() == t.length() && (t + t).indexOf(s) >= 0;
     }
+
+    //==============================================================================================
 
     /**
      * 1.3.3
@@ -170,7 +177,6 @@ public class Exercises {
         return true;
     }
 
-    // 1.3.3
     public static void isPopSequenceTest() {
         System.out.println(isPopSequence(new int[]{4, 3, 2, 1, 0, 9, 8, 7, 6, 5}));
         System.out.println(isPopSequence(new int[]{4, 6, 8, 7, 5, 3, 2, 9, 0, 1}));
@@ -181,6 +187,8 @@ public class Exercises {
         System.out.println(isPopSequence(new int[]{1, 4, 7, 9, 8, 6, 5, 3, 0, 2}));
         System.out.println(isPopSequence(new int[]{2, 1, 4, 3, 6, 5, 8, 7, 9, 0}));
     }
+
+    //==============================================================================================
 
     /**
      * 1.3.30
@@ -221,18 +229,19 @@ public class Exercises {
         return rest;
     }
 
-    //1.3.30
     public static void reverseTest() {
-        Node first = Utils.makeLinkedList(1, 10);
+        Node first = NodeUtils.makeLinkedList(1, 10);
         first = reverse1(first);
-        Utils.printNode(first);
+        NodeUtils.printNode(first);
         first = reverse2(first);
-        Utils.printNode(first);
+        NodeUtils.printNode(first);
         first = reverse2(first);
-        Utils.printNode(first);
+        NodeUtils.printNode(first);
         first = reverse1(first);
-        Utils.printNode(first);
+        NodeUtils.printNode(first);
     }
+
+    //==============================================================================================
 
     /**
      * 1.3.37
@@ -258,11 +267,12 @@ public class Exercises {
         return arr;
     }
 
-    // 1.3.37
     public static void josephusTest() {
-        Utils.printArray(josephus(7, 2));
-        Utils.printArray(josephus(41, 3));
+        ArrayUtils.printArray(josephus(7, 2));
+        ArrayUtils.printArray(josephus(41, 3));
     }
+
+    //==============================================================================================
 
     /**
      * 1.4.15
@@ -291,6 +301,8 @@ public class Exercises {
         return count;
     }
 
+    //==============================================================================================
+
     /**
      * 1.4.18
      * 数组的局部最小值
@@ -302,5 +314,7 @@ public class Exercises {
      * 双调查找，一个双调数组是先递增再递减
      * 所以先用1.4.18的方法先找到极大值，然后在左右区间分别二分查找
      */
+
+    //==============================================================================================
 
 }

@@ -4,7 +4,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 
 /**
- *
+ * 基于 LinkedList 实现
  * @author KaiKoo
  */
 public class MyBag<Item> implements Iterable<Item> {
