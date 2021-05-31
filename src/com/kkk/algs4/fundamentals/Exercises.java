@@ -317,4 +317,64 @@ public class Exercises {
 
     //==============================================================================================
 
+    /**
+     * 1.4.30
+     * 三个栈实现一个双向队列
+     */
+    public static class DequeBy3Stacks {
+
+        private final Stack left = new Stack();
+        private final Stack right = new Stack();
+        // 辅助栈不存元素，只用于辅助转移
+        private final Stack temp = new Stack();
+
+        public void pushLeft(int i) {
+            left.push(i);
+        }
+
+        public void pushRight(int i) {
+            right.push(i);
+        }
+
+        public boolean isEmpty() {
+            return left.isEmpty() && right.isEmpty();
+        }
+
+        public int popLeft() {
+            if (this.isEmpty()) {
+                throw new UnsupportedOperationException();
+            }
+            if (left.isEmpty()) {
+                moveHalf(right, left);
+            }
+            return left.pop();
+        }
+
+        public int popRight() {
+            if (this.isEmpty()) {
+                throw new UnsupportedOperationException();
+            }
+            if (right.isEmpty()) {
+                moveHalf(left, right);
+            }
+            return right.pop();
+        }
+
+        //转移时只把一半放过去，确保左右弹栈时不用一直来回倒
+        private void moveHalf(Stack from, Stack to) {
+            int n = from.size();
+            for (int i = 0; i < n / 2; i++) {
+                temp.push(from.pop());
+            }
+            while (!from.isEmpty()) {
+                to.push(from.pop());
+            }
+            while (!temp.isEmpty()) {
+                from.push(temp.pop());
+            }
+        }
+    }
+
+    //==============================================================================================
+
 }
