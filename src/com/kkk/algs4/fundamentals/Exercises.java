@@ -1,4 +1,4 @@
-package com.kkk.algorithms.fundamentals;
+package com.kkk.algs4.fundamentals;
 
 import com.kkk.supports.Node;
 import com.kkk.supports.Queue;
@@ -127,20 +127,15 @@ public class Exercises {
 
     // 1.1.29
     public static void rankTest() {
-        int n = 50;
         int key = 20;
-        int[] arr = new int[n];
-        for (int i = 0; i < arr.length; i++) {
-            arr[i] = ThreadLocalRandom.current().nextInt(30);
-        }
-        Arrays.sort(arr);
-        System.out.println(Arrays.toString(arr));
+        int[] arr = Utils.randomSortedArr(50, 0, 30);
+        Utils.printArray(arr);
         int rank = rank(key, arr);
         int count = count(key, arr);
         System.out.println(rank);
         System.out.println(count);
         // 打印出等于key的元素
-        System.out.println(Arrays.toString(Arrays.copyOfRange(arr, rank, rank + count)));
+        Utils.printArray(Arrays.copyOfRange(arr, rank, rank + count));
     }
 
     /**
@@ -228,13 +223,7 @@ public class Exercises {
 
     //1.3.30
     public static void reverseTest() {
-        Node node = new Node(1);
-        Node first = node;
-        for (int i = 2; i <= 10; i++) {
-            Node temp = new Node(i);
-            node.next = temp;
-            node = temp;
-        }
+        Node first = Utils.makeLinkedList(1, 10);
         first = reverse1(first);
         Utils.printNode(first);
         first = reverse2(first);
@@ -271,8 +260,8 @@ public class Exercises {
 
     // 1.3.37
     public static void josephusTest() {
-        System.out.println(Arrays.toString(josephus(7, 2)));
-        System.out.println(Arrays.toString(josephus(41, 3)));
+        Utils.printArray(josephus(7, 2));
+        Utils.printArray(josephus(41, 3));
     }
 
     /**

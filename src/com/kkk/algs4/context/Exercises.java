@@ -1,4 +1,4 @@
-package com.kkk.algorithms.graphs;
+package com.kkk.algs4.context;
 
 /**
  *

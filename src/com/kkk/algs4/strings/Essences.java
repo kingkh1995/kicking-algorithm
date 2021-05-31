@@ -1,4 +1,4 @@
-package com.kkk.algorithms.strings;
+package com.kkk.algs4.strings;
 
 /**
  *

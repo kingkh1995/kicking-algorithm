@@ -1,28 +1,24 @@
-package com.kkk.algorithms.fundamentals;
+package com.kkk.algs4.fundamentals;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
+ * 拔高题
  * @author KaiKoo
  */
 public class Essences {
 
     /**
-     *  有负数参与的除法和余数遵守：a / b 向 0 取整   (a / b) * b + a % b = a
-     */
-
-    /**
      * 超难题：
-     * 1.3.49
-     * 1.4.20
+     * 1.3.49 使用多个栈实现一个队列，每次队列操作对应常数次的栈操作
+     * 1.4.20 求矩阵中的局部最小值（小于上下左右的元素）（要求线性时间复杂度）
      */
 
     /**
      * 1.4.22
      * 斐波那契数列搜索 仅使用加法和减法
-     * 对比二分查找 斐波那契查找的时间复杂度还是O(log2n )，但是对磁盘的操作更省力
+     * 对比二分查找 斐波那契查找的时间复杂度还是对数级，但是对磁盘的操作更省力
      */
     public static int fbSearch(int[] arr, int key) {
         if (arr == null || arr.length == 0) {
