@@ -1,4 +1,4 @@
-package com.kkk.algs4.fundamentals;
+package com.kkk.algs4;
 
 import com.kkk.supports.ArrayUtils;
 import com.kkk.supports.Node;
@@ -9,10 +9,11 @@ import java.util.Arrays;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
+ * 第一章 基础
  *
  * @author KaiKoo
  */
-public class Exercises {
+public class FundamentalsExs {
 
     //==============================================================================================
 
@@ -44,9 +45,9 @@ public class Exercises {
         int i = ThreadLocalRandom.current().nextInt();
         System.out.println(i);
         System.out.println(Integer.toBinaryString(i));
-        System.out.println(Exercises.toBinaryString(i));
+        System.out.println(FundamentalsExs.toBinaryString(i));
         System.out.println(Integer.toBinaryString(-i));
-        System.out.println(Exercises.toBinaryString(-i));
+        System.out.println(FundamentalsExs.toBinaryString(-i));
     }
 
     //==============================================================================================

@@ -1,4 +1,4 @@
-package com.kkk.algs4.fundamentals;
+package com.kkk.algs4;
 
 import java.util.Iterator;
 import java.util.LinkedList;

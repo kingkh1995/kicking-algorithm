@@ -1,10 +1,11 @@
-package com.kkk.algs4.fundamentals;
+package com.kkk.algs4;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * 拔高题
+ *
  * @author KaiKoo
  */
 public class Essences {
@@ -15,7 +16,7 @@ public class Essences {
      * 超难题：
      * 1.3.49 使用多个栈实现一个队列，每次队列操作对应常数次的栈操作
      * 1.4.20 求矩阵中的局部最小值（小于上下左右的元素）（要求线性时间复杂度）
-     * 1.4.34 冷还是热 猜出秘密数
+     * 1.4.34 冷还是热 猜出秘密数 2lgN 和 lgN 的解法
      */
 
     //==============================================================================================
