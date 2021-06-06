@@ -231,7 +231,7 @@ public class FundamentalsExs {
     }
 
     public static void reverseTest() {
-        Node first = NodeUtils.makeLinkedList(1, 10);
+        Node first = NodeUtils.distinctSortedLinkedNode(10, 1, 11);
         first = reverse1(first);
         NodeUtils.printNode(first);
         first = reverse2(first);
