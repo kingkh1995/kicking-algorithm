@@ -1,5 +1,6 @@
 package com.kkk.algs4;
 
+import com.kkk.supports.ArrayUtils;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -109,6 +110,89 @@ public class Essences {
      *  n从1开始递增，每次都测n的平方 则 n = sqrt(k)+1
      *  则要测到N层最坏的情况，先测n次，鸡蛋摔碎，然后从 (n-1)^2层开始一层层测到n^2
      *  总次数：n+n^2-(n-1)^2 约等于 3n 总次数约等于 3sqrt(F)次
+     */
+
+    //==============================================================================================
+
+    /**
+     * 2.3.22
+     * 快速三向切分  lo--p--i--j--q--hi
+     * 使[lo, p-1]和[q+1, hi]都等于pivot，[p, i-1]都小于pivot，[j+1, q]都大于pivot，[i, j]是未排序的数组
+     * 排序完成后再将[lo, p-1]和[q+1, hi]的元素换到中间
+     */
+    public static void quickSort(int[] arr) {
+        sort(arr, 0, arr.length - 1);
+    }
+
+    private static void sort(int[] arr, int lo, int hi) {
+        if (hi <= lo) {
+            return;
+        }
+        // 数组小于某个大小使用插入排序
+        // 切分元素选择
+        // 以上优化忽略
+        int i = lo, j = hi + 1;
+        int p = lo, q = hi + 1;
+        int pivot = arr[lo];
+        while (true) {
+            // 从左边开始找到第一个大于等于pivot的数
+            while (arr[++i] < pivot) {
+                if (i == hi) {
+                    break;
+                }
+            }
+            // 从右边开始找到第一个小于等于pivot的数
+            while (arr[--j] > pivot) {
+                if (j == lo) {
+                    break;
+                }
+            }
+            // 相遇有两种情况，在中间相遇，肯定等于pivot，第二种情况在hi处相遇，此时不一定等于。
+            // 如果i j 相遇，且等于pivot，则交换到等于pivot的区间
+            if (i == j && arr[i] == pivot) {
+                ArrayUtils.swap(arr, ++p, i);
+            }
+            if (i >= j) {
+                break;
+            }
+            // 和普通的partiion方法一样，交换i j
+            ArrayUtils.swap(arr, i, j);
+            if (arr[i] == pivot) {
+                ArrayUtils.swap(arr, ++p, i);
+            }
+            if (arr[j] == pivot) {
+                ArrayUtils.swap(arr, --q, j);
+            }
+        }
+        // 交换区间
+        // 循环终止时，j处的数必定小于pivot，因为如果等于pivot会和小于pivot的数交换
+        // 故此时[p, j]区间小于pivot [j+1, q]区间大于pivot
+        i = j + 1;
+        for (int k = lo; k <= p; k++) {
+            ArrayUtils.swap(arr, k, j--);
+        }
+        for (int k = hi; k >= q; k--) {
+            ArrayUtils.swap(arr, k, i++);
+        }
+        sort(arr, lo, j);
+        sort(arr, i, hi);
+    }
+
+    public static void quickSortTest() {
+        int[] arr = ArrayUtils.distinctArr(1000, 1, 2000);
+        quickSort(arr);
+        System.out.println(ArrayUtils.isSorted(arr));
+    }
+
+    //==============================================================================================
+
+    /**
+     * 2.3.24
+     * 取样排序 取样大小为2^k-1
+     * 先将取样的元素排序，再以中位数分割分为两个子数组移动到数组的左右两端，则数组分为了四个部分：有序的取样数组、
+     * 取样数组的中位数、无序的剩余数组、有序的取样数组。使用中位数作pivot，对未取样的剩余元素做快速排序进行切分
+     * 切分完成后，接下来我们再对第一个部分取半，放到中位数之前；对最后一部分取半，放到中位数之后
+     * 则此时中位数左右的数组都被分为了上一步一样的四部分，重复以上过程，直至完全排序
      */
 
     //==============================================================================================

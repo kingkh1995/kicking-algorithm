@@ -4,6 +4,7 @@ import com.kkk.supports.ArrayUtils;
 import com.kkk.supports.Node;
 import com.kkk.supports.NodeUtils;
 import com.kkk.supports.Queue;
+import com.kkk.supports.Stack;
 
 /**
  * 第二章 排序
@@ -333,4 +334,145 @@ public class SortingExs {
     }
 
     //==============================================================================================
+
+    /**
+     * 2.3.15
+     * 螺丝和螺母
+     * N个螺丝和N个螺母，快速将其配对，不能直接比较螺丝和螺丝，螺母和螺母
+     */
+    /**
+     * 使用快速排序
+     * 先分为螺丝组和螺母组，将两组排序后，即可按顺序匹配。
+     * 1、选螺丝组第一个螺丝为pivot，从螺母中找到该螺丝匹配的螺母，将其换到第一位上
+     * 2、使用快速排序排序两个组，不过每次比对是螺丝组使用螺母组的pivot，螺母组使用螺丝组的pivot
+     */
+
+    //==============================================================================================
+
+    /**
+     * 2.3.17
+     * 快速排序的哨兵，省略掉循环内部的边界检查
+     * 使用一次冒泡排序将最大的元素排到最右边，这样它可以作为右边的哨兵
+     */
+    public static void sentinelQuickSort(int[] arr) {
+        // 先将最大的元素排到最右边
+        for (int i = 0; i < arr.length - 1; i++) {
+            if (arr[i] > arr[i + 1]) {
+                ArrayUtils.swap(arr, i, i + 1);
+            }
+        }
+        // 只需要排到length-2位即可
+        sentinelQuickSort(arr, 0, arr.length - 2);
+    }
+
+    // 与原sort一致
+    private static void sentinelQuickSort(int[] arr, int lo, int hi) {
+        if (hi <= lo) {
+            return;
+        }
+        int j = sentinelPartition(arr, lo, hi);
+        sentinelQuickSort(arr, lo, j - 1);
+        sentinelQuickSort(arr, j + 1, hi);
+    }
+
+    // 与原partition一致，只需要去掉循环内的if校验即可
+    private static int sentinelPartition(int[] arr, int lo, int hi) {
+        int pivot = arr[lo];
+        // 左哨兵为lo 右哨兵为hi+1
+        int i = lo, j = hi + 1;
+        while (true) {
+            // 从左边开始找到第一个大于等于pivot的元素
+            // 循环必然会终止，因为右哨兵一定大于区间内所有的值
+            while (arr[++i] < pivot) {
+            }
+            // 从右边开始找到第一个小于等于pivot的元素
+            // 循环必然会终止，因为pivot为lo的值
+            while (arr[--j] > pivot) {
+            }
+            // 此处判断不放在循环终止条件中是因为最后一步是j和pivot交换位置
+            if (i >= j) {
+                break;
+            }
+            ArrayUtils.swap(arr, i, j);
+        }
+        // 因为默认pivot是lo，所以最后一步是j和pivot交换位置
+        ArrayUtils.swap(arr, lo, j);
+        return j;
+    }
+
+    public static void sentinelQuickSortTest() {
+        int[] arr = ArrayUtils.distinctArr(1000, 1, 2000);
+        sentinelQuickSort(arr);
+        System.out.println(ArrayUtils.isSorted(arr));
+    }
+
+    //==============================================================================================
+
+    /**
+     * 2.3.20
+     * 非递归的快速排序
+     * 用一个栈保存每次切分后的数组坐标
+     */
+    public static void unrecursionQuickSort(int[] arr) {
+        Stack stack = new Stack();
+        // 初始入栈，先入lo 再入hi
+        stack.push(0);
+        stack.push(arr.length - 1);
+        while (!stack.isEmpty()) {
+            // 出栈先出hi再出lo
+            int hi = stack.pop();
+            int lo = stack.pop();
+            if (hi <= lo) {
+                continue;
+            }
+            // 切分
+            int j = partition(arr, lo, hi);
+            // 将大的数组先入栈，即先排小的数组
+            if (hi - j > j - lo) {
+                stack.push(j + 1);
+                stack.push(hi);
+                stack.push(lo);
+                stack.push(j - 1);
+            } else {
+                stack.push(lo);
+                stack.push(j - 1);
+                stack.push(j + 1);
+                stack.push(hi);
+            }
+        }
+    }
+
+    // 快速排序原partition方法
+    private static int partition(int[] arr, int lo, int hi) {
+        int pivot = arr[lo];
+        int i = lo, j = hi + 1;
+        while (true) {
+            // 从左边开始找到第一个大于等于pivot的元素
+            // 循环必然会终止，因为右哨兵一定大于区间内所有的值
+            while (arr[++i] < pivot) {
+                if (i == hi) {
+                    break;
+                }
+            }
+            // 从右边开始找到第一个小于等于pivot的元素
+            // 循环必然会终止，因为pivot为lo的值
+            while (arr[--j] > pivot) {
+            }
+            if (i >= j) {
+                break;
+            }
+            ArrayUtils.swap(arr, i, j);
+        }
+        ArrayUtils.swap(arr, lo, j);
+        return j;
+    }
+
+    public static void unrecursionQuickSortTest() {
+        int[] arr = ArrayUtils.distinctArr(1000, 1, 2000);
+        unrecursionQuickSort(arr);
+        System.out.println(ArrayUtils.isSorted(arr));
+    }
+
+    //==============================================================================================
+
 }
