@@ -119,6 +119,9 @@ public class Essences {
      * 快速三向切分  lo--p--i--j--q--hi
      * 使[lo, p-1]和[q+1, hi]都等于pivot，[p, i-1]都小于pivot，[j+1, q]都大于pivot，[i, j]是未排序的数组
      * 排序完成后再将[lo, p-1]和[q+1, hi]的元素换到中间
+     *
+     * 优势是交换次数会少于普通的三向切分快排，因为可预见的是大多数情况下等于pivot的区间应该远小于小于和大于的区间，
+     * 故普通的三向切分快排中等于pivot的区间需要一直右移，可知会有很多次交换，而快速三向切分克服了这个问题。
      */
     public static void quickSort(int[] arr) {
         sort(arr, 0, arr.length - 1);
@@ -164,7 +167,7 @@ public class Essences {
                 ArrayUtils.swap(arr, --q, j);
             }
         }
-        // 交换区间
+        // 交换等于的区间到中间
         // 循环终止时，j处的数必定小于pivot，因为如果等于pivot会和小于pivot的数交换
         // 故此时[p, j]区间小于pivot [j+1, q]区间大于pivot
         i = j + 1;

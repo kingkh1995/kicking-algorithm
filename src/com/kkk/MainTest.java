@@ -1,7 +1,5 @@
 package com.kkk;
 
-import com.kkk.algs4.SortingExs;
-
 /**
  *
  * @author KaiKoo
@@ -9,7 +7,6 @@ import com.kkk.algs4.SortingExs;
 public class MainTest {
 
     public static void main(String[] args) {
-        SortingExs.sortQueueTest();
     }
 
 }
