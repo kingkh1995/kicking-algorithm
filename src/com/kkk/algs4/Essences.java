@@ -170,7 +170,7 @@ public class Essences {
         }
         // 交换等于的区间到中间
         // 循环终止时，j处的数必定小于pivot，因为如果等于pivot会和小于pivot的数交换
-        // 故此时[p, j]区间小于pivot [j+1, q]区间大于pivot
+        // 故此时(p, j]区间小于pivot [j+1, q)区间大于pivot
         i = j + 1;
         for (int k = lo; k <= p; k++) {
             ArrayUtils.swap(arr, k, j--);
