@@ -5,41 +5,16 @@ import com.kkk.supports.Node;
 import com.kkk.supports.NodeUtils;
 import com.kkk.supports.Queue;
 import com.kkk.supports.Stack;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 /**
  * 第二章 排序
  * @author KaiKoo
  */
 public class SortingExs {
-
-    //==============================================================================================
-
-    /**
-     * 希尔排序
-     */
-    public static void shellSort(int[] arr) {
-        int length = arr.length;
-        int h = 1;
-        while (h < length / 3) {
-            h = 3 * h + 1;
-        }
-        System.out.println(h);
-        for (; h >= 1; h /= 3) {
-            // 将数组变为h有序
-            for (int i = h; i < length; i++) {
-                for (int j = i; j >= h && arr[j] < arr[j - h]; j -= h) {
-                    ArrayUtils.swap(arr, j, j - h);
-                }
-            }
-        }
-    }
-
-    public static void shellSortTest() {
-        int[] arr = ArrayUtils.distinctArr(10000, 0, 20000);
-        System.out.println(ArrayUtils.isSorted(arr));
-        SortingExs.shellSort(arr);
-        System.out.println(ArrayUtils.isSorted(arr));
-    }
 
     //==============================================================================================
 
@@ -58,7 +33,7 @@ public class SortingExs {
      * 拓展：队列排序（无重复数据）
      * 类似于选择排序
      */
-    public static void sortQueue(Queue queue) {
+    private static void sortQueue(Queue queue) {
         if (queue == null || queue.size() < 2) {
             return;
         }
@@ -165,7 +140,7 @@ public class SortingExs {
      * 2.2.16
      *  自然的归并排序 编写一个自底向上的归并排序，能够利用数组中有序的部分，连续归并两个递增的区块
      */
-    public static void naturalSort(int[] arr) {
+    private static void naturalSort(int[] arr) {
         if (arr.length <= 1) {
             return;
         }
@@ -219,7 +194,7 @@ public class SortingExs {
      * 2.2.17
      * 链表排序 使用自然排序，这是链表最佳的排序方法
      */
-    public static Node linkedNodeSort(Node node) {
+    private static Node linkedNodeSort(Node node) {
         Node first, second, third;
         // 归并之后的头
         Node head = node;
@@ -264,7 +239,7 @@ public class SortingExs {
         return head;
     }
 
-    public static void add(Node head, Node next) {
+    private static void add(Node head, Node next) {
         if (head == null || next == null) {
             return;
         }
@@ -274,7 +249,7 @@ public class SortingExs {
         head.next = next;
     }
 
-    public static Node merge(Node first, Node second) {
+    private static Node merge(Node first, Node second) {
         if (second == null) {
             return first;
         } else if (first == null) {
@@ -309,7 +284,7 @@ public class SortingExs {
         return head;
     }
 
-    public static Node findBlock(Node node) {
+    private static Node findBlock(Node node) {
         if (node == null) {
             return null;
         }
@@ -354,7 +329,7 @@ public class SortingExs {
      * 快速排序的哨兵，省略掉循环内部的边界检查
      * 使用一次冒泡排序将最大的元素排到最右边，这样它可以作为右边的哨兵
      */
-    public static void sentinelQuickSort(int[] arr) {
+    private static void sentinelQuickSort(int[] arr) {
         // 先将最大的元素排到最右边
         for (int i = 0; i < arr.length - 1; i++) {
             if (arr[i] > arr[i + 1]) {
@@ -413,7 +388,7 @@ public class SortingExs {
      * 非递归的快速排序
      * 用一个栈保存每次切分后的数组坐标
      */
-    public static void unrecursionQuickSort(int[] arr) {
+    private static void unrecursionQuickSort(int[] arr) {
         Stack stack = new Stack();
         // 初始入栈，先入lo 再入hi
         stack.push(0);
@@ -500,6 +475,141 @@ public class SortingExs {
      * 然后插入该位置，并让其他元素沿着路径下移即swim完成。
      * 路径长度是~logN级别，可知加上二分查找后则是~loglogN级别
      */
+
+    //==============================================================================================
+
+    /**
+     * 2.5.2
+     * 从一列单词输入中打印出所有由两个单词组成的组合词
+     * 类似于3-sum问题
+     */
+    private static void printCombinedWords(String[] arr) {
+        // 先按单词长度排序
+        Arrays.sort(arr, Comparator.comparingInt(String::length));
+        // 从第三位开始
+        for (int n = 2; n < arr.length; n++) {
+            // 从前面的字符串里面查找
+            int i = 0, j = n - 1;
+            int length = arr[n].length();
+            while (i < j) {
+                int com = arr[i].length() + arr[j].length() - length;
+                if (com == 0) {
+                    if (arr[i] + arr[j] == arr[n] || arr[j] + arr[i] == arr[n]) {
+                        System.out.println(arr[n]);
+                        break;
+                    }
+                    i++;
+                    j--;
+                } else if (com > 0) {
+                    j--;
+                } else {
+                    i++;
+                }
+            }
+        }
+    }
+
+    //==============================================================================================
+
+    /**
+     * 2.5.13
+     * 负载均衡 接受一个整数M，读取一系列的任务和所需的运行时间，将任务分配给M个处理器，是的完成所有任务的总时间最少
+     */
+    /**
+     * 首先将所有任务按运行时间排序，为处理器构建一个M大小的最小堆，记录下处理器接受到任务所需的总时间
+     * 将排序后的任务数组，按顺序开始分配，每次从堆顶取出当前总时间最小的处理器，分配当前任务，
+     * 并给处理器加上任务时间，再重新加入堆中，分配完成后，删去所有元素，取出执行任务总时间最大的处理器。
+     */
+
+    //==============================================================================================
+
+    /**
+     * 2.5.18
+     * 强制稳定 将任意一种排序方法变为稳定
+     */
+    private static <T extends Comparable> int[] stabilize(T[] arr, Consumer<Wrapper<T>[]> sort) {
+        Wrapper<T>[] wrappers = new Wrapper[arr.length];
+        for (int i = 0; i < arr.length; i++) {
+            wrappers[i] = new Wrapper(arr[i], i);
+        }
+        sort.accept(wrappers);
+        for (int i = 1; i < wrappers.length; i++) {
+            // 插入排序
+            for (; i < wrappers.length && wrappers[i].v == wrappers[i - 1].v; i++) {
+                for (int j = i;
+                        j > 0 && wrappers[j].v == wrappers[j - 1].v && wrappers[j].index < wrappers[
+                                j - 1].index; j--) {
+                    Wrapper temp = wrappers[j - 1];
+                    wrappers[j - 1] = wrappers[j];
+                    wrappers[j] = temp;
+                }
+            }
+        }
+        int[] indexs = new int[arr.length];
+        for (int i = 0; i < wrappers.length; i++) {
+            arr[i] = wrappers[i].v;
+            indexs[i] = wrappers[i].index;
+        }
+        return indexs;
+    }
+
+    private static class Wrapper<T extends Comparable> implements Comparable<Wrapper<T>> {
+
+        T v;
+        int index;
+
+        public Wrapper(T v, int index) {
+            this.v = v;
+            this.index = index;
+        }
+
+        @Override
+        public int compareTo(Wrapper<T> o) {
+            return v.compareTo(o.v);
+        }
+    }
+
+    public static void stabilizeTest() {
+        Integer[] array = Arrays.stream(ArrayUtils.randomArr(50, 1, 10)).boxed()
+                .collect(Collectors.toList()).toArray(new Integer[50]);
+        int[] indexs = stabilize(array, Essences::fast3DQuickSort);
+        System.out.println(Arrays.toString(array));
+        System.out.println(Arrays.toString(indexs));
+    }
+
+    //==============================================================================================
+
+    /**
+     * 2.5.23
+     * 选择的取样 找出第K小的元素，使用取样改进算法
+     * 当数据量过大的时候，使用普通的快速排序算法，效率很差，递归次数过多，会栈溢出。
+     * Floyd-Rivest算法：每次都选择数组中第k个元素作为切分元素，当数据量大于600时，性能会有明显提高。
+     */
+    private static int selectKth(int[] arr, int k) {
+        if (k >= arr.length) {
+            throw new IllegalArgumentException();
+        }
+        return select(arr, k - 1, 0, arr.length - 1);
+    }
+
+    private static int select(int[] arr, int i, int lo, int hi) {
+        // 选择i作为切分元素
+        ArrayUtils.swap(arr, i, lo);
+        int j = partition(arr, lo, hi);
+        if (j > i) {
+            return select(arr, i, 0, j - 1);
+        } else if (j < i) {
+            return select(arr, i, j + 1, arr.length - 1);
+        } else {
+            return arr[j];
+        }
+    }
+
+    public static void selectKthTest() {
+        int[] arr1 = ArrayUtils.distinctArr(50000, 0, 50000);
+
+        System.out.println(selectKth(arr1, 10000));
+    }
 
     //==============================================================================================
 }

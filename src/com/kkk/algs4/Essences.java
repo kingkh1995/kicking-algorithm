@@ -18,6 +18,7 @@ public class Essences {
      * 1.3.49 使用多个栈实现一个队列，每次队列操作对应常数次的栈操作
      * 1.4.20 求矩阵中的局部最小值（小于上下左右的元素）（要求线性时间复杂度）
      * 1.4.34 冷还是热 猜出秘密数 2lgN 和 lgN 的解法
+     * 2.5.32 8字谜题
      */
 
     //==============================================================================================
@@ -123,11 +124,11 @@ public class Essences {
      * 优势是交换次数会少于普通的三向切分快排，因为可预见的是大多数情况下等于pivot的区间应该远小于小于和大于的区间，
      * 故普通的三向切分快排中等于pivot的区间需要一直右移，可知会有很多次交换，而快速三向切分克服了这个问题。
      */
-    public static void quickSort(int[] arr) {
-        sort(arr, 0, arr.length - 1);
+    public static void fast3DQuickSort(Comparable[] arr) {
+        fast3DQuickSort(arr, 0, arr.length - 1);
     }
 
-    private static void sort(int[] arr, int lo, int hi) {
+    private static void fast3DQuickSort(Comparable[] arr, int lo, int hi) {
         if (hi <= lo) {
             return;
         }
@@ -136,16 +137,16 @@ public class Essences {
         // 以上优化忽略
         int i = lo, j = hi + 1;
         int p = lo, q = hi + 1;
-        int pivot = arr[lo];
+        Comparable pivot = arr[lo];
         while (true) {
             // 从左边开始找到第一个大于等于pivot的数
-            while (arr[++i] < pivot) {
+            while (arr[++i].compareTo(pivot) < 0) {
                 if (i == hi) {
                     break;
                 }
             }
             // 从右边开始找到第一个小于等于pivot的数
-            while (arr[--j] > pivot) {
+            while (arr[--j].compareTo(pivot) > 0) {
                 if (j == lo) {
                     break;
                 }
@@ -177,14 +178,8 @@ public class Essences {
         for (int k = hi; k >= q; k--) {
             ArrayUtils.swap(arr, k, i++);
         }
-        sort(arr, lo, j);
-        sort(arr, i, hi);
-    }
-
-    public static void quickSortTest() {
-        int[] arr = ArrayUtils.distinctArr(1000, 1, 2000);
-        quickSort(arr);
-        System.out.println(ArrayUtils.isSorted(arr));
+        fast3DQuickSort(arr, lo, j);
+        fast3DQuickSort(arr, i, hi);
     }
 
     //==============================================================================================

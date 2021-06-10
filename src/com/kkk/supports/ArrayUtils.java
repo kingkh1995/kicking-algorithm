@@ -39,11 +39,11 @@ public class ArrayUtils {
         for (int i = origin; i < bound; i++) {
             arr[i - origin] = i;
         }
+        for (int i = 0; i < n - 1; i++) {
+            swap(arr, i, random.nextInt(i + 1, arr.length));
+        }
         if (n == arr.length) {
             return arr;
-        }
-        for (int i = 0; i < n; i++) {
-            swap(arr, i, random.nextInt(i + 1, arr.length));
         }
         return Arrays.copyOf(arr, n);
     }
@@ -53,6 +53,15 @@ public class ArrayUtils {
             throw new IllegalArgumentException();
         }
         int temp = arr[a];
+        arr[a] = arr[b];
+        arr[b] = temp;
+    }
+
+    public static void swap(Comparable[] arr, int a, int b) {
+        if (a >= arr.length || a < 0 || b >= arr.length || b < 0) {
+            throw new IllegalArgumentException();
+        }
+        Comparable temp = arr[a];
         arr[a] = arr[b];
         arr[b] = temp;
     }

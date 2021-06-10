@@ -22,7 +22,7 @@ public class FundamentalsExs {
      * 将一个整数（可正可负，正数省去前面的0）用二进制表示并转换为字符串
      * Integer.toBinaryString(int i)
      */
-    public static String toBinaryString(int i) {
+    private static String toBinaryString(int i) {
         // 特殊情况 0
         if (i == 0) {
             return "0";
@@ -56,7 +56,7 @@ public class FundamentalsExs {
      * 1.1.27
      * 求二项分布
      */
-    public static double binomial(int N, int k, double p) {
+    private static double binomial(int N, int k, double p) {
         if (N == 0 && k == 0) {
             return 1.0;
         }
@@ -68,7 +68,7 @@ public class FundamentalsExs {
     }
 
     // 循环求解，空间换时间
-    public static double betterBinomial(int n, int k, double p) {
+    private static double betterBinomial(int n, int k, double p) {
         // 使用二维数组保存之前的值
         double[][] matrix = new double[n + 1][k + 1];
         matrix[0][0] = 1.0D;
@@ -102,7 +102,7 @@ public class FundamentalsExs {
      * 1.1.29
      * 基于二分查找，对一个整型有序数组（可能存在重复值），添加一个rank()方法返回小于key值的元素个数，一个count()方法返回等于key值的元素个数。
      */
-    public static int rank(int key, int[] a) {
+    private static int rank(int key, int[] a) {
         int lo = 0, hi = a.length - 1;
         // 等于情况下，向左遍历直到第一个不等于（小于）key的元素
         // 其余情况下等同于二分查找
@@ -122,7 +122,7 @@ public class FundamentalsExs {
         return lo;
     }
 
-    public static int count(int key, int[] a) {
+    private static int count(int key, int[] a) {
         int num = 0;
         for (int i = rank(key, a); i < a.length && a[i++] == key; num++) {
             ;
@@ -149,7 +149,7 @@ public class FundamentalsExs {
      * 回环变位 字符串s循环移动任意位置后得到t 判断两个字符串是否互为回环变位
      */
     // 仅使用 length() indexOf() 方法
-    public static boolean circularRotation(String s, String t) {
+    private static boolean circularRotation(String s, String t) {
         // 拼接两个t必然包含s
         return s.length() == t.length() && (t + t).indexOf(s) >= 0;
     }
@@ -160,7 +160,7 @@ public class FundamentalsExs {
      * 1.3.3
      * 将 0-9 顺序入栈，判断出栈序列是否可能
      */
-    public static boolean isPopSequence(int[] arr) {
+    private static boolean isPopSequence(int[] arr) {
         Stack stack = new Stack();
         int i = 0;
         for (int n : arr) {
@@ -196,7 +196,7 @@ public class FundamentalsExs {
      * 反转链表
      */
     // 迭代方法
-    public static Node reverse1(Node t) {
+    private static Node reverse1(Node t) {
         // 指向剩余未反转链表的首结点
         Node first = t;
         // 指向反转链表的首结点
@@ -216,7 +216,7 @@ public class FundamentalsExs {
     }
 
     // 递归方法
-    public static Node reverse2(Node first) {
+    private static Node reverse2(Node first) {
         if (first == null || first.next == null) {
             return first;
         }
@@ -248,7 +248,7 @@ public class FundamentalsExs {
      * 1.3.37
      * 约瑟夫问题 使用队列 （41个人到3则出列，最后剩16、31）
      */
-    public static int[] josephus(int n, int m) {
+    private static int[] josephus(int n, int m) {
         int[] arr = new int[n];
         Queue queue = new Queue();
         // 从 1 开始
@@ -279,7 +279,7 @@ public class FundamentalsExs {
      * 1.4.15
      * 平方级别算法实现 3-sum
      */
-    public static int count3Sum(int[] arr) {
+    private static int count3Sum(int[] arr) {
         Arrays.sort(arr);
         int count = 0;
         for (int i = 0; i < arr.length - 2; i++) {
@@ -322,7 +322,7 @@ public class FundamentalsExs {
      * 1.4.30
      * 三个栈实现一个双向队列
      */
-    public static class DequeBy3Stacks {
+    private static class DequeBy3Stacks {
 
         private final Stack left = new Stack();
         private final Stack right = new Stack();
