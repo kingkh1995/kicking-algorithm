@@ -605,11 +605,29 @@ public class SortingExs {
         }
     }
 
-    public static void selectKthTest() {
-        int[] arr1 = ArrayUtils.distinctArr(50000, 0, 50000);
+    // 数据量比较小的时候可以使用冒泡排序
+    private static int selectKth0(int[] arr, int k) {
+        if (k >= arr.length) {
+            throw new IllegalArgumentException();
+        }
+        for (int i = 0; i < k; i++) {
+            for (int j = arr.length - 1; j > i; j--) {
+                if (arr[j] < arr[j - 1]) {
+                    ArrayUtils.swap(arr, j - 1, j);
+                }
+            }
+        }
+        return arr[k - 1];
+    }
 
-        System.out.println(selectKth(arr1, 10000));
+    public static void selectKthTest() {
+        int[] arr1 = ArrayUtils.randomArr(1000, 0, 4000);
+        int[] arr2 = Arrays.copyOf(arr1, arr1.length);
+        System.out.println(selectKth(arr1, 10));
+        System.out.println(selectKth(arr1, 300));
+        System.out.println(selectKth0(arr2, 10));
     }
 
     //==============================================================================================
+
 }
