@@ -582,7 +582,6 @@ public class SortingExs {
     /**
      * 2.5.23
      * 选择的取样 找出第K小的元素，使用取样改进算法
-     * 当数据量过大的时候，使用普通的快速排序算法，效率很差，递归次数过多，会栈溢出。
      * Floyd-Rivest算法：每次都选择数组中第k个元素作为切分元素，当数据量大于600时，性能会有明显提高。
      */
     private static int selectKth(int[] arr, int k) {
@@ -593,39 +592,24 @@ public class SortingExs {
     }
 
     private static int select(int[] arr, int i, int lo, int hi) {
-        // 选择i作为切分元素
-        ArrayUtils.swap(arr, i, lo);
-        int j = partition(arr, lo, hi);
-        if (j > i) {
-            return select(arr, i, 0, j - 1);
-        } else if (j < i) {
-            return select(arr, i, j + 1, arr.length - 1);
-        } else {
-            return arr[j];
-        }
-    }
-
-    // 数据量比较小的时候可以使用冒泡排序
-    private static int selectKth0(int[] arr, int k) {
-        if (k >= arr.length) {
-            throw new IllegalArgumentException();
-        }
-        for (int i = 0; i < k; i++) {
-            for (int j = arr.length - 1; j > i; j--) {
-                if (arr[j] < arr[j - 1]) {
-                    ArrayUtils.swap(arr, j - 1, j);
-                }
+        while (lo < hi) {
+            // 选择i作为切分元素
+            ArrayUtils.swap(arr, i, lo);
+            int j = partition(arr, lo, hi);
+            if (j > i) {
+                hi = j - 1;
+            } else if (j < i) {
+                lo = j + 1;
+            } else {
+                break;
             }
         }
-        return arr[k - 1];
+        return arr[i];
     }
 
     public static void selectKthTest() {
-        int[] arr1 = ArrayUtils.randomArr(1000, 0, 4000);
-        int[] arr2 = Arrays.copyOf(arr1, arr1.length);
-        System.out.println(selectKth(arr1, 10));
-        System.out.println(selectKth(arr1, 300));
-        System.out.println(selectKth0(arr2, 10));
+        int[] arr = ArrayUtils.distinctArr(100000, 0, 100000);
+        System.out.println(selectKth(arr, 45555));
     }
 
     //==============================================================================================
