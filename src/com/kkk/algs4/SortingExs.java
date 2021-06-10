@@ -582,7 +582,7 @@ public class SortingExs {
     /**
      * 2.5.23
      * 选择的取样 找出第K小的元素，使用取样改进算法
-     * Floyd-Rivest算法：每次都选择数组中第k个元素作为切分元素，当数据量大于600时，性能会有明显提高。
+     * Floyd-Rivest算法
      */
     private static int selectKth(int[] arr, int k) {
         if (k >= arr.length) {
@@ -593,6 +593,10 @@ public class SortingExs {
 
     private static int select(int[] arr, int i, int lo, int hi) {
         while (lo < hi) {
+            if (hi - lo > 600)
+            {
+                //太复杂忽略
+            }
             // 选择i作为切分元素
             ArrayUtils.swap(arr, i, lo);
             int j = partition(arr, lo, hi);
