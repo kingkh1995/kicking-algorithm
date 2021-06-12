@@ -5,27 +5,27 @@ import java.util.LinkedList;
 
 /**
  * 基于 LinkedList 实现
+ *
  * @author KaiKoo
  */
 public class MyBag<Item> implements Iterable<Item> {
 
-    private LinkedList<Item> bag = new LinkedList<>();
+  private LinkedList<Item> bag = new LinkedList<>();
 
-    @Override
-    public Iterator<Item> iterator() {
-        return bag.iterator();
-    }
+  @Override
+  public Iterator<Item> iterator() {
+    return bag.iterator();
+  }
 
-    public void add(Item item) {
-        bag.add(item);
-    }
+  public void add(Item item) {
+    bag.add(item);
+  }
 
-    public boolean isEmpty() {
-        return bag.isEmpty();
-    }
+  public boolean isEmpty() {
+    return bag.isEmpty();
+  }
 
-    public int size() {
-        return bag.size();
-    }
-
+  public int size() {
+    return bag.size();
+  }
 }

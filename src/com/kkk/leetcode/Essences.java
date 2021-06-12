@@ -5,6 +5,4 @@ package com.kkk.leetcode;
  *
  * @author KaiKoo
  */
-public class Essences {
-
-}
+public class Essences {}

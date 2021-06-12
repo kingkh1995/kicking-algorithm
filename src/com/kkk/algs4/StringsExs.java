@@ -5,6 +5,4 @@ package com.kkk.algs4;
  *
  * @author KaiKoo
  */
-public class StringsExs {
-
-}
+public class StringsExs {}

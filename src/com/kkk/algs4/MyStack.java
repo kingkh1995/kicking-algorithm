@@ -5,35 +5,35 @@ import java.util.LinkedList;
 
 /**
  * 基于 LinkedList 实现
+ *
  * @author KaiKoo
  */
 public class MyStack<Item> implements Iterable<Item> {
 
-    private LinkedList<Item> stack = new LinkedList<>();
+  private LinkedList<Item> stack = new LinkedList<>();
 
-    @Override
-    public Iterator<Item> iterator() {
-        return stack.iterator();
-    }
+  @Override
+  public Iterator<Item> iterator() {
+    return stack.iterator();
+  }
 
-    public void push(Item item) {
-        stack.addFirst(item);
-    }
+  public void push(Item item) {
+    stack.addFirst(item);
+  }
 
-    public Item pop() {
-        return stack.removeFirst();
-    }
+  public Item pop() {
+    return stack.removeFirst();
+  }
 
-    public boolean isEmpty() {
-        return stack.isEmpty();
-    }
+  public boolean isEmpty() {
+    return stack.isEmpty();
+  }
 
-    public int size() {
-        return stack.size();
-    }
+  public int size() {
+    return stack.size();
+  }
 
-    public Item peek() {
-        return stack.peekFirst();
-    }
-
+  public Item peek() {
+    return stack.peekFirst();
+  }
 }

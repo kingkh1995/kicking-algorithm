@@ -5,6 +5,4 @@ package com.kkk.leetcode;
  *
  * @author KaiKoo
  */
-public class BaseExs {
-
-}
+public class BaseExs {}

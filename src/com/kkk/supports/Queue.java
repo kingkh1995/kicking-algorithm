@@ -1,57 +1,53 @@
 package com.kkk.supports;
 
-/**
- *
- * @author KaiKoo
- */
+/** @author KaiKoo */
 public class Queue {
 
-    private int count = 0;
+  private int count = 0;
 
-    private Node first = null;
+  private Node first = null;
 
-    private Node tail = null;
+  private Node tail = null;
 
-    public void enqueue(int i) {
-        Node node = new Node(i);
-        count++;
-        if (count == 1) {
-            this.first = node;
-            this.tail = node;
-        } else {
-            this.tail.next = node;
-            this.tail = node;
-        }
+  public void enqueue(int i) {
+    Node node = new Node(i);
+    count++;
+    if (count == 1) {
+      this.first = node;
+      this.tail = node;
+    } else {
+      this.tail.next = node;
+      this.tail = node;
     }
+  }
 
-    public int dequeue() {
-        if (count == 0) {
-            throw new UnsupportedOperationException();
-        }
-        Node node = this.first;
-        count--;
-        if (count == 0) {
-            this.first = null;
-            this.tail = null;
-        } else {
-            this.first = node.next;
-        }
-        return node.val;
+  public int dequeue() {
+    if (count == 0) {
+      throw new UnsupportedOperationException();
     }
-
-    public boolean isEmpty() {
-        return count == 0;
+    Node node = this.first;
+    count--;
+    if (count == 0) {
+      this.first = null;
+      this.tail = null;
+    } else {
+      this.first = node.next;
     }
+    return node.val;
+  }
 
-    public int size(){
-        return count;
+  public boolean isEmpty() {
+    return count == 0;
+  }
+
+  public int size() {
+    return count;
+  }
+
+  public int peek() {
+    if (count == 0) {
+      throw new UnsupportedOperationException();
     }
-
-    public int peek() {
-        if (count == 0) {
-            throw new UnsupportedOperationException();
-        }
-        return first.val;
-    }
-
+    return first.val;
+  }
 }
