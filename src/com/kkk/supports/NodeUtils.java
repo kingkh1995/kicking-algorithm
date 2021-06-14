@@ -54,4 +54,25 @@ public class NodeUtils {
     }
     System.out.println();
   }
+
+  public static void threadedPrint(TreeNode treeNode) {
+    if (treeNode != null) {
+      while (treeNode.left != null) {
+        treeNode = treeNode.left;
+      }
+      while (treeNode.next != null) {
+        System.out.print(
+            " ("
+                + ((treeNode.prev == null ? "*" : treeNode.prev.val)
+                    + "|"
+                    + treeNode.val
+                    + "|"
+                    + (treeNode.next == null ? "*" : treeNode.next.val))
+                + ") ");
+        treeNode = treeNode.next;
+      }
+      System.out.println(
+          " (" + ((treeNode.prev == null ? "*" : treeNode.prev.val) + "|" + treeNode.val + "|*) "));
+    }
+  }
 }

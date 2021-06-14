@@ -46,10 +46,10 @@ public class Essences {
         hi = mid - 1;
       } else {
         // 如果等于最后一个元素，还要额外判断一次
-        return mid > arr.length ? arr.length - 1 : mid;
+        return mid >= arr.length ? arr.length - 1 : mid;
       }
     }
-    return -1;
+    return -(lo + 1);
   }
 
   // index超过数组大小则返回最后的元素
