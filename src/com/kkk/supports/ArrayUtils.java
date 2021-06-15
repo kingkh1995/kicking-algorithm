@@ -2,47 +2,44 @@ package com.kkk.supports;
 
 import java.util.Arrays;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 /** @author KaiKoo */
 public class ArrayUtils {
 
   private static ThreadLocalRandom random = ThreadLocalRandom.current();
 
+  private static IntStream randomArr0(int n, int origin, int bound) {
+    return Stream.generate(() -> random.nextInt(origin, bound))
+        .limit(n)
+        .mapToInt(Integer::intValue);
+  }
+
   public static int[] randomSortedArr(int n, int origin, int bound) {
-    int[] arr = randomArr(n, origin, bound);
-    Arrays.sort(arr);
-    return arr;
+    return randomArr0(n, origin, bound).sorted().toArray();
   }
 
   public static int[] randomArr(int n, int origin, int bound) {
-    int[] arr = new int[n];
-    for (int i = 0; i < n; i++) {
-      arr[i] = random.nextInt(origin, bound);
+    return randomArr0(n, origin, bound).toArray();
+  }
+
+  private static IntStream distinctArr0(int n, int origin, int bound) {
+    if (bound - origin < n) {
+      throw new IllegalArgumentException();
     }
-    return arr;
+    return Stream.generate(() -> random.nextInt(origin, bound))
+        .distinct()
+        .limit(n)
+        .mapToInt(Integer::intValue);
   }
 
   public static int[] distinctSortedArr(int n, int origin, int bound) {
-    int[] arr = distinctArr(n, origin, bound);
-    Arrays.sort(arr);
-    return arr;
+    return distinctArr0(n, origin, bound).sorted().toArray();
   }
 
   public static int[] distinctArr(int n, int origin, int bound) {
-    int[] arr = new int[bound - origin];
-    if (arr.length < n) {
-      throw new IllegalArgumentException();
-    }
-    for (int i = origin; i < bound; i++) {
-      arr[i - origin] = i;
-    }
-    for (int i = 0; i < n - 1; i++) {
-      swap(arr, i, random.nextInt(i + 1, arr.length));
-    }
-    if (n == arr.length) {
-      return arr;
-    }
-    return Arrays.copyOf(arr, n);
+    return distinctArr0(n, origin, bound).toArray();
   }
 
   public static void swap(int[] arr, int a, int b) {

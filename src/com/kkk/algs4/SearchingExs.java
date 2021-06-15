@@ -38,7 +38,7 @@ public class SearchingExs {
 
   // ===============================================================================================
 
-  /** 3.2.24 线性符号表 使找到下一个结点和下一个结点的操作为常熟操作，即每个添加变量prev next，并在方法中维护。 */
+  /** 3.2.34 线性符号表 使找到下一个结点和下一个结点的操作为常熟操作，即每个添加变量prev next，并在方法中维护。 */
   private static TreeNode put(TreeNode node, int key) {
     // 根结点情况
     if (node == null) {
@@ -49,13 +49,8 @@ public class SearchingExs {
       if (node.left == null) {
         // 临界条件 应该插入左子树且左子树为空则找到插入位置
         TreeNode temp = new TreeNode(key);
-        if (node.prev != null) {
-          temp.prev = node.prev;
-          temp.prev.next = temp;
-        }
-        temp.next = node;
+        insertNode(temp, node.prev, node);
         node.left = temp;
-        node.prev = temp;
       } else {
         put(node.left, key);
       }
@@ -63,17 +58,35 @@ public class SearchingExs {
       if (node.right == null) {
         // 临界条件 应该插入右子树且右子树为空则找到插入位置
         TreeNode temp = new TreeNode(key);
-        if (node.next != null) {
-          temp.next = node.next;
-          temp.next.prev = temp;
-        }
-        temp.prev = node;
+        insertNode(temp, node, node.next);
         node.right = temp;
-        node.next = temp;
       } else {
         put(node.right, key);
       }
     }
+    node.size = 1 + size(node.right) + size(node.left);
+    return node;
+  }
+
+  // 插入元素到两个结点中间，改变prev next
+  private static void insertNode(TreeNode node, TreeNode prev, TreeNode next) {
+    if (prev != null) {
+      node.prev = prev;
+      prev.next = node;
+    }
+    if (next != null) {
+      node.next = next;
+      next.prev = node;
+    }
+  }
+
+  // 删除一个结点不改变整体顺序 故整个过程中只需要调用deleteNode一次
+  private static TreeNode deleteMin(TreeNode node) {
+    if (node.left == null) {
+      deleteNode(node);
+      return node.right;
+    }
+    node.left = deleteMin(node.left);
     node.size = 1 + size(node.right) + size(node.left);
     return node;
   }
@@ -97,24 +110,12 @@ public class SearchingExs {
       } else if (node.right == null) {
         return node.left;
       }
-      // 替换
+      // 用next替换node的位置
       TreeNode temp = node;
       node = node.next;
-      // 顺序很重要 先删除
-      node.right = deleteMin0(temp.right); // 删除最小值时不用改变prev next，因为删除node的时候已经变更过了
+      node.right = deleteMin0(temp.right); // 使用原始的deleteMin操作，而不用改变prev next，因为删除node的时候已经变更过了
       node.left = temp.left;
     }
-    node.size = 1 + size(node.right) + size(node.left);
-    return node;
-  }
-
-  // 删除一个结点不改变整体顺序 故整个过程中只需要调用deleteNode一次
-  private static TreeNode deleteMin(TreeNode node) {
-    if (node.left == null) {
-      deleteNode(node);
-      return node.right;
-    }
-    node.left = deleteMin(node.left);
     node.size = 1 + size(node.right) + size(node.left);
     return node;
   }
@@ -128,6 +129,7 @@ public class SearchingExs {
     return node;
   }
 
+  // 改变prev next
   private static void deleteNode(TreeNode node) {
     if (node.next != null) {
       node.next.prev = node.prev;
