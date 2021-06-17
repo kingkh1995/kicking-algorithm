@@ -1,4 +1,4 @@
-package com.kkk.supports;
+package com.kkk.algs4;
 
 /**
  * 红黑树
@@ -61,6 +61,7 @@ public class RBBST {
   }
 
   // 将一个结点下的两个红链接变为黑链接 将指向结点的链接变为红色
+  // 将一个4-结点变为3个2-结点
   private static void flipColors(RBNode node) {
     node.isRed = true;
     node.left.isRed = false;
