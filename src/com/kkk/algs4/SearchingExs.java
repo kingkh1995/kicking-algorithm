@@ -3,6 +3,7 @@ package com.kkk.algs4;
 import com.kkk.supports.ArrayUtils;
 import com.kkk.supports.NodeUtils;
 import com.kkk.supports.TreeNode;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * 第三章 查找
@@ -174,7 +175,38 @@ public class SearchingExs {
 
   // ===============================================================================================
 
-
+  /** 红黑树测试 */
+  public static void RedBlackBSTTest() {
+    ThreadLocalRandom random = ThreadLocalRandom.current();
+    RedBlackBST rbbst = new RedBlackBST();
+    int n = 250;
+    System.out.println("delete");
+    for (int i = 0; i < 4 * n; i++) {
+      rbbst.put(random.nextInt(n));
+    }
+    System.out.println("isBalanced:" + rbbst.isBalanced());
+    for (int i = 0; i < 4 * n; i++) {
+      rbbst.delete(random.nextInt(n));
+    }
+    System.out.println("delete max");
+    for (int i = 0; i < 4 * n; i++) {
+      rbbst.put(random.nextInt(n));
+    }
+    System.out.println("isBalanced:" + rbbst.isBalanced());
+    int count = rbbst.count();
+    for (int i = 0; i < count; i++) {
+      rbbst.deleteMax();
+    }
+    System.out.println("delete min");
+    for (int i = 0; i < 4 * n; i++) {
+      rbbst.put(random.nextInt(n));
+    }
+    System.out.println("isBalanced:" + rbbst.isBalanced());
+    count = rbbst.count();
+    for (int i = 0; i < count; i++) {
+      rbbst.deleteMin();
+    }
+  }
 
   // ===============================================================================================
 }
