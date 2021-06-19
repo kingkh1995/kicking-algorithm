@@ -320,6 +320,10 @@ public class RedBlackBST {
   private RBNode balance(RBNode node) {
     // 这一步很关键 去除2-结点后产生的的图形复原 如果直接右旋会产生右斜红链接
     // 所以需要先左旋一次，将红链接旋转到左边，这样会产生三个连续的左斜红链接
+    //      B                      B
+    //    R   R   =直接右旋=>     R     R      所以需要先左旋
+    //  R                                R
+
     if (isRed(node.right)) {
       node = rotateLeft(node);
     }

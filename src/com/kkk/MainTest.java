@@ -7,5 +7,6 @@ public class MainTest {
 
   public static void main(String[] args) {
     SearchingExs.RedBlackBSTTest();
+    SearchingExs.AVLBSTTest();
   }
 }
