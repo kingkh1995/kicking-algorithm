@@ -179,33 +179,34 @@ public class SearchingExs {
   public static void RedBlackBSTTest() {
     ThreadLocalRandom random = ThreadLocalRandom.current();
     RedBlackBST rbbst = new RedBlackBST();
-    int n = 250;
+    int n = 2500;
     System.out.println("delete");
     for (int i = 0; i < 4 * n; i++) {
       rbbst.put(random.nextInt(n));
     }
-    System.out.println("isBalanced:" + rbbst.isBalanced());
-    for (int i = 0; i < 4 * n; i++) {
-      rbbst.delete(random.nextInt(n));
+    System.out.println(rbbst.count());
+    for (int i = 0; i < n; i++) {
+      rbbst.delete(i);
     }
+    System.out.println(rbbst.count());
     System.out.println("delete max");
     for (int i = 0; i < 4 * n; i++) {
       rbbst.put(random.nextInt(n));
     }
-    System.out.println("isBalanced:" + rbbst.isBalanced());
     int count = rbbst.count();
     for (int i = 0; i < count; i++) {
       rbbst.deleteMax();
     }
+    System.out.println(rbbst.count());
     System.out.println("delete min");
     for (int i = 0; i < 4 * n; i++) {
       rbbst.put(random.nextInt(n));
     }
-    System.out.println("isBalanced:" + rbbst.isBalanced());
     count = rbbst.count();
     for (int i = 0; i < count; i++) {
       rbbst.deleteMin();
     }
+    System.out.println(rbbst.count());
   }
 
   // ===============================================================================================
@@ -348,18 +349,20 @@ public class SearchingExs {
 
   // ===============================================================================================
 
-  /** 3.3.32 AVL树 */
+  /** 3.3.32 AVL树测试 */
   public static void AVLBSTTest() {
     ThreadLocalRandom random = ThreadLocalRandom.current();
     AVLBST bst = new AVLBST();
-    int n = 250;
+    int n = 2500;
     System.out.println("delete");
     for (int i = 0; i < 4 * n; i++) {
       bst.put(random.nextInt(n));
     }
-    for (int i = 0; i < 4 * n; i++) {
-      bst.delete(random.nextInt(n));
+    System.out.println(bst.count());
+    for (int i = 0; i < n; i++) {
+      bst.delete(i);
     }
+    System.out.println(bst.count());
     System.out.println("delete min");
     for (int i = 0; i < 4 * n; i++) {
       bst.put(random.nextInt(n));
@@ -368,6 +371,7 @@ public class SearchingExs {
     for (int i = 0; i < count; i++) {
       bst.deleteMin();
     }
+    System.out.println(bst.count());
   }
 
   // ===============================================================================================

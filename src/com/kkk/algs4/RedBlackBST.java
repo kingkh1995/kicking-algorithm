@@ -50,20 +50,17 @@ public class RedBlackBST {
   }
 
   public boolean contains(int key) {
-    return contains(root, key);
-  }
-
-  private boolean contains(RBNode node, int key) {
-    if (node == null) {
-      return false;
+    while (root != null) {
+      int cmp = key - root.val;
+      if (cmp == 0) {
+        return true;
+      } else if (cmp > 0) {
+        root = root.right;
+      } else {
+        root = root.left;
+      }
     }
-    int cmp = key - root.val;
-    if (cmp > 0) {
-      return contains(node.right, key);
-    } else if (cmp < 0) {
-      return contains(node.left, key);
-    }
-    return true;
+    return false;
   }
 
   // ===============================================================================================
@@ -129,23 +126,7 @@ public class RedBlackBST {
     } else if (cmp > 0) {
       node.right = put(node.right, key);
     }
-    // 再重新平衡
-    // 第一步左子结点为黑，右子节点为红 则左旋
-    if (!isRed(node.left) && isRed(node.right)) {
-      node = rotateLeft(node);
-    }
-    // 第二步 左子结点为红，且左子节点的左子节点为红 右旋
-    if (isRed(node.left) && isRed(node.left.left)) {
-      node = rotateRight(node);
-    }
-    // 左为红，且左子节点的右子节点为红 这种情况不会存在，因为该情况对应上一步的左子结点为黑，右子节点为红
-    // 第三步，左子结点和右子结点都为红
-    if (isRed(node.left) && isRed(node.right)) {
-      flipColors(node);
-    }
-    // 设置size
-    node.size = 1 + size(node.left) + size(node.right);
-    return node;
+    return balance(node);
   }
 
   // ===============================================================================================
@@ -256,9 +237,6 @@ public class RedBlackBST {
   // ===============================================================================================
 
   public void delete(int key) {
-    if (root == null) {
-      return;
-    }
     // 判断key是否存在，删除操作就不用判断临界条件了
     if (!contains(key)) {
       return;
@@ -316,27 +294,34 @@ public class RedBlackBST {
 
   // ===============================================================================================
 
-  // 删除结点恢复平衡
+  // 插入和删除结点恢复平衡公共方法
   private RBNode balance(RBNode node) {
-    // 这一步很关键 去除2-结点后产生的的图形复原 如果直接右旋会产生右斜红链接
-    // 所以需要先左旋一次，将红链接旋转到左边，这样会产生三个连续的左斜红链接
-    //      B                      B
-    //    R   R   =直接右旋=>     R     R      所以需要先左旋
-    //  R                                R
-
-    if (isRed(node.right)) {
+    // 第0步，针对moveLeft图像的优化 或者去掉该步直接在第二步处加上判断
+    /*        if (isRed(node.right)) {
       node = rotateLeft(node);
-    }
-    // 左子结点为黑，右子节点为红 则左旋
+    }*/
+
+    // 这一步很关键 将去除2-结点后产生的的图形复原(moveLeft) 会先符合第二步右旋的判断，导致会产生右斜红链接
+    // 所以需要先左旋一次，将红链接旋转到左边，这样会产生三个连续的左斜红链接 再进行第二步，会复原图像，接下来直接颜色转换即可
+    //      B                      B                            B                          B
+    //    R   R   =直接右旋=>     R     R      所以需要先左旋      R   再右旋一次恢复原图形状    R   R
+    //  R                                R                    R                       R
+    // 如果是moveRight则不用做处理                              R
+    //      B                             B
+    //    R   R     =之前会左旋一次=>     R     R      然后直接颜色转换即可
+    //          R                          R
+
+    // 第一步 左子结点为黑，右子节点为红 则左旋
     if (!isRed(node.left) && isRed(node.right)) {
       node = rotateLeft(node);
     }
-    // 左子结点为红，且左子节点的左子节点为红 右旋
-    if (isRed(node.left) && isRed(node.left.left)) {
+    // 第二步 左子结点为红，且左子节点的左子节点为红 右旋
+    // 额外加上判断 对moveLeft的图像不做右旋
+    if (isRed(node.left) && isRed(node.left.left) && !isRed(node.right)) {
       node = rotateRight(node);
     }
     // 左为红，且左子节点的右子节点为红 这种情况不会存在，因为该情况对应上一步的左子结点为黑，右子节点为红
-    // 左子结点和右子结点都为红
+    // 第三步 左子结点和右子结点都为红
     if (isRed(node.left) && isRed(node.right)) {
       flipColors(node);
     }

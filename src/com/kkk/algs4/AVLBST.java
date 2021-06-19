@@ -48,23 +48,6 @@ public class AVLBST {
     return node;
   }
 
-  public boolean contains(int key) {
-    return contains(root, key);
-  }
-
-  private boolean contains(Node node, int key) {
-    if (node == null) {
-      return false;
-    }
-    int cmp = key - root.val;
-    if (cmp > 0) {
-      return contains(node.right, key);
-    } else if (cmp < 0) {
-      return contains(node.left, key);
-    }
-    return true;
-  }
-
   // ===============================================================================================
 
   private static Node rotateLeft(Node node) {
