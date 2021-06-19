@@ -286,7 +286,7 @@ public class RedBlackBST {
       }
       node.left = delete(node.left, key);
     } else {
-      // 将路径上的左斜红链接全部右旋为右斜红链接
+      // 将如果在右边则将左斜红链接右旋为右斜红链接 将红链接转移到查询路径上，回溯时才可以处理
       if (isRed(node.left)) {
         node = rotateRight(node);
       }

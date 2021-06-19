@@ -347,4 +347,28 @@ public class SearchingExs {
   }
 
   // ===============================================================================================
+
+  /** 3.3.32 AVL树 */
+  public static void AVLBSTTest() {
+    ThreadLocalRandom random = ThreadLocalRandom.current();
+    AVLBST bst = new AVLBST();
+    int n = 250;
+    System.out.println("delete");
+    for (int i = 0; i < 4 * n; i++) {
+      bst.put(random.nextInt(n));
+    }
+    for (int i = 0; i < 4 * n; i++) {
+      bst.delete(random.nextInt(n));
+    }
+    System.out.println("delete min");
+    for (int i = 0; i < 4 * n; i++) {
+      bst.put(random.nextInt(n));
+    }
+    int count = bst.count();
+    for (int i = 0; i < count; i++) {
+      bst.deleteMin();
+    }
+  }
+
+  // ===============================================================================================
 }
