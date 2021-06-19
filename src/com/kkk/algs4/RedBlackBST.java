@@ -69,6 +69,7 @@ public class RedBlackBST {
   // ===============================================================================================
 
   // 将右斜红链接变为左斜红链接
+  // 被旋转下去的结点变为红色，旋转上去的结点变为被旋转的结点的原来颜色
   private static RBNode rotateLeft(RBNode node) {
     // right为红结点
     RBNode right = node.right;
@@ -82,6 +83,7 @@ public class RedBlackBST {
   }
 
   // 将左斜红链接变为右斜红链接
+  // 被旋转下去的结点变为红色，旋转上去的结点变为被旋转的结点的原来颜色
   private static RBNode rotateRight(RBNode node) {
     // left为红结点
     RBNode left = node.left;
@@ -101,26 +103,6 @@ public class RedBlackBST {
     node.right.isRed = !node.right.isRed;
   }
 
-  // 恢复平衡
-  private RBNode balance(RBNode node) {
-    // 第一步左子结点为黑，右子节点为红 则左旋
-    if (!isRed(node.left) && isRed(node.right)) {
-      node = rotateLeft(node);
-    }
-    // 第二步 左子结点为红，且左子节点的左子节点为红 右旋
-    if (isRed(node.left) && isRed(node.left.left)) {
-      node = rotateRight(node);
-    }
-    // 左为红，且左子节点的右子节点为红 这种情况不会存在，因为该情况对应上一步的左子结点为黑，右子节点为红
-    // 第三步，左子结点和右子结点都为红
-    if (isRed(node.left) && isRed(node.right)) {
-      flipColors(node);
-    }
-    // 设置size
-    node.size = 1 + size(node.left) + size(node.right);
-    return node;
-  }
-
   // ===============================================================================================
 
   public void put(int key) {
@@ -129,6 +111,9 @@ public class RedBlackBST {
     root.isRed = false;
     if (!isBalanced()) {
       System.out.println("not balanced!");
+    }
+    if (!is23()) {
+      System.out.println("not 23!");
     }
   }
 
@@ -145,7 +130,7 @@ public class RedBlackBST {
       node.right = put(node.right, key);
     }
     // 再重新平衡
-    // 左子结点为黑，右子节点为红 则左旋
+    // 第一步左子结点为黑，右子节点为红 则左旋
     if (!isRed(node.left) && isRed(node.right)) {
       node = rotateLeft(node);
     }
@@ -180,6 +165,9 @@ public class RedBlackBST {
     }
     if (!isBalanced()) {
       System.out.println("not balanced!");
+    }
+    if (!is23()) {
+      System.out.println("not 23!");
     }
   }
 
@@ -228,6 +216,9 @@ public class RedBlackBST {
     }
     if (!isBalanced()) {
       System.out.println("not balanced!");
+    }
+    if (!is23()) {
+      System.out.println("not 23!");
     }
   }
 
@@ -282,6 +273,9 @@ public class RedBlackBST {
     if (!isBalanced()) {
       System.out.println("not balanced!");
     }
+    if (!is23()) {
+      System.out.println("not 23!");
+    }
   }
 
   private RBNode delete(RBNode node, int key) {
@@ -322,6 +316,31 @@ public class RedBlackBST {
 
   // ===============================================================================================
 
+  // 删除结点恢复平衡
+  private RBNode balance(RBNode node) {
+    // 这一步很关键 去除2-结点后产生的的图形复原 如果直接右旋会产生右斜红链接
+    // 所以需要先左旋一次，将红链接旋转到左边，这样会产生三个连续的左斜红链接
+    if (isRed(node.right)) {
+      node = rotateLeft(node);
+    }
+    // 左子结点为黑，右子节点为红 则左旋
+    if (!isRed(node.left) && isRed(node.right)) {
+      node = rotateLeft(node);
+    }
+    // 左子结点为红，且左子节点的左子节点为红 右旋
+    if (isRed(node.left) && isRed(node.left.left)) {
+      node = rotateRight(node);
+    }
+    // 左为红，且左子节点的右子节点为红 这种情况不会存在，因为该情况对应上一步的左子结点为黑，右子节点为红
+    // 左子结点和右子结点都为红
+    if (isRed(node.left) && isRed(node.right)) {
+      flipColors(node);
+    }
+    // 设置size
+    node.size = 1 + size(node.left) + size(node.right);
+    return node;
+  }
+
   // 沿着最左路径计算出黑结点的个数
   public boolean isBalanced() {
     int black = 0;
@@ -342,6 +361,25 @@ public class RedBlackBST {
       black--;
     }
     return isBalanced(x.left, black) && isBalanced(x.right, black);
+  }
+
+  public boolean is23() {
+    return is23(root);
+  }
+
+  private boolean is23(RBNode node) {
+    if (node == null) {
+      return true;
+    }
+    // 判断右红链接是否存在
+    if (isRed(node.right)) {
+      return false;
+    }
+    // 判断左边红链接
+    if (isRed(node) && isRed(node.left)) {
+      return false;
+    }
+    return is23(node.left) && is23(node.right);
   }
 
   // ===============================================================================================

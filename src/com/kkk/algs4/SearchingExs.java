@@ -209,4 +209,142 @@ public class SearchingExs {
   }
 
   // ===============================================================================================
+
+  /**
+   * 3.3.29 <br>
+   * ReaBlackBST的最优存储 不用在设置结点是否为红色 如果要设为红色 ，将左右子链接交换，要检测是否为红色只需要比较左右子结点的大小
+   */
+  /**
+   * 1.判断是否为红色： <br>
+   * 1）是否为根节点，根节点必然为黑色；2）三种情况：a.有左子结点无右子节点（黑色）b.左右子都有（判断大小得出） <br>
+   * c.左右子都无，继续判断是否有兄弟结点，没有兄弟结点必定为红色，有兄弟结点则为黑色（因为是完美黑色平衡） 2.查找算法：先判断结点颜色，如果为红色，则相反方向查找 <br>
+   */
+
+  // ===============================================================================================
+
+  /** 3.3.23 非平衡的2-3树 */
+  private class TwoThreeNode {
+
+    public int val;
+
+    public TwoThreeNode left;
+
+    public TwoThreeNode right;
+
+    public int size = 1;
+
+    public boolean isRed = false;
+
+    public TwoThreeNode(int val) {
+      this.val = val;
+    }
+  }
+
+  private static int size(TwoThreeNode node) {
+    return node == null ? 0 : node.size;
+  }
+
+  private static boolean isRed(TwoThreeNode node) {
+    return node == null ? false : node.isRed;
+  }
+
+  public TwoThreeNode min(TwoThreeNode node) {
+    if (node.left != null) {
+      return min(node.left);
+    }
+    return node;
+  }
+
+  private class TwoThreeST {
+    private TwoThreeNode root;
+
+    public void notBalancedPut(int key) {
+      if (root == null) {
+        root = new TwoThreeNode(key);
+      } else {
+        notBalancedPut(root, key);
+      }
+    }
+
+    private void notBalancedPut(TwoThreeNode node, int key) {
+      int cmp = key - node.val;
+      // 先插入
+      if (cmp < 0) {
+        // 找到插入位置
+        if (node.left == null) {
+          TwoThreeNode temp = new TwoThreeNode(key);
+          node.left = temp;
+          // 判断当前结点类型 因为不追求平衡，如果为3-结点则添加2-结点，新结点为黑色，否则组成3-结点，新结点类型为红色
+          if (!isRed(node) && !isRed(node.right)) {
+            temp.isRed = true;
+          }
+        } else {
+          // 往左边插入
+          notBalancedPut(node.left, key);
+        }
+      } else if (cmp > 0) {
+        // 找到插入位置
+        if (node.right == null) {
+          TwoThreeNode temp = new TwoThreeNode(key);
+          node.right = temp;
+          // 判断当前结点类型 因为不追求平衡，如果为3-结点则添加2-结点，新结点为黑色，否则组成3-结点，新结点类型为红色
+          if (!isRed(node) && !isRed(node.right)) {
+            temp.isRed = true;
+          }
+        } else {
+          // 往右边插入
+          notBalancedPut(node.right, key);
+        }
+      }
+      node.size = 1 + size(node.left) + size(node.right);
+    }
+
+    private TwoThreeNode notBalancedDeleteMin(TwoThreeNode node) {
+      if (node.left == null) {
+        // 找到最小值，并判断当前结点是不是3-结点 是则退化为2-结点
+        if (isRed(node.right)) {
+          node.right.isRed = false;
+        }
+        return node.right;
+      }
+      node.left = notBalancedDeleteMin(node.left);
+      node.size = 1 + size(node.right) + size(node.left);
+      return node;
+    }
+
+    private TwoThreeNode notBalancedDelete(TwoThreeNode node, int key) {
+      // 不存在情况
+      if (node == null) {
+        return null;
+      }
+      int compare = key - node.val;
+      if (compare < 0) {
+        node.left = notBalancedDelete(node.left, key);
+      } else if (compare > 0) {
+        node.right = notBalancedDelete(node.right, key);
+      } else {
+        if (node.left == null) {
+          if (isRed(node.right)) {
+            node.right.isRed = false;
+          }
+          return node.right;
+        } else if (node.right == null) {
+          if (isRed(node.left)) {
+            node.left.isRed = false;
+          }
+          return node.left;
+        }
+        // 用next替换node的位置
+        TwoThreeNode temp = node;
+        node = min(node.right);
+        node.right = notBalancedDeleteMin(temp.right);
+        node.left = temp.left;
+        node.isRed = temp.isRed;
+      }
+      node.size = 1 + size(node.right) + size(node.left);
+      return node;
+    }
+  }
+
+  // ===============================================================================================
 }
