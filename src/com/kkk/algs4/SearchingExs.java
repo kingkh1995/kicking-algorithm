@@ -442,25 +442,24 @@ public class SearchingExs {
     // 尝试插入 如果插入失败，需要替换散列函数
     private boolean tryToInsert(Key key) {
       Key temp = key;
-      boolean hasInserted = false;
       // 出现死循环的时候 最后key仍然是原值
       // 插入C，数组中的值A和B经过两个hash函数结果完全一致，C与他们hash值也一致，则先替换A，A再替换B，B再替换C，一直循环直到重新变为C
       do {
         int aHash = aHash(temp);
         if (aKeys[aHash] == null) {
           aKeys[aHash] = temp;
-          hasInserted = true;
+          temp = null;
         } else {
           // 发生冲突则替换旧键
           Key old = aKeys[aHash];
           aKeys[aHash] = temp;
           temp = old;
         }
-        if (!hasInserted) {
+        if (temp != null) {
           int bHash = bHash(temp);
           if (bKeys[bHash] == null) {
             bKeys[bHash] = temp;
-            hasInserted = true;
+            temp = null;
           } else {
             // 发生冲突则替换旧键
             Key old = bKeys[bHash];
@@ -468,8 +467,8 @@ public class SearchingExs {
             temp = old;
           }
         }
-      } while (!hasInserted && !temp.equals(key)); // 终止条件，插入成功或者key变为了原值（出现了死循环）
-      return hasInserted;
+      } while (temp != null && !key.equals(temp)); // 终止条件，插入成功（temp为null）或者key变为了原值（出现了死循环）
+      return temp == null;
     }
 
     public void put(Key key) {
