@@ -218,7 +218,7 @@ public class SearchingExs {
   /**
    * 1.判断是否为红色： <br>
    * 1）是否为根节点，根节点必然为黑色；2）三种情况：a.有左子结点无右子节点（黑色）b.左右子都有（判断大小得出） <br>
-   * c.左右子都无，继续判断是否有兄弟结点，没有兄弟结点必定为红色，有兄弟结点则为黑色（因为是完美黑色平衡）  <br>
+   * c.左右子都无，继续判断是否有兄弟结点，没有兄弟结点必定为红色，有兄弟结点则为黑色（因为是完美黑色平衡） <br>
    * 2.查找算法：先判断结点颜色，如果为红色，则相反方向查找 <br>
    */
 
@@ -373,6 +373,155 @@ public class SearchingExs {
       bst.deleteMin();
     }
     System.out.println(bst.count());
+  }
+
+  // ===============================================================================================
+
+  /** 3.4.31 Cuckoo散列函数 维护两张散列表和两个散列函数 如果冲突则替换旧键，并将旧键插入另一张散列表中 */
+  private class CuckooHashSet<Key> {
+
+    // 两个散列表大小相同，同时公用size和n
+    private int size = 0;
+    private int n = 16;
+    private Key[] aKeys = (Key[]) new Object[n];
+    private Key[] bKeys = (Key[]) new Object[n];
+
+    private int aHash(Key key) {
+      return 0; // 不实现了
+    }
+
+    private int bHash(Key key) {
+      return 0; // 不实现了
+    }
+
+    // 置换hash函数，两个键值通过两个hash函数的结果都是相同的，会出现死循环无法插入
+    private void rehash() {
+      // 不实现了
+    }
+
+    private void tryResize() {
+      if (size > (n >> 1)) {
+        resize(n << 1);
+      } else if (size < (n >> 2)) {
+        resize(n >> 1);
+      }
+    }
+
+    private void resize(int newSize) {
+      if (newSize < 16 || newSize > Integer.MAX_VALUE) {
+        return;
+      }
+      n = newSize;
+      Key[] aOldKeys = aKeys;
+      aKeys = (Key[]) new Object[newSize];
+      Key[] bOldKeys = bKeys;
+      bKeys = (Key[]) new Object[newSize];
+      // 判断是否需要rehash
+      boolean needToRehash;
+      do {
+        needToRehash = false;
+        rehash();
+        // 遍历重新插入，如果插入失败，则break 重新置换hash函数 然后重新遍历插入
+        for (Key i : aOldKeys) {
+          if (i != null && !tryToInsert(i)) {
+            needToRehash = true;
+            break;
+          }
+        }
+        if (!needToRehash) {
+          for (Key i : bOldKeys) {
+            if (i != null && !tryToInsert(i)) {
+              needToRehash = true;
+              break;
+            }
+          }
+        }
+      } while (needToRehash);
+    }
+
+    // 尝试插入 如果插入失败，需要替换散列函数
+    private boolean tryToInsert(Key key) {
+      Key temp = key;
+      boolean hasInserted = false;
+      // 出现死循环的时候 最后key仍然是原值
+      // 插入C，数组中的值A和B经过两个hash函数结果完全一致，C与他们hash值也一致，则先替换A，A再替换B，B再替换C，一直循环直到重新变为C
+      do {
+        int aHash = aHash(temp);
+        if (aKeys[aHash] == null) {
+          aKeys[aHash] = temp;
+          hasInserted = true;
+        } else {
+          // 发生冲突则替换旧键
+          Key old = aKeys[aHash];
+          aKeys[aHash] = temp;
+          temp = old;
+        }
+        if (!hasInserted) {
+          int bHash = bHash(temp);
+          if (bKeys[bHash] == null) {
+            bKeys[bHash] = temp;
+            hasInserted = true;
+          } else {
+            // 发生冲突则替换旧键
+            Key old = bKeys[bHash];
+            bKeys[bHash] = temp;
+            temp = old;
+          }
+        }
+      } while (!hasInserted && !temp.equals(key)); // 终止条件，插入成功或者key变为了原值（出现了死循环）
+      return hasInserted;
+    }
+
+    public void put(Key key) {
+      if (key == null) {
+        return;
+      }
+      // 如果存在 return
+      if (contains(key)) {
+        return;
+      }
+      // 尝试插入，如果插入失败，重新hash，使用当前n值resize一遍，直到插入成功。
+      while (!tryToInsert(key)) {
+        resize(n);
+      }
+      size++;
+      tryResize();
+    }
+
+    public boolean contains(Key key) {
+      if (key == null) {
+        return false;
+      }
+      // 使用对应的散列函数在两个数组查找一次即可
+      int aHash = aHash(key);
+      if (key.equals(aKeys[aHash])) {
+        return true;
+      }
+      int bHash = bHash(key);
+      if (key.equals(bKeys[bHash])) {
+        return true;
+      }
+      return false;
+    }
+
+    public void delete(Key key) {
+      if (key == null) {
+        return;
+      }
+      // 如果不存在 return
+      if (!contains(key)) {
+        return;
+      }
+      // 存在着找到并删除
+      int aHash = aHash(key);
+      if (key.equals(aKeys[aHash])) {
+        aKeys[aHash] = null;
+      } else {
+        bKeys[bHash(key)] = null;
+      }
+      size--;
+      tryResize();
+    }
   }
 
   // ===============================================================================================
