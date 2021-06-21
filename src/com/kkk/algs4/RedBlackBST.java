@@ -221,7 +221,7 @@ public class RedBlackBST {
       node = rotateRight(node);
     }
     if (node.right == null) {
-      // 找到最小值，直接删除，因为变换之后已经不存在2-结点了
+      // 找到最大值，直接删除，因为变换之后已经不存在2-结点了
       return node.left; // 可以直接return null 因为left必然为null
     }
     // 判断右结点为2-结点 则将右结点或右结点的子结点任意一个变红

@@ -439,11 +439,11 @@ public class SearchingExs {
       } while (needToRehash);
     }
 
-    // 尝试插入 如果插入失败，需要替换散列函数
+    // 尝试插入 如果插入失败，需要替换散列函数并重新插入所有元素
     private boolean tryToInsert(Key key) {
       Key temp = key;
-      // 出现死循环的时候 最后key仍然是原值
-      // 插入C，数组中的值A和B经过两个hash函数结果完全一致，C与他们hash值也一致，则先替换A，A再替换B，B再替换C，一直循环直到重新变为C
+      // 出现死循环的时候 插入值会仍然是原值
+      // 插入C，数组中的值A和B经过两个hash函数结果完全一致，C与他们hash值也一致，则C先替换A，A再替换B，B再替换C，一直循环插入值会重新变为C
       do {
         int aHash = aHash(temp);
         if (aKeys[aHash] == null) {
@@ -467,7 +467,7 @@ public class SearchingExs {
             temp = old;
           }
         }
-      } while (temp != null && !key.equals(temp)); // 终止条件，插入成功（temp为null）或者key变为了原值（出现了死循环）
+      } while (temp != null && !key.equals(temp)); // 终止条件，插入成功（temp为null）或者temp变为了原值（出现了死循环）
       return temp == null;
     }
 
@@ -479,7 +479,7 @@ public class SearchingExs {
       if (contains(key)) {
         return;
       }
-      // 尝试插入，如果插入失败，重新hash，使用当前n值resize一遍，直到插入成功。
+      // 尝试插入，如果插入失败，重新设置hash函数，并重新插入元素，循环直到插入成功。
       while (!tryToInsert(key)) {
         resize(n);
       }
@@ -511,7 +511,7 @@ public class SearchingExs {
       if (!contains(key)) {
         return;
       }
-      // 存在着找到并删除
+      // 存在则找到并删除
       int aHash = aHash(key);
       if (key.equals(aKeys[aHash])) {
         aKeys[aHash] = null;
