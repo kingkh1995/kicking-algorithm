@@ -23,7 +23,7 @@ public class SearchingExs {
     if (lo > hi) {
       return null;
     }
-    int mid = (lo + hi) >>> 1;
+    int mid = lo + ((hi - lo) >> 1); // 不用（lo + hi） >> 1 是防止lo和hi直接相加结果溢出
     TreeNode treeNode = new TreeNode(arr[mid]);
     treeNode.left = buildBST(arr, lo, mid - 1);
     treeNode.right = buildBST(arr, mid + 1, hi);
