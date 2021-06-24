@@ -10,6 +10,7 @@ public class BaseExs {
 
   /**
    * 二分查找 <br>
+   * 三个模板：1、区间允许只有一个元素；2、区间至少两个元素；3、区间至少3个元素。 <br>
    * <br>
    */
 
@@ -32,7 +33,7 @@ public class BaseExs {
     }
     // 为什么返回hi?最后一轮循环lo=hi=mid
     // 如果循环结束于cmp<0，表示mid次方大于x，故需要减1，最后一轮循环结束后，hi=mid-1，所以取hi
-    // 如果循环结束于cmp>0，表示mid次方小于x，故取mid即可，而最后一轮循环后，hi未变，还是取hi
+    // 如果循环结束于cmp>0，表示mid次方小于x，故取mid即可，而最后一轮循环后，hi未变，还是等于mid
     return hi;
   }
 
@@ -71,6 +72,43 @@ public class BaseExs {
       }
       return -1;
     }
+  }
+
+  // 求区间极小值
+  public int findPeakElement(int[] nums) {
+    if (nums.length == 1) {
+      return 0;
+    }
+    // 找到任意一个极限值 保证区间元素至少有两个
+    int l = 0, r = nums.length - 1;
+    while (l < r) {
+      int m = l + (r - l) / 2;
+      // 最后一步l=m=r-1 所以先判断右边 并保证右边一定是小值
+      if (nums[m] > nums[m + 1]) {
+        r = m;
+      } else {
+        l = m + 1;
+      }
+    }
+    return l;
+  }
+
+  // 求最小值，不同于求极小值
+  public static int findMin(int[] nums) {
+    // 保证区间元素至少有两个 区间长度为1时特殊判断
+    if (nums.length == 1) {
+      return nums[0];
+    }
+    int l = 0, r = nums.length - 1;
+    while (l < r) {
+      int m = l + (r - l) / 2;
+      if (nums[m] > nums[r]) { // 中点大于说明最小值在mid右边 否则在左边 保证右边是右区间的小值
+        l = m + 1;
+      } else {
+        r = m;
+      }
+    }
+    return nums[l];
   }
 
   // ===============================================================================================
