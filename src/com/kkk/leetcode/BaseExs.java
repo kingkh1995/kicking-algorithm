@@ -111,5 +111,33 @@ public class BaseExs {
     return nums[l];
   }
 
+  // 从排序数组中找到等于target的区间
+  public int[] searchRange(int[] nums, int target) {
+    // 找到大于target-1的第一个位置
+    int leftIdx = binarySearch(nums, target - 1); // 必然大于target-1
+    // 找到大于target的第一个位置左移一位（不存在则为右端点）//必然大于等于target
+    int rightIdx = binarySearch(nums, target) - 1;
+    // 首先判断区间存在，并且区间值等于target 区间内值肯定是完全相同的，但可能全部是大于target的某个值
+    if (leftIdx <= rightIdx && nums[leftIdx] == target) {
+      return new int[] {leftIdx, rightIdx};
+    }
+    return new int[] {-1, -1};
+  }
+
+  // 第一个大于 target 的数的下标
+  public int binarySearch(int[] nums, int target) {
+    int left = 0, right = nums.length - 1, ans = nums.length; // 默认为右边界加一
+    while (left <= right) {
+      int mid = (left + right) / 2;
+      if (nums[mid] > target) {
+        right = mid - 1;
+        ans = mid;
+      } else {
+        left = mid + 1;
+      }
+    }
+    return ans;
+  }
+
   // ===============================================================================================
 }
