@@ -5,18 +5,19 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * 基础入门
+ * 二分查找 <br>
  *
  * @author KaiKoo
  */
-public class BaseExs {
-  // =============================================================================================
+public class BinarySearchExs {
 
   /**
-   * 二分查找 <br>
    * 三个模板：1、区间允许只有一个元素；2、区间至少两个元素；3、区间至少3个元素。 <br>
    * <br>
    */
+
+  // ===============================================================================================
+  /** 基础题 */
 
   // 求 x 的平方根，其中 x 是非负整数，结果只保留整数的部分，小数部分将被舍去。
   public int mySqrt(int x) {
@@ -97,7 +98,7 @@ public class BaseExs {
     return l;
   }
 
-  // 求最小值，不同于求极小值
+  // 求最小值，不同于求极小值 分为左右区间均是有序
   public static int findMin(int[] nums) {
     // 保证区间元素至少有两个 区间长度为1时特殊判断
     if (nums.length == 1) {
@@ -144,6 +145,7 @@ public class BaseExs {
     return ans;
   }
 
+  // 查找数组中最解决x的k个数
   public static List<Integer> findClosestElements(int[] arr, int k, int x) {
     if (k < 1 || k > arr.length) {
       throw new IllegalArgumentException();
@@ -165,9 +167,9 @@ public class BaseExs {
     }
     while (hi - low < k - 1) {
       if (low == 0) {
-        hi++;
+        hi = k - 1;
       } else if (hi == arr.length - 1) {
-        low--;
+        low = arr.length - k;
       } else if (Math.abs(arr[low - 1] - x) <= Math.abs(arr[hi + 1] - x)) {
         low--;
       } else {
@@ -178,4 +180,5 @@ public class BaseExs {
   }
 
   // ===============================================================================================
+  /** 拔高题 */
 }
