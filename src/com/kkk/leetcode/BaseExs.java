@@ -1,5 +1,9 @@
 package com.kkk.leetcode;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
 /**
  * 基础入门
  *
@@ -117,7 +121,7 @@ public class BaseExs {
     int leftIdx = binarySearch(nums, target - 1); // 必然大于target-1
     // 找到大于target的第一个位置左移一位（不存在则为右端点）//必然大于等于target
     int rightIdx = binarySearch(nums, target) - 1;
-    // 首先判断区间存在，并且区间值等于target 区间内值肯定是完全相同的，但可能全部是大于target的某个值
+    // 首先判断区间存在，特殊情况是不存在target，left&right则均指向第一个大于target的元素，所以需要判断是否为target
     if (leftIdx <= rightIdx && nums[leftIdx] == target) {
       return new int[] {leftIdx, rightIdx};
     }
@@ -125,8 +129,9 @@ public class BaseExs {
   }
 
   // 第一个大于 target 的数的下标
-  public int binarySearch(int[] nums, int target) {
+  public static int binarySearch(int[] nums, int target) {
     int left = 0, right = nums.length - 1, ans = nums.length; // 默认为右边界加一
+    // 使用二分查找 去查找target并且每次将大值设为ans
     while (left <= right) {
       int mid = (left + right) / 2;
       if (nums[mid] > target) {
@@ -137,6 +142,39 @@ public class BaseExs {
       }
     }
     return ans;
+  }
+
+  public static List<Integer> findClosestElements(int[] arr, int k, int x) {
+    if (k < 1 || k > arr.length) {
+      throw new IllegalArgumentException();
+    }
+    // 找到第一个大于x的元素
+    int index = binarySearch(arr, x);
+    if (index == 0) {
+      return Arrays.stream(arr).limit(k).boxed().collect(Collectors.toList());
+    }
+    if (index == arr.length) {
+      return Arrays.stream(arr).skip(arr.length - k).boxed().collect(Collectors.toList());
+    }
+    int low, hi;
+    // 设置low hi 取index index-1最接近的那个
+    if (Math.abs(arr[index] - x) <= Math.abs(arr[index - 1] - x)) {
+      low = hi = index;
+    } else {
+      low = hi = index - 1;
+    }
+    while (hi - low < k - 1) {
+      if (low == 0) {
+        hi++;
+      } else if (hi == arr.length - 1) {
+        low--;
+      } else if (Math.abs(arr[low - 1] - x) <= Math.abs(arr[hi + 1] - x)) {
+        low--;
+      } else {
+        hi++;
+      }
+    }
+    return Arrays.stream(arr).skip(low).limit(k).boxed().collect(Collectors.toList());
   }
 
   // ===============================================================================================
