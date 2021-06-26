@@ -12,7 +12,8 @@ import java.util.stream.Collectors;
 public class BinarySearchExs {
 
   /**
-   * 三个模板：1、区间允许只有一个元素；2、区间至少两个元素；3、区间至少3个元素。 <br>
+   * 三个模板： <br>
+   * 1、区间允许只有一个元素（不和任何元素对比）；2、区间至少两个元素（要和右边元素对比）；3、区间至少3个元素（要和左右元素对比）。 <br>
    * <br>
    */
 
@@ -42,7 +43,7 @@ public class BinarySearchExs {
     return hi;
   }
 
-  // 搜索旋转排序数组
+  // 在旋转排序数组中搜索元素
   public static int search(int[] nums, int target) {
     int lo = 0, hi = nums.length - 1;
     int left = nums[lo], right = nums[hi];
@@ -81,9 +82,6 @@ public class BinarySearchExs {
 
   // 求区间极小值
   public int findPeakElement(int[] nums) {
-    if (nums.length == 1) {
-      return 0;
-    }
     // 找到任意一个极限值 保证区间元素至少有两个
     int l = 0, r = nums.length - 1;
     while (l < r) {
@@ -96,24 +94,6 @@ public class BinarySearchExs {
       }
     }
     return l;
-  }
-
-  // 求最小值，不同于求极小值 分为左右区间均是有序
-  public static int findMin(int[] nums) {
-    // 保证区间元素至少有两个 区间长度为1时特殊判断
-    if (nums.length == 1) {
-      return nums[0];
-    }
-    int l = 0, r = nums.length - 1;
-    while (l < r) {
-      int m = l + (r - l) / 2;
-      if (nums[m] > nums[r]) { // 中点大于说明最小值在mid右边 否则在左边 保证右边是右区间的小值
-        l = m + 1;
-      } else {
-        r = m;
-      }
-    }
-    return nums[l];
   }
 
   // 从排序数组中找到等于target的区间
@@ -181,14 +161,11 @@ public class BinarySearchExs {
 
   // 求pow
   public static double myPow(double x, int n) {
-    return n > 0 ? quickPow(x, n) : 1 / quickPow(x, -(long) n); // 必须要转为long类型 处理-2^31次方情况
+    return n >= 0 ? quickPow(x, n) : 1 / quickPow(x, -(long) n); // 必须要转为long类型 处理-2^31次方情况
   }
 
   // 迭代实现
   private static double quickPow(double x, long n) {
-    if (n == 0) {
-      return 1;
-    }
     double temp = x;
     double ans = 1;
     // n变为2的n次幂相加的结果 则 ans转为x的（2的n次幂）次幂相乘的结果
@@ -200,6 +177,23 @@ public class BinarySearchExs {
       temp *= temp;
     }
     return ans;
+  }
+
+  // 求最小值 （有重复值） 不同于求极小值 数组分为左右区间且均是有序
+  public int findMin(int[] nums) {
+    int low = 0;
+    int high = nums.length - 1;
+    while (low < high) {
+      int pivot = low + (high - low) / 2;
+      if (nums[pivot] < nums[high]) {
+        high = pivot; // 小于必然在右区间 忽略右边
+      } else if (nums[pivot] > nums[high]) {
+        low = pivot + 1; // 大于必然在左区间 忽略左边
+      } else {
+        high -= 1; // 等于无法判断，左移一格
+      }
+    }
+    return nums[low];
   }
 
   // ===============================================================================================
