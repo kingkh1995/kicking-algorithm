@@ -179,6 +179,29 @@ public class BinarySearchExs {
     return Arrays.stream(arr).skip(low).limit(k).boxed().collect(Collectors.toList());
   }
 
+  // 求pow
+  public static double myPow(double x, int n) {
+    return n > 0 ? quickPow(x, n) : 1 / quickPow(x, -(long) n); // 必须要转为long类型 处理-2^31次方情况
+  }
+
+  // 迭代实现
+  private static double quickPow(double x, long n) {
+    if (n == 0) {
+      return 1;
+    }
+    double temp = x;
+    double ans = 1;
+    // n变为2的n次幂相加的结果 则 ans转为x的（2的n次幂）次幂相乘的结果
+    while (n != 0) {
+      if ((n & 1) == 1) {
+        ans *= temp;
+      }
+      n >>= 1;
+      temp *= temp;
+    }
+    return ans;
+  }
+
   // ===============================================================================================
   /** 拔高题 */
 }
