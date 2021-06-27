@@ -72,4 +72,19 @@ public class ArrayUtils {
     }
     return true;
   }
+
+  public static int rank(int[] a, int key) {
+    int lo = 0, hi = a.length - 1, i = a.length;
+    while (lo <= hi) {
+      int mid = lo + (hi - lo) / 2;
+      if (a[mid] < key) {
+        lo = mid + 1;
+      } else {
+        i = mid; // 大于等于情况下，将i设置为mid
+        hi = mid - 1;
+      }
+    }
+    // i对应的值必然大于等于key 或者等于数组长度
+    return i;
+  }
 }

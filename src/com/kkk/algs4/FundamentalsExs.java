@@ -99,7 +99,7 @@ public class FundamentalsExs {
     while (lo <= hi) {
       int mid = lo + (hi - lo) / 2;
       if (a[mid] == key) {
-        while (--mid >= 0 & a[mid] == key) {}
+        while (--mid >= 0 && a[mid] == key) {}
         return ++mid;
       } else if (a[mid] < key) {
         lo = mid + 1;
