@@ -10,7 +10,7 @@ import java.util.concurrent.ThreadLocalRandom;
  *
  * @author KaiKoo
  */
-public class SearchingExs {
+public class SearchingExx {
   // ===============================================================================================
 
   /** 3.2.25 完美平衡 利用一组数构建一个和二分查找完全等价的二叉树 */

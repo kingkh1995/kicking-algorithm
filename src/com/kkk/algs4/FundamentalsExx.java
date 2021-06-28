@@ -13,7 +13,7 @@ import java.util.concurrent.ThreadLocalRandom;
  *
  * @author KaiKoo
  */
-public class FundamentalsExs {
+public class FundamentalsExx {
 
   // ==============================================================================================
 
@@ -41,9 +41,9 @@ public class FundamentalsExs {
     int i = ThreadLocalRandom.current().nextInt();
     System.out.println(i);
     System.out.println(Integer.toBinaryString(i));
-    System.out.println(FundamentalsExs.toBinaryString(i));
+    System.out.println(FundamentalsExx.toBinaryString(i));
     System.out.println(Integer.toBinaryString(-i));
-    System.out.println(FundamentalsExs.toBinaryString(-i));
+    System.out.println(FundamentalsExx.toBinaryString(-i));
   }
 
   // ==============================================================================================

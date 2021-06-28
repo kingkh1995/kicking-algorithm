@@ -1,8 +1,8 @@
 package com.kkk.algs4;
 
 /**
- * 第四章 图
+ * 第五章 字符串
  *
  * @author KaiKoo
  */
-public class Graphs {}
+public class StringsExx {}

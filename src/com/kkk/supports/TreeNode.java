@@ -27,5 +27,4 @@ public class TreeNode {
         + (this.right == null ? "*" : this.right.toString())
         + "|";
   }
-
 }

@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
  *
  * @author KaiKoo
  */
-public class SortingExs {
+public class SortingExx {
 
   // ==============================================================================================
 
@@ -159,10 +159,10 @@ public class SortingExs {
 
   public static void naturalSortTest() {
     int[] arr1 = ArrayUtils.randomArr(200, 1, 100);
-    SortingExs.naturalSort(arr1);
+    SortingExx.naturalSort(arr1);
     System.out.println(ArrayUtils.isSorted(arr1));
     int[] arr2 = ArrayUtils.randomArr(200, 1, 1000);
-    SortingExs.naturalSort(arr2);
+    SortingExx.naturalSort(arr2);
     System.out.println(ArrayUtils.isSorted(arr2));
   }
 
@@ -521,7 +521,7 @@ public class SortingExs {
             .boxed()
             .collect(Collectors.toList())
             .toArray(new Integer[50]);
-    int[] indexs = stabilize(array, Essences::fast3DQuickSort);
+    int[] indexs = stabilize(array, EssentialExx::fast3DQuickSort);
     System.out.println(Arrays.toString(array));
     System.out.println(Arrays.toString(indexs));
   }

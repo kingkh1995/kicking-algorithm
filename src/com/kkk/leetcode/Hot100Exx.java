@@ -1,6 +1,10 @@
 package com.kkk.leetcode;
 
-/** @author KaiKoo */
-public class Hot100Exs {
+/**
+ * 力扣热题100
+ *
+ * @author KaiKoo
+ */
+public class Hot100Exx {
   // ===============================================================================================
 }

@@ -1,8 +1,8 @@
 package com.kkk.algs4;
 
 /**
- * 第五章 字符串
+ * 第六章 背景
  *
  * @author KaiKoo
  */
-public class StringsExs {}
+public class ContextExx {}

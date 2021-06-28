@@ -5,12 +5,12 @@ package com.kkk.leetcode;
  *
  * @author KaiKoo
  */
-public class DPExs {
+public class DynamicProgramingExx {
 
   // ===============================================================================================
   /** 拔高题 */
 
-  // 分割数组的最大值 将非负整数数组分为非空的m组 使得各数组各自的和的最大值最小 求出该最小值
+  // 分割数组的最大值 将非负整数数组分为非空且连续的m组 使得各数组各自的和的最大值最小 求出该最小值
   public static int splitArray(int[] nums, int m) {
     int n = nums.length;
     int[][] dp = new int[n + 1][m + 1]; // 将前n个元素分为m组

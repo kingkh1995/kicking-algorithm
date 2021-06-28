@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
  *
  * @author KaiKoo
  */
-public class BinarySearchExs {
+public class BinarySearchExx {
 
   /**
    * 三个模板： <br>
