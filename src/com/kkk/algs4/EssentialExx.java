@@ -138,7 +138,7 @@ public class EssentialExx {
       }
       // 相遇有两种情况，在中间相遇，肯定等于pivot，第二种情况在hi处相遇，此时不一定等于。
       // 如果i j 相遇，且等于pivot，则交换到等于pivot的区间
-      if (i == j && arr[i] == pivot) {
+      if (i == j && arr[i].compareTo(pivot) == 0) {
         ArrayUtils.swap(arr, ++p, i);
       }
       if (i >= j) {
@@ -146,10 +146,10 @@ public class EssentialExx {
       }
       // 和普通的partiion方法一样，交换i j
       ArrayUtils.swap(arr, i, j);
-      if (arr[i] == pivot) {
+      if (arr[i].compareTo(pivot) == 0) {
         ArrayUtils.swap(arr, ++p, i);
       }
-      if (arr[j] == pivot) {
+      if (arr[j].compareTo(pivot) == 0) {
         ArrayUtils.swap(arr, --q, j);
       }
     }

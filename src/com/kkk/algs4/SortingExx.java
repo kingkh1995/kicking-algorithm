@@ -479,10 +479,10 @@ public class SortingExx {
     sort.accept(wrappers);
     for (int i = 1; i < wrappers.length; i++) {
       // 插入排序
-      for (; i < wrappers.length && wrappers[i].v == wrappers[i - 1].v; i++) {
+      for (; i < wrappers.length && wrappers[i].v.compareTo(wrappers[i - 1].v) == 0; i++) {
         for (int j = i;
             j > 0
-                && wrappers[j].v == wrappers[j - 1].v
+                && wrappers[j].v.compareTo(wrappers[j - 1].v) == 0
                 && wrappers[j].index < wrappers[j - 1].index;
             j--) {
           Wrapper temp = wrappers[j - 1];
