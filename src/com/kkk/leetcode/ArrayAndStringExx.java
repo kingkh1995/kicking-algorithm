@@ -3,11 +3,11 @@ package com.kkk.leetcode;
 import com.kkk.supports.ArrayUtils;
 
 /**
- * 数组和矩阵
+ * 数组和字符串
  *
  * @author KaiKoo
  */
-public class ArrayAndMatrixExx {
+public class ArrayAndStringExx {
 
   // ===============================================================================================
   /** 基础题 */
