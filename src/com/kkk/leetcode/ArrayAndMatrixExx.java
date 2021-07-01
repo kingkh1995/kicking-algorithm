@@ -47,7 +47,7 @@ public class ArrayAndMatrixExx {
     if (nums.length <= 1) {
       return nums.length;
     }
-    // 从第二个元素开始，如果不等于前一个元素则移到前端
+    // 从第二个元素开始，如果不等于前一个元素则移到前端 相同则跳过元素
     int index = 1;
     for (int i = 1; i < nums.length; i++) {
       if (nums[i] != nums[index - 1]) {
@@ -111,8 +111,77 @@ public class ArrayAndMatrixExx {
     return slow;
   }
 
-  // 找到第k大的元素
+  // 找到第k大的元素 普通三向切分快排
   public static int findKthLargest(int[] arr, int k) {
+    int lo = 0, hi = arr.length - 1;
+    k--;
+    while (true) {
+      int pivot = arr[lo];
+      // （lo,i）大于 [i,l)等于 [l,j]未排序 （j,hi）小于
+      int i = lo, l = lo + 1, j = hi;
+      while (l <= j) {
+        int cmp = arr[l] - pivot;
+        if (cmp == 0) {
+          l++; // 等于直接左移 即等于区间右增一格
+        } else if (cmp < 0) {
+          ArrayUtils.swap(arr, l, j--); // 小于从未排序区间最右边换一个元素过来，即未排序区间左缩一格
+        } else {
+          ArrayUtils.swap(arr, l++, i++); // 大于则从等于区间交换一个等于元素过来 即等于区间整个左移
+        }
+      }
+      // 排序完之后则[i,j]未等于区间 判断是否在该区间内
+      if (k >= i && k <= j) {
+        return pivot;
+      } else if (k < i) {
+        hi = i - 1; // 在左边则排序左边
+      } else {
+        lo = j + 1; // 在右边则排序右边
+      }
+    }
+  }
+
+  // 盛最多水的容器 选择两块板让装水量最多
+  public int maxArea(int[] height) {
+    int i = 0, j = height.length - 1, max = 0;
+    while (i < j) {
+      max = Math.max(max, Math.min(height[i], height[j]) * (j - i));
+      // 短板效应 从短板一侧向中间找到第一个比它长的板
+      if (height[i] > height[j]) {
+        // 移动j
+        int temp = height[j];
+        while (j > 0 && height[--j] <= temp) {}
+
+      } else {
+        // 移动i
+        int temp = height[i];
+        while (i < height.length - 1 && height[++i] <= temp) {}
+      }
+    }
+    return max;
+  }
+
+  // 长度最小的子数组 找到和满足大于等于target的长度最小的连续子数组
+  public static int minSubArrayLen(int target, int[] nums) {
+    int min = Integer.MAX_VALUE, sum = 0;
+    // 使用滑动窗口
+    int i = 0, j = 0;
+    while (j < nums.length) {
+      sum += nums[j];
+      while (sum >= target) {
+        min = Math.min(min, j - i + 1);
+        // 左端左移 左移永远不可能超过j
+        sum -= nums[i++];
+      }
+      j++;
+    }
+    return min == Integer.MAX_VALUE ? 0 : min;
+  }
+
+  // ===============================================================================================
+  /** 困难题 */
+
+  // 找到第k大的元素 使用快速三向切分快排
+  public static int findKthLargest0(int[] arr, int k) {
     if (k < 1 || k > arr.length) {
       throw new IllegalArgumentException();
     }
@@ -120,7 +189,7 @@ public class ArrayAndMatrixExx {
     var hi = arr.length - 1;
     var index = arr.length - k;
     while (true) {
-      // 小于5个元素直接插入排序
+      // 小于等于5个元素直接插入排序
       if (hi - lo < 5) {
         for (var i = lo + 1; i <= hi; i++) {
           var j = i;
@@ -132,7 +201,6 @@ public class ArrayAndMatrixExx {
         }
         return arr[index];
       }
-      // 使用快速三向切分快排
       // 将index处的值作为pivot
       ArrayUtils.swap(arr, index, lo);
       // l--p--i--j--q--h
