@@ -1,13 +1,15 @@
 package com.kkk.supports;
 
 /** @author KaiKoo */
-public class Node {
+public class ListNode {
 
   public int val;
 
-  public Node next;
+  public ListNode next;
 
-  public Node(int val) {
+  public ListNode(int val) {
     this.val = val;
+    next = null;
   }
+
 }

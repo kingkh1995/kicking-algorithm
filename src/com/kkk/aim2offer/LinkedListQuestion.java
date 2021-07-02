@@ -10,7 +10,7 @@ public class LinkedListQuestion {
 
   private static final LinkedListQuestion LINKED_LIST_QUESTION = new LinkedListQuestion();
 
-  public static class ListNode {
+  private static class ListNode {
 
     int val;
     ListNode next;

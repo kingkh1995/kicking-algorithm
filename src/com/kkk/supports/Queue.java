@@ -5,12 +5,12 @@ public class Queue {
 
   private int count = 0;
 
-  private Node first = null;
+  private ListNode first = null;
 
-  private Node tail = null;
+  private ListNode tail = null;
 
   public void enqueue(int i) {
-    Node node = new Node(i);
+    ListNode node = new ListNode(i);
     count++;
     if (count == 1) {
       this.first = node;
@@ -25,7 +25,7 @@ public class Queue {
     if (count == 0) {
       throw new UnsupportedOperationException();
     }
-    Node node = this.first;
+    ListNode node = this.first;
     count--;
     if (count == 0) {
       this.first = null;

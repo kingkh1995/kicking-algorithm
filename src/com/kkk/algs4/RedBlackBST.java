@@ -170,7 +170,7 @@ public class RedBlackBST {
       // 找到最小值，直接删除，因为变换之后已经不存在2-结点了
       return node.right; // 可以直接return null 因为right必然为null
     }
-    // 如果判断左结点为2-结点则 将左结点或者左结点的子节点任意一个变红
+    // 如果判断左结点为2-结点则 将左结点或者左结点的子结点任意一个变红
     if (!isRed(node.left) && !isRed(node.left.left)) {
       node = moveRedLeft(node);
     }
@@ -264,7 +264,7 @@ public class RedBlackBST {
       }
       node.left = delete(node.left, key);
     } else {
-      // 如果为3-结点，则将左斜红链接右旋为右斜红链接，这是为了保证路径上两个黑结点的父结点必然是红节点
+      // 如果为3-结点，则将左斜红链接右旋为右斜红链接，这是为了保证路径上两个黑结点的父结点必然是红结点
       if (isRed(node.left)) {
         node = rotateRight(node);
       }
@@ -311,16 +311,16 @@ public class RedBlackBST {
     //    R   R     =之前会左旋一次=>     R     R      然后直接颜色转换即可
     //          R                          R
 
-    // 第一步 左子结点为黑，右子节点为红 则左旋
+    // 第一步 左子结点为黑，右子结点为红 则左旋
     if (!isRed(node.left) && isRed(node.right)) {
       node = rotateLeft(node);
     }
-    // 第二步 左子结点为红，且左子节点的左子节点为红 右旋
+    // 第二步 左子结点为红，且左子结点的左子结点为红 右旋
     // 额外加上判断 对moveLeft的图像不做右旋
     if (isRed(node.left) && isRed(node.left.left) && !isRed(node.right)) {
       node = rotateRight(node);
     }
-    // 左为红，且左子节点的右子节点为红 这种情况不会存在，因为该情况对应上一步的左子结点为黑，右子节点为红
+    // 左为红，且左子结点的右子结点为红 这种情况不会存在，因为该情况对应上一步的左子结点为黑，右子结点为红
     // 第三步 左子结点和右子结点都为红
     if (isRed(node.left) && isRed(node.right)) {
       flipColors(node);

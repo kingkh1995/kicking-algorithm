@@ -1,7 +1,7 @@
 package com.kkk.algs4;
 
 import com.kkk.supports.ArrayUtils;
-import com.kkk.supports.Node;
+import com.kkk.supports.ListNode;
 import com.kkk.supports.NodeUtils;
 import com.kkk.supports.Queue;
 import com.kkk.supports.Stack;
@@ -169,10 +169,10 @@ public class SortingExx {
   // ==============================================================================================
 
   /** 2.2.17 链表排序 使用自然排序，这是链表最佳的排序方法 */
-  private static Node linkedNodeSort(Node node) {
-    Node first, second, third;
+  private static ListNode linkedNodeSort(ListNode node) {
+    ListNode first, second, third;
     // 归并之后的头
-    Node head = node;
+    ListNode head = node;
     while (true) {
       // 先确定头
       first = head;
@@ -182,9 +182,9 @@ public class SortingExx {
       }
       third = findBlock(second.next);
       // 归并区间后一个结点
-      Node next = third.next;
+      ListNode next = third.next;
       // 合并两个链表前先拆开
-      Node temp = second.next;
+      ListNode temp = second.next;
       second.next = null;
       third.next = null;
       head = merge(first, temp);
@@ -214,7 +214,7 @@ public class SortingExx {
     return head;
   }
 
-  private static void add(Node head, Node next) {
+  private static void add(ListNode head, ListNode next) {
     if (head == null || next == null) {
       return;
     }
@@ -224,13 +224,13 @@ public class SortingExx {
     head.next = next;
   }
 
-  private static Node merge(Node first, Node second) {
+  private static ListNode merge(ListNode first, ListNode second) {
     if (second == null) {
       return first;
     } else if (first == null) {
       return second;
     }
-    Node head;
+    ListNode head;
     if (first.val < second.val) {
       head = first;
       first = first.next;
@@ -238,7 +238,7 @@ public class SortingExx {
       head = second;
       second = second.next;
     }
-    Node node = head;
+    ListNode node = head;
     while (true) {
       if (first == null) {
         node.next = second;
@@ -259,11 +259,11 @@ public class SortingExx {
     return head;
   }
 
-  private static Node findBlock(Node node) {
+  private static ListNode findBlock(ListNode node) {
     if (node == null) {
       return null;
     }
-    Node next = node.next;
+    ListNode next = node.next;
     while (next != null) {
       if (node.val > next.val) {
         return node;
@@ -275,8 +275,8 @@ public class SortingExx {
   }
 
   public static void linkedNodeSortTest() {
-    Node node1 = NodeUtils.randomLinkedNode(50, 1, 50);
-    Node node2 = NodeUtils.distinctLinkedNode(50, 1, 100);
+    ListNode node1 = NodeUtils.randomLinkedList(50, 1, 50);
+    ListNode node2 = NodeUtils.distinctLinkedList(50, 1, 100);
     node1 = linkedNodeSort(node1);
     node2 = linkedNodeSort(node2);
     System.out.println(NodeUtils.isSorted(node1));

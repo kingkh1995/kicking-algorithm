@@ -5,11 +5,11 @@ public class Stack {
 
   private int count = 0;
 
-  private Node top = null;
+  private ListNode top = null;
 
   public void push(int i) {
     count++;
-    Node node = new Node(i);
+    ListNode node = new ListNode(i);
     node.next = this.top;
     this.top = node;
   }
@@ -19,7 +19,7 @@ public class Stack {
       throw new UnsupportedOperationException();
     }
     count--;
-    Node node = this.top;
+    ListNode node = this.top;
     this.top = node.next;
     return node.val;
   }

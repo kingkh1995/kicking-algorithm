@@ -3,35 +3,35 @@ package com.kkk.supports;
 /** @author KaiKoo */
 public class NodeUtils {
 
-  public static Node randomSortedLinkedNode(int n, int origin, int bound) {
-    return toLinkedNode(ArrayUtils.randomSortedArr(n, origin, bound));
+  public static ListNode randomSortedLinkedList(int n, int origin, int bound) {
+    return toLinkedList(ArrayUtils.randomSortedArr(n, origin, bound));
   }
 
-  public static Node randomLinkedNode(int n, int origin, int bound) {
-    return toLinkedNode(ArrayUtils.randomArr(n, origin, bound));
+  public static ListNode randomLinkedList(int n, int origin, int bound) {
+    return toLinkedList(ArrayUtils.randomArr(n, origin, bound));
   }
 
-  public static Node distinctSortedLinkedNode(int n, int origin, int bound) {
-    return toLinkedNode(ArrayUtils.distinctSortedArr(n, origin, bound));
+  public static ListNode distinctSortedLinkedList(int n, int origin, int bound) {
+    return toLinkedList(ArrayUtils.distinctSortedArr(n, origin, bound));
   }
 
-  public static Node distinctLinkedNode(int n, int origin, int bound) {
-    return toLinkedNode(ArrayUtils.distinctArr(n, origin, bound));
+  public static ListNode distinctLinkedList(int n, int origin, int bound) {
+    return toLinkedList(ArrayUtils.distinctArr(n, origin, bound));
   }
 
-  public static Node toLinkedNode(int[] arr) {
-    Node head = new Node(arr[0]);
-    Node node = head;
+  public static ListNode toLinkedList(int[] arr) {
+    ListNode head = new ListNode(arr[0]);
+    ListNode node = head;
     for (int i = 1; i < arr.length; i++) {
-      Node temp = new Node(arr[i]);
+      ListNode temp = new ListNode(arr[i]);
       node.next = temp;
       node = temp;
     }
     return head;
   }
 
-  public static boolean isSorted(Node node) {
-    Node next = node.next;
+  public static boolean isSorted(ListNode node) {
+    ListNode next = node.next;
     while (next != null) {
       if (node.val > next.val) {
         return false;
@@ -42,7 +42,7 @@ public class NodeUtils {
     return true;
   }
 
-  public static void printNode(Node node) {
+  public static void printNode(ListNode node) {
     if (node == null) {
       return;
     }
