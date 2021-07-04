@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 /**
  * 二分查找 <br>
+ * 719、410
  *
  * @author KaiKoo
  */
@@ -251,10 +252,7 @@ public class BinarySearchExx {
   }
 
   // ===============================================================================================
-  /**
-   * 困难题： <br>
-   * 719、410
-   */
+  /** 困难题 */
 
   // 找到两个排序数组的中位数
   public static double findMedianSortedArrays(int[] nums1, int[] nums2) {

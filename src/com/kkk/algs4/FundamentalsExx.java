@@ -136,7 +136,7 @@ public class FundamentalsExx {
   /** 1.2.6 回环变位 字符串s循环移动任意位置后得到t 判断两个字符串是否互为回环变位 */
   // 仅使用 length() indexOf() 方法
   private static boolean circularRotation(String s, String t) {
-    // 拼接两个t必然包含s
+    // 互为回环变换，则拼接两个t必然包含s
     return s.length() == t.length() && (t + t).indexOf(s) >= 0;
   }
 
@@ -149,7 +149,6 @@ public class FundamentalsExx {
     for (int n : arr) {
       // 如果栈为空 或 当前出栈不匹配 则入栈
       while (stack.isEmpty() || stack.peek() != n) {
-        // 入栈完毕还是不匹配则 return
         if (i > 9) {
           return false;
         }
@@ -175,7 +174,7 @@ public class FundamentalsExx {
   // ==============================================================================================
 
   /** 1.3.30 反转链表 */
-  // 迭代方法
+  // 迭代方法 按原始顺序迭代结点从后往前构建一条新链表
   private static ListNode reverse1(ListNode t) {
     // 指向剩余未反转链表的首结点
     ListNode first = t;
@@ -252,7 +251,7 @@ public class FundamentalsExx {
 
   // ==============================================================================================
 
-  /** 1.4.15 平方级别算法实现 3-sum */
+  /** 1.4.15 平方级别算法实现 3-sum 双指针*/
   private static int count3Sum(int[] arr) {
     Arrays.sort(arr);
     int count = 0;
@@ -275,11 +274,6 @@ public class FundamentalsExx {
     }
     return count;
   }
-
-  // ==============================================================================================
-
-  /** 1.4.18 数组的局部最小值 使用二分法，一直在较小相邻元素的半边查找即可 将数组看作函数图像求极小值试试，就可以明白该方法是正确的。 */
-  /** 1.4.20 双调查找，一个双调数组是先递增再递减 所以先用1.4.18的方法先找到极大值，然后在左右区间分别二分查找 */
 
   // ==============================================================================================
 

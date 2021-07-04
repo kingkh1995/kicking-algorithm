@@ -4,22 +4,25 @@ package com.kkk.supports;
 public class NodeUtils {
 
   public static ListNode randomSortedLinkedList(int n, int origin, int bound) {
-    return toLinkedList(ArrayUtils.randomSortedArr(n, origin, bound));
+    return arr2LinkedList(ArrayUtils.randomSortedArr(n, origin, bound));
   }
 
   public static ListNode randomLinkedList(int n, int origin, int bound) {
-    return toLinkedList(ArrayUtils.randomArr(n, origin, bound));
+    return arr2LinkedList(ArrayUtils.randomArr(n, origin, bound));
   }
 
   public static ListNode distinctSortedLinkedList(int n, int origin, int bound) {
-    return toLinkedList(ArrayUtils.distinctSortedArr(n, origin, bound));
+    return arr2LinkedList(ArrayUtils.distinctSortedArr(n, origin, bound));
   }
 
   public static ListNode distinctLinkedList(int n, int origin, int bound) {
-    return toLinkedList(ArrayUtils.distinctArr(n, origin, bound));
+    return arr2LinkedList(ArrayUtils.distinctArr(n, origin, bound));
   }
 
-  public static ListNode toLinkedList(int[] arr) {
+  public static ListNode arr2LinkedList(int[] arr) {
+    if (arr == null || arr.length <= 0) {
+      return null;
+    }
     ListNode head = new ListNode(arr[0]);
     ListNode node = head;
     for (int i = 1; i < arr.length; i++) {
@@ -31,25 +34,21 @@ public class NodeUtils {
   }
 
   public static boolean isSorted(ListNode node) {
-    ListNode next = node.next;
-    while (next != null) {
-      if (node.val > next.val) {
+    if (node == null) {
+      return true;
+    }
+    while (node.next != null) {
+      if (node.val > node.next.val) {
         return false;
       }
-      node = next;
-      next = node.next;
+      node = node.next;
     }
     return true;
   }
 
   public static void printNode(ListNode node) {
-    if (node == null) {
-      return;
-    }
-    System.out.print(node.val);
-    node = node.next;
     while (node != null) {
-      System.out.print(" => " + node.val);
+      System.out.print(node.val + " => ");
       node = node.next;
     }
     System.out.println();
