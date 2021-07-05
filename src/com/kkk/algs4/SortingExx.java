@@ -5,6 +5,7 @@ import com.kkk.supports.ListNode;
 import com.kkk.supports.NodeUtils;
 import com.kkk.supports.Queue;
 import com.kkk.supports.Stack;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.function.Consumer;
@@ -180,75 +181,54 @@ public class SortingExx {
 
   /** 2.2.17 链表排序 使用自然归并排序的方式排序，这是链表最佳的排序方法 */
   private static ListNode linkedNodeSort(ListNode node) {
-    ListNode first, second, third;
-    // 归并之后的头
-    ListNode head = node;
+    // 添加一个虚拟头结点
+    ListNode head = new ListNode(0);
+    head.next = node;
+    ListNode tempHead = new ListNode(0); // 备用虚拟结点
+    ListNode first, prev;
     while (true) {
-      // 先确定头
-      first = head;
-      second = findBlock(first);
-      if (second.next == null) {
-        break;
-      }
-      third = findBlock(second.next);
-      // 归并区间后一个结点
-      ListNode next = third.next;
-      // 合并两个链表前先拆开
-      ListNode temp = second.next;
-      second.next = null;
-      third.next = null;
-      head = merge(first, temp);
-      // 归并完与next连在一起
-      if (next == null) {
-        break;
-      }
-      add(head, next);
-      // 开始循环
-      do {
-        first = next;
-        second = findBlock(first);
-        if (second.next == null) {
+      ListNode block1Tail, block2Tail;
+      first = block1Tail = block2Tail = prev = head;
+      while (true) {
+        block1Tail = findBlock(first.next);
+        if (block1Tail.next == null) { // 判断是否循环结束
           break;
         }
-        third = findBlock(second.next);
-        next = third.next;
-        // 合并两个链表前先拆开
-        temp = second.next;
-        second.next = null;
-        third.next = null;
-        head = merge(first, temp);
-        // 归并完与next连在一起
-        add(first, next);
-      } while (next != null);
+        block2Tail = findBlock(block1Tail.next);
+        // merge前把链表拆开
+        ListNode second = block1Tail.next; // 第二个归并链表的头结点
+        ListNode next = block2Tail.next; // 剩下未排序链表的头结点
+        block1Tail.next = null;
+        block2Tail.next = null;
+        prev = merge(prev, first, second, next); // 归并完设置prev
+        if (next == null) { // 判断是否循环结束
+          break;
+        }
+        // 循环未结束则赋值
+        first = tempHead; // 设置为备用虚拟结点
+        tempHead.next = next;
+      }
+      // 判断是否排序完成
+      if (first == head && (block1Tail.next == null || block2Tail.next == null)) {
+        break;
+      }
     }
-    return head;
+    return head.next;
   }
 
-  private static void add(ListNode head, ListNode next) {
-    if (head == null || next == null) {
-      return;
-    }
-    while (head.next != null) {
-      head = head.next;
-    }
-    head.next = next;
-  }
+  //
 
-  private static ListNode merge(ListNode first, ListNode second) {
-    if (second == null) {
-      return first;
-    } else if (first == null) {
-      return second;
-    }
-    ListNode head;
-    if (first.val < second.val) {
-      head = first;
-      first = first.next;
-    } else {
-      head = second;
-      second = second.next;
-    }
+  /**
+   * @param prev 前一端归并链表的尾结点 第一趟循环时则为虚拟头结点
+   * @param first 第一个结点是备份虚拟头结点 固定
+   * @param second 下一段链表的头结点
+   * @param next 剩余未归并链表的头结点
+   * @return
+   */
+  private static ListNode merge(ListNode prev, ListNode first, ListNode second, ListNode next) {
+    ListNode head = first; // 保留虚拟头结点 作为归并后链表的头
     ListNode node = head;
+    first = first.next;
     while (true) {
       if (first == null) {
         node.next = second;
@@ -266,7 +246,17 @@ public class SortingExx {
         node = node.next;
       }
     }
-    return head;
+    // 归并完后的处理 与前后的链表相连
+    // 将头连到前面的链表尾结点
+    prev.next = head.next;
+    // 将链表尾结点连到剩余结点的头结点
+    if (next != null) {
+      while (node.next != null) {
+        node = node.next;
+      }
+      node.next = next;
+    }
+    return node; // 返回归并后链表的最后一个结点
   }
 
   private static ListNode findBlock(ListNode node) {
@@ -285,12 +275,17 @@ public class SortingExx {
   }
 
   public static void linkedNodeSortTest() {
-    ListNode node1 = NodeUtils.randomLinkedList(50, 1, 50);
-    ListNode node2 = NodeUtils.distinctLinkedList(50, 1, 100);
-    node1 = linkedNodeSort(node1);
-    node2 = linkedNodeSort(node2);
-    System.out.println(NodeUtils.isSorted(node1));
-    System.out.println(NodeUtils.isSorted(node2));
+    int[] ints = ArrayUtils.randomArr(100000, 1, 8000);
+    ListNode node = NodeUtils.arr2LinkedList(ints);
+    node = linkedNodeSort(node);
+    var list = new ArrayList<Integer>(100000);
+    while (node != null) {
+      list.add(node.val);
+      node = node.next;
+    }
+    int[] array = list.stream().mapToInt(i -> i).toArray();
+    Arrays.sort(ints);
+    System.out.println(Arrays.equals(ints, array));
   }
 
   // ==============================================================================================
