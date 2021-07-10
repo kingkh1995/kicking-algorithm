@@ -10,7 +10,7 @@ import java.util.LinkedList;
  */
 public class MyQueue<Item> implements Iterable<Item> {
 
-  private LinkedList<Item> queue = new LinkedList<>();
+  private final LinkedList<Item> queue = new LinkedList<>();
 
   @Override
   public Iterator<Item> iterator() {

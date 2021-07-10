@@ -61,7 +61,7 @@ public class SortingExx {
         } else {
           queue.enqueue(temp);
         }
-      } while (queue.peek() != first); // 每次选择终止条件是碰到上一个比它小的值
+      } while (queue.getHead() != first); // 每次选择终止条件是碰到上一个比它小的值
       queue.enqueue(queue.dequeue());
       queue.enqueue(second);
       first = second;

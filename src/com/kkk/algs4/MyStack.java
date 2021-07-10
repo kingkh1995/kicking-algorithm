@@ -10,7 +10,7 @@ import java.util.LinkedList;
  */
 public class MyStack<Item> implements Iterable<Item> {
 
-  private LinkedList<Item> stack = new LinkedList<>();
+  private final LinkedList<Item> stack = new LinkedList<>();
 
   @Override
   public Iterator<Item> iterator() {

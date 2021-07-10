@@ -10,7 +10,7 @@ import java.util.LinkedList;
  */
 public class MyBag<Item> implements Iterable<Item> {
 
-  private LinkedList<Item> bag = new LinkedList<>();
+  private final LinkedList<Item> bag = new LinkedList<>();
 
   @Override
   public Iterator<Item> iterator() {

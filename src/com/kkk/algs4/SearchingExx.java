@@ -247,7 +247,7 @@ public class SearchingExx {
   }
 
   private static boolean isRed(TwoThreeNode node) {
-    return node == null ? false : node.isRed;
+    return node != null && node.isRed;
   }
 
   public TwoThreeNode min(TwoThreeNode node) {
@@ -497,10 +497,7 @@ public class SearchingExx {
         return true;
       }
       int bHash = bHash(key);
-      if (key.equals(bKeys[bHash])) {
-        return true;
-      }
-      return false;
+      return key.equals(bKeys[bHash]);
     }
 
     public void delete(Key key) {

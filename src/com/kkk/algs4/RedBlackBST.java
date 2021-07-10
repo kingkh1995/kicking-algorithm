@@ -39,7 +39,7 @@ public class RedBlackBST {
   }
 
   private static boolean isRed(RBNode node) {
-    return node == null ? false : node.isRed;
+    return node != null && node.isRed;
   }
 
   public RBNode min(RBNode node) {

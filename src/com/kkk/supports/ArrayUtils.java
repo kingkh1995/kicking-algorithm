@@ -8,7 +8,7 @@ import java.util.stream.Stream;
 /** @author KaiKoo */
 public class ArrayUtils {
 
-  private static ThreadLocalRandom random = ThreadLocalRandom.current();
+  private static final ThreadLocalRandom random = ThreadLocalRandom.current();
 
   private static IntStream randomArr0(int n, int origin, int bound) {
     return Stream.generate(() -> random.nextInt(origin, bound))

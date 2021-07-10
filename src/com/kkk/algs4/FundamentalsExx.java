@@ -6,6 +6,7 @@ import com.kkk.supports.NodeUtils;
 import com.kkk.supports.Queue;
 import com.kkk.supports.Stack;
 import java.util.Arrays;
+import java.util.NoSuchElementException;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
@@ -114,7 +115,6 @@ public class FundamentalsExx {
   private static int count(int key, int[] a) {
     int num = 0;
     for (int i = rank(key, a); i < a.length && a[i++] == key; num++) {
-      ;
     }
     return num;
   }
@@ -148,7 +148,7 @@ public class FundamentalsExx {
     int i = 0;
     for (int n : arr) {
       // 如果栈为空 或 当前出栈不匹配 则入栈
-      while (stack.isEmpty() || stack.peek() != n) {
+      while (stack.isEmpty() || stack.top() != n) {
         if (i > 9) {
           return false;
         }
@@ -251,7 +251,7 @@ public class FundamentalsExx {
 
   // ==============================================================================================
 
-  /** 1.4.15 平方级别算法实现 3-sum 双指针*/
+  /** 1.4.15 平方级别算法实现 3-sum 双指针 */
   private static int count3Sum(int[] arr) {
     Arrays.sort(arr);
     int count = 0;
@@ -299,7 +299,7 @@ public class FundamentalsExx {
 
     public int popLeft() {
       if (this.isEmpty()) {
-        throw new UnsupportedOperationException();
+        throw new NoSuchElementException();
       }
       if (left.isEmpty()) {
         moveHalf(right, left);
@@ -309,7 +309,7 @@ public class FundamentalsExx {
 
     public int popRight() {
       if (this.isEmpty()) {
-        throw new UnsupportedOperationException();
+        throw new NoSuchElementException();
       }
       if (right.isEmpty()) {
         moveHalf(left, right);

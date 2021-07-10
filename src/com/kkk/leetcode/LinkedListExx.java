@@ -11,10 +11,6 @@ import com.kkk.supports.ListNode;
 public class LinkedListExx {
   // ===============================================================================================
   /** 基础题 */
-  public static void main(String[] args) {
-    int k=4;
-    System.out.println(k<<1==8);
-  }
 
   // 找到两个单链表相交的起始结点 未相交则返回null
   public static ListNode getIntersectionNode(ListNode headA, ListNode headB) {

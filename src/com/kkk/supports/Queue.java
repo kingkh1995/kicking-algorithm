@@ -1,11 +1,13 @@
 package com.kkk.supports;
 
+import java.util.NoSuchElementException;
+
 /** @author KaiKoo */
 public class Queue {
 
   private int count = 0;
 
-  private ListNode first = null;
+  private ListNode head = null;
 
   private ListNode tail = null;
 
@@ -13,7 +15,7 @@ public class Queue {
     ListNode node = new ListNode(i);
     count++;
     if (count == 1) {
-      this.first = node;
+      this.head = node;
       this.tail = node;
     } else {
       this.tail.next = node;
@@ -23,15 +25,15 @@ public class Queue {
 
   public int dequeue() {
     if (count == 0) {
-      throw new UnsupportedOperationException();
+      throw new NoSuchElementException();
     }
-    ListNode node = this.first;
+    ListNode node = this.head;
     count--;
     if (count == 0) {
-      this.first = null;
+      this.head = null;
       this.tail = null;
     } else {
-      this.first = node.next;
+      this.head = node.next;
     }
     return node.val;
   }
@@ -44,10 +46,10 @@ public class Queue {
     return count;
   }
 
-  public int peek() {
+  public int getHead() {
     if (count == 0) {
-      throw new UnsupportedOperationException();
+      throw new NoSuchElementException();
     }
-    return first.val;
+    return head.val;
   }
 }

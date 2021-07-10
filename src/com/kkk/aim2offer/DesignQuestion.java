@@ -23,9 +23,9 @@ public class DesignQuestion {
   public static class MyQueue<T> {
 
     // 数据存储栈
-    private Deque<T> stack1 = new LinkedList<>();
+    private final Deque<T> stack1 = new LinkedList<>();
     // 数据取出栈
-    private Deque<T> stack2 = new LinkedList<>();
+    private final Deque<T> stack2 = new LinkedList<>();
 
     public void appendTail(T t) {
       stack1.push(t);
@@ -57,10 +57,10 @@ public class DesignQuestion {
   public static class MyStack<T> {
 
     // 主队列
-    private Queue<T> queue1 = new LinkedList<>();
+    private final Queue<T> queue1 = new LinkedList<>();
 
     // 辅助队列
-    private Queue<T> queue2 = new LinkedList<>();
+    private final Queue<T> queue2 = new LinkedList<>();
 
     // push的时候即把顺序颠倒，queue1存数据，queue2辅助
     public void push(T t) {
@@ -85,9 +85,9 @@ public class DesignQuestion {
   public static class StackWithMin<T extends Comparable> {
 
     // 元素存储栈
-    private Deque<T> stack = new LinkedList<>();
+    private final Deque<T> stack = new LinkedList<>();
     // 最小值存储栈
-    private Deque<T> minStack = new LinkedList<>();
+    private final Deque<T> minStack = new LinkedList<>();
 
     public void push(T t) {
       stack.push(t);
