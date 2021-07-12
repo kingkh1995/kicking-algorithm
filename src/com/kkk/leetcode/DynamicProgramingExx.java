@@ -1,11 +1,35 @@
 package com.kkk.leetcode;
 
 /**
- * 动态规划
+ * 动态规划 <br>
+ * 493
  *
  * @author KaiKoo
  */
 public class DynamicProgramingExx {
+
+  // ===============================================================================================
+  /** 基础题 */
+
+  // 完全平方数
+  public int numSquares(int n) {
+    int[] dp = new int[n + 1];
+    dp[0] = 0;
+    dp[1] = 1;
+    // dp[n] = dp[?] + 1 遍历1-n找出最小的dp[?]
+    for (int i = 2; i <= n; i++) {
+      int count = dp[i - 1] + 1;
+      for (int j = 2; j < i; j++) {
+        int p = j * j;
+        if (p > i) {
+          break;
+        }
+        count = Math.min(dp[i - p] + 1, count);
+      }
+      dp[i] = count;
+    }
+    return dp[n];
+  }
 
   // ===============================================================================================
   /** 拔高题 */

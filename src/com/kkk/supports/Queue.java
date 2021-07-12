@@ -1,7 +1,5 @@
 package com.kkk.supports;
 
-import java.util.NoSuchElementException;
-
 /** @author KaiKoo */
 public class Queue {
 
@@ -25,7 +23,7 @@ public class Queue {
 
   public int dequeue() {
     if (count == 0) {
-      throw new NoSuchElementException();
+      throw new UnsupportedOperationException();
     }
     ListNode node = this.head;
     count--;
@@ -48,7 +46,7 @@ public class Queue {
 
   public int getHead() {
     if (count == 0) {
-      throw new NoSuchElementException();
+      throw new UnsupportedOperationException();
     }
     return head.val;
   }

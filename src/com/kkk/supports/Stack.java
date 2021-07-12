@@ -1,7 +1,5 @@
 package com.kkk.supports;
 
-import java.util.NoSuchElementException;
-
 /** @author KaiKoo */
 public class Stack {
 
@@ -18,7 +16,7 @@ public class Stack {
 
   public int pop() {
     if (count == 0) {
-      throw new NoSuchElementException();
+      throw new UnsupportedOperationException();
     }
     count--;
     ListNode node = this.top;
@@ -36,7 +34,7 @@ public class Stack {
 
   public int top() {
     if (count == 0) {
-      throw new NoSuchElementException();
+      throw new UnsupportedOperationException();
     }
     return this.top.val;
   }
