@@ -129,31 +129,22 @@ public class QueueAndStackExx {
     return count;
   }
 
-  // 有效的括号
-  public boolean isValid(String s) {
-    // 快速判断
-    if ((s.length() & 1) == 1) {
-      return false;
-    }
-    Stack stack = new Stack();
-    for (char c : s.toCharArray()) {
-      if (c == ')') {
-        if (stack.isEmpty() || stack.pop() != '(') {
-          return false;
-        }
-      } else if (c == '}') {
-        if (stack.isEmpty() || stack.pop() != '{') {
-          return false;
-        }
-      } else if (c == ']') {
-        if (stack.isEmpty() || stack.pop() != '[') {
-          return false;
-        }
-      } else {
-        stack.push(c);
+  // 二叉树的中序遍历 使用栈实现
+  public List<Integer> inorderTraversal(TreeNode root) {
+    MyStack<TreeNode> stack = new MyStack<>();
+    List<Integer> res = new ArrayList<>();
+    while (root != null || !stack.isEmpty()) {
+      // 一直往左子树移动，并将根结点压入栈
+      while (root != null) {
+        stack.push(root);
+        root = root.left;
       }
+      // 一直到左子树为空 pop出根结点 打印 然后变为右结点
+      root = stack.pop();
+      res.add(root.val);
+      root = root.right;
     }
-    return stack.isEmpty();
+    return res;
   }
 
   // ===============================================================================================
@@ -217,21 +208,37 @@ public class QueueAndStackExx {
     return res;
   }
 
-  // 二叉树的中序遍历 使用栈实现
-  public List<Integer> inorderTraversal(TreeNode root) {
-    MyStack<TreeNode> stack = new MyStack<>();
-    List<Integer> res = new ArrayList<>();
-    while (root != null || !stack.isEmpty()) {
-      // 一直往左子树移动，并将根结点压入栈
-      while (root != null) {
-        stack.push(root);
-        root = root.left;
+  // 字符串解码  形式为 k[s]  ex: 3[z]2[2[y]pq4[2[jk]e1[f]]]ef
+  public String decodeString(String s) {
+    MyStack<StringBuilder> stack = new MyStack<>();
+    for (char c : s.toCharArray()) {
+      if (Character.isDigit(c)) {
+        if (!stack.isEmpty() && Character.isDigit(stack.peek().charAt(0))) { // 当前栈顶为数字直接追加
+          stack.push(stack.pop().append(c));
+        } else {
+          stack.push(new StringBuilder().append(c)); // 否则push
+        }
+      } else if (Character.isLetter(c)) {
+        if (!stack.isEmpty() && Character.isLetter(stack.peek().charAt(0))) { // 当前栈顶为字符直接追加
+          stack.push(stack.pop().append(c));
+        } else {
+          stack.push(new StringBuilder().append(c)); // 否则push
+        }
+      } else if (c == '[') {
+        stack.push(new StringBuilder().append('[')); // 左括号直接push
+      } else {
+        // 右括号 取出一个字符串一个数字
+        String string = stack.pop().toString(); // 取出一个字符串
+        stack.pop(); // 取出一个左括号
+        int i = Integer.parseInt(stack.pop().toString()); // 取出一个数字
+        String repeat = string.repeat(i);
+        if (!stack.isEmpty() && Character.isLetter(stack.peek().charAt(0))) {
+          stack.push(stack.pop().append(repeat)); // 栈顶仍然为字符追加
+        } else {
+          stack.push(new StringBuilder(repeat));
+        }
       }
-      // 一直到左子树为空 pop出根结点 打印 然后变为右结点
-      root = stack.pop();
-      res.add(root.val);
-      root = root.right;
     }
-    return res;
+    return stack.pop().toString();
   }
 }
