@@ -18,11 +18,17 @@ public class MyStack<Item> implements Iterable<Item> {
   }
 
   public void push(Item item) {
-    stack.addFirst(item);
+    stack.offerFirst(item);
   }
 
+  /** @return null or element */
   public Item pop() {
-    return stack.removeFirst();
+    return stack.pollFirst();
+  }
+
+  /** @return null or element */
+  public Item top() {
+    return stack.peekFirst();
   }
 
   public boolean isEmpty() {
@@ -31,9 +37,5 @@ public class MyStack<Item> implements Iterable<Item> {
 
   public int size() {
     return stack.size();
-  }
-
-  public Item peek() {
-    return stack.peekFirst();
   }
 }

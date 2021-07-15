@@ -2,6 +2,7 @@ package com.kkk.algs4;
 
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.Queue;
 
 /**
  * 基于 LinkedList 实现
@@ -10,19 +11,25 @@ import java.util.LinkedList;
  */
 public class MyQueue<Item> implements Iterable<Item> {
 
-  private final LinkedList<Item> queue = new LinkedList<>();
+  private final Queue<Item> queue = new LinkedList<>();
 
   @Override
   public Iterator<Item> iterator() {
     return queue.iterator();
   }
 
-  public void enqueue(Item item) {
-    queue.addLast(item);
+  public void offer(Item item) {
+    queue.offer(item);
   }
 
-  public Item dequeue() {
-    return queue.removeFirst();
+  /** @return null or element */
+  public Item poll() {
+    return queue.poll();
+  }
+
+  /** @return null or element */
+  public Item peek() {
+    return queue.peek();
   }
 
   public boolean isEmpty() {
@@ -31,9 +38,5 @@ public class MyQueue<Item> implements Iterable<Item> {
 
   public int size() {
     return queue.size();
-  }
-
-  public Item peek() {
-    return queue.peekFirst();
   }
 }

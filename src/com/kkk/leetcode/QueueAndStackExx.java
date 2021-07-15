@@ -3,9 +3,6 @@ package com.kkk.leetcode;
 import com.kkk.algs4.MyStack;
 import com.kkk.supports.Queue;
 import com.kkk.supports.Stack;
-import com.kkk.supports.TreeNode;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * 队列和栈 (BFS & DFS) <br>
@@ -129,24 +126,6 @@ public class QueueAndStackExx {
     return count;
   }
 
-  // 二叉树的中序遍历 使用栈实现
-  public List<Integer> inorderTraversal(TreeNode root) {
-    MyStack<TreeNode> stack = new MyStack<>();
-    List<Integer> res = new ArrayList<>();
-    while (root != null || !stack.isEmpty()) {
-      // 一直往左子树移动，并将根结点压入栈
-      while (root != null) {
-        stack.push(root);
-        root = root.left;
-      }
-      // 一直到左子树为空 pop出根结点 打印 然后变为右结点
-      root = stack.pop();
-      res.add(root.val);
-      root = root.right;
-    }
-    return res;
-  }
-
   // ===============================================================================================
   /** 拔高题 */
 
@@ -192,6 +171,44 @@ public class QueueAndStackExx {
     return -1;
   }
 
+  // 给定一个由 0 和 1 组成的矩阵，找出每个元素到最近的 0 的距离
+  public int[][] updateMatrix(int[][] matrix) {
+    int m = matrix.length, n = matrix[0].length;
+    int[][] res = new int[m][n];
+    boolean[][] visited = new boolean[m][n];
+    int[][] dirs = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
+    Queue queue = new Queue();
+    // 从任意一个0出发BFS整个数组可以计算出所有的1到这个0的距离，那么为了取到最小值，需要从所有的0出发BFS一遍
+    // 可以把所有的0全部加入数组，当作一个超级0，做BFS即可，1被访问到的最小次数则是最小距离
+    for (int i = 0; i < m; i++) {
+      for (int j = 0; j < n; j++) {
+        // 把所有的0加入队列，并标记为已访问
+        if (matrix[i][j] == 0 && !visited[i][j]) {
+          queue.enqueue(i * n + j);
+          visited[i][j] = true;
+        }
+      }
+    }
+    while (!queue.isEmpty()) { // 不需要计算层级，故不需要双重循环
+      int code = queue.dequeue();
+      int i = code / n;
+      int j = code % n;
+
+      for (int k = 0; k < 4; k++) {
+        int x = i + dirs[k][0], y = j + dirs[k][1];
+        if (x >= 0 && x < m && y >= 0 && y < n && !visited[x][y]) {
+          // 未被访问过的入队列 （必然全是1，前面已将0全部标记为已访问）
+          queue.enqueue(x * n + y);
+          // 标记
+          visited[x][y] = true;
+          // 沿着1访问，距离为上一个结点的距离加1
+          res[x][y] = res[i][j] + 1;
+        }
+      }
+    }
+    return res;
+  }
+
   // 每日气温 要想观测到更高的气温，至少需要等待的天数
   public int[] dailyTemperatures(int[] temperatures) {
     Stack stack = new Stack();
@@ -213,13 +230,13 @@ public class QueueAndStackExx {
     MyStack<StringBuilder> stack = new MyStack<>();
     for (char c : s.toCharArray()) {
       if (Character.isDigit(c)) {
-        if (!stack.isEmpty() && Character.isDigit(stack.peek().charAt(0))) { // 当前栈顶为数字直接追加
+        if (!stack.isEmpty() && Character.isDigit(stack.top().charAt(0))) { // 当前栈顶为数字直接追加
           stack.push(stack.pop().append(c));
         } else {
           stack.push(new StringBuilder().append(c)); // 否则push
         }
       } else if (Character.isLetter(c)) {
-        if (!stack.isEmpty() && Character.isLetter(stack.peek().charAt(0))) { // 当前栈顶为字符直接追加
+        if (!stack.isEmpty() && Character.isLetter(stack.top().charAt(0))) { // 当前栈顶为字符直接追加
           stack.push(stack.pop().append(c));
         } else {
           stack.push(new StringBuilder().append(c)); // 否则push
@@ -232,7 +249,7 @@ public class QueueAndStackExx {
         stack.pop(); // 取出一个左括号
         int i = Integer.parseInt(stack.pop().toString()); // 取出一个数字
         String repeat = string.repeat(i);
-        if (!stack.isEmpty() && Character.isLetter(stack.peek().charAt(0))) {
+        if (!stack.isEmpty() && Character.isLetter(stack.top().charAt(0))) {
           stack.push(stack.pop().append(repeat)); // 栈顶仍然为字符追加
         } else {
           stack.push(new StringBuilder(repeat));
