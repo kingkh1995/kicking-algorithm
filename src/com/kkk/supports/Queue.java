@@ -44,7 +44,7 @@ public class Queue {
     return count;
   }
 
-  public int getHead() {
+  public int peek() {
     if (count == 0) {
       throw new UnsupportedOperationException();
     }

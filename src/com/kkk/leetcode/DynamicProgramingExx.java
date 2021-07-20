@@ -64,7 +64,7 @@ public class DynamicProgramingExx {
   /**
    * 给定一个由 0 和 1 组成的矩阵，找出每个元素到最近的 0 的距离 <br>
    * f(i,j)的值肯定是0（元素为0）或其上下左右的结果的最小值加1 问题是如何构建出动态规划数组？ <br>
-   * 从四个角落出发构造一遍即可，实际上只需要构造两遍，选择 左上和右下 或 左下或右上。
+   * 从四个角落出发构造一遍即可，实际上只需要构造两遍，选择（左上和右下） 或（左下或右上）。
    */
   public int[][] updateMatrix(int[][] matrix) {
     int m = matrix.length, n = matrix[0].length;
