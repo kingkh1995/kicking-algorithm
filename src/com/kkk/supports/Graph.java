@@ -1,27 +1,29 @@
 package com.kkk.supports;
 
+import java.util.Arrays;
+
 /**
  * <br>
  *
  * @author KaiKoo
  */
 public class Graph {
-  private final int vertex; // 顶点个数
-  private int edge; // 边的数目
+  private final int vertices; // 顶点个数
+  private int edges; // 边的数目
   private final ListNode[] adj; // 邻接表
 
-  public Graph(int vertex) {
-    this.vertex = vertex;
-    this.edge = 0;
-    this.adj = new ListNode[vertex];
+  public Graph(int vertices) {
+    this.vertices = vertices;
+    this.edges = 0;
+    this.adj = new ListNode[vertices];
   }
 
-  public int vertex() {
-    return this.vertex;
+  public int vertices() {
+    return this.vertices;
   }
 
-  public int edge() {
-    return this.edge;
+  public int edges() {
+    return this.edges;
   }
 
   public void addEdge(int v, int w) {
@@ -39,20 +41,25 @@ public class Graph {
     nodeW.next = adj[v];
     adj[w] = nodeV;
     adj[v] = nodeW;
-    edge++;
+    edges++;
   }
 
-  public ListNode adj(int v) {
-    return adj[v];
+  public int[] adj(int v) {
+    int[] temp = new int[this.vertices];
+    ListNode node = adj[v];
+    int i = 0;
+    while (node != null) {
+      temp[i++] = node.val;
+      node = node.next;
+    }
+    return Arrays.copyOf(temp, i);
   }
 
   public boolean hasEdge(int v, int w) {
-    ListNode adj = adj(v);
-    while (adj != null) {
-      if (adj.val == w) {
+    for (int i : adj(v)) {
+      if (i == w) {
         return true;
       }
-      adj = adj.next;
     }
     return false;
   }
