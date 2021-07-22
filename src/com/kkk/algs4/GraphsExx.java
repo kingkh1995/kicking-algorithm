@@ -2,6 +2,8 @@ package com.kkk.algs4;
 
 import com.kkk.supports.Graph;
 import com.kkk.supports.Queue;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 第四章 图
@@ -192,7 +194,70 @@ public class GraphsExx {
 
   // ===============================================================================================
 
-  public static void main(String[] args) {
-    graphPropertiesTest();
+  /**
+   * 4.1.35 如果一幅连通图某条边被删除后会被分为两个连通分量，该边被称为桥，没有桥的图为边连通图，判断是否为边连通图 <br>
+   * 如果点和其邻接点不构成桥，需要判断从邻接点出发是否有反向边，指向该点或者其前置点 <br>
+   */
+  public static class EdgeConnectivity {
+    private final int[] dfsOrder; // 每个顶点在dfs路径中的序号
+    private final int[] lowAncestor; // 每个顶点反向边祖先的最低序号，必然小于等于顶点自身序号
+
+    private int count;
+    private final Graph graph;
+
+    public List<Bridge> bridges;
+
+    public class Bridge {
+      int v1;
+      int v2;
+
+      public Bridge(int v1, int v2) {
+        this.v1 = v1;
+        this.v2 = v2;
+      }
+    }
+
+    public EdgeConnectivity(Graph graph) {
+      this.graph = graph;
+      count = 0;
+      bridges = new ArrayList<>();
+      dfsOrder = new int[graph.vertices()];
+      lowAncestor = new int[graph.vertices()];
+      // 因为默认是连通图 直接从顶点0出发做dfs
+      dfs(0, 0);
+    }
+
+    private void dfs(int v, int pre) {
+      count++;
+      // 设置当前序号
+      dfsOrder[v] = count;
+      // 反向边最低祖先序号也设为当前序号
+      lowAncestor[v] = count;
+      // 遍历邻接点
+      for (int w : graph.adj(v)) {
+        // 如果邻接点未被访问
+        if (dfsOrder[w] == 0) {
+          // 要先dfs设置序号和反向边序号
+          dfs(w, v);
+          // dfs完成后回溯设置值
+          // 没被访问，邻接点序号必然大于当前点，故不用判断
+          if (lowAncestor[w] <= dfsOrder[v]) {
+            // 如果邻接点反向边最低祖先序号小于当前点 将当前点反向边最低祖先序号也设置为其值
+            // 因为显然  v-w-w.lowAncestor构成一条路径 即 v.lowAncestor=w.lowAncestor
+            lowAncestor[v] = lowAncestor[w];
+          } else {
+            // 大于情况，即不存在反向边，反向边最低祖先序号等于自身序号，则为桥
+            bridges.add(new Bridge(v, w));
+          }
+        } else if (w != pre && dfsOrder[w] < lowAncestor[v]) {
+          // 已被访问情况且邻接点不是其上一个顶点
+          // 如果临界点为之前的点，即序号小于当前点的反向边最低祖先序号，重新设置当前顶点反向边最低祖先序号
+          lowAncestor[v] = dfsOrder[w];
+        }
+      }
+    }
   }
+
+  // ===============================================================================================
+
 }
