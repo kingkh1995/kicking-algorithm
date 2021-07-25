@@ -1,8 +1,11 @@
 package com.kkk.algs4;
 
+import com.kkk.supports.Digraph;
+import com.kkk.supports.Digraph.Topological;
 import com.kkk.supports.Graph;
 import com.kkk.supports.Queue;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -196,13 +199,13 @@ public class GraphsExx {
 
   /**
    * 4.1.35 如果一幅连通图某条边被删除后会被分为两个连通分量，该边被称为桥，没有桥的图为边连通图，判断是否为边连通图 <br>
-   * 如果点和其邻接点不构成桥，需要判断从邻接点出发是否有反向边，指向该点或者其前置点 <br>
+   * 如果点和其邻接点不构成桥，需要判断从邻接点出发是否有反向边，指向该点或者dfs路径上的其前置点 <br>
    */
   public static class EdgeConnectivity {
     private final int[] dfsOrder; // 每个顶点在dfs路径中的序号
     private final int[] lowAncestor; // 每个顶点反向边祖先的最低序号，必然小于等于顶点自身序号
 
-    private int count;
+    private int order;
     private final Graph graph;
 
     public List<Bridge> bridges;
@@ -219,7 +222,7 @@ public class GraphsExx {
 
     public EdgeConnectivity(Graph graph) {
       this.graph = graph;
-      count = 0;
+      order = 0;
       bridges = new ArrayList<>();
       dfsOrder = new int[graph.vertices()];
       lowAncestor = new int[graph.vertices()];
@@ -228,11 +231,11 @@ public class GraphsExx {
     }
 
     private void dfs(int v, int pre) {
-      count++;
+      order++;
       // 设置当前序号
-      dfsOrder[v] = count;
+      dfsOrder[v] = order;
       // 反向边最低祖先序号也设为当前序号
-      lowAncestor[v] = count;
+      lowAncestor[v] = order;
       // 遍历邻接点
       for (int w : graph.adj(v)) {
         // 如果邻接点未被访问
@@ -253,6 +256,8 @@ public class GraphsExx {
           // 已被访问情况且邻接点不是其上一个顶点
           // 如果临界点为之前的点，即序号小于当前点的反向边最低祖先序号，重新设置当前顶点反向边最低祖先序号
           lowAncestor[v] = dfsOrder[w];
+          // 其实还可以再判断一次lowAncestor[w]，其必然是小于dfsOrder[w]
+          // 不过上一步设置之后已经足以判定当前顶点和该邻接点不可能组成桥了。
         }
       }
     }
@@ -260,4 +265,25 @@ public class GraphsExx {
 
   // ===============================================================================================
 
+  public static void topologicalTest() {
+    Digraph digraph = new Digraph(13);
+    digraph.addEdge(8, 7);
+    digraph.addEdge(7, 6);
+    digraph.addEdge(2, 3);
+    digraph.addEdge(2, 0);
+    digraph.addEdge(3, 5);
+    digraph.addEdge(0, 6);
+    digraph.addEdge(0, 1);
+    digraph.addEdge(0, 5);
+    digraph.addEdge(6, 9);
+    digraph.addEdge(6, 4);
+    digraph.addEdge(9, 10);
+    digraph.addEdge(9, 11);
+    digraph.addEdge(9, 12);
+    digraph.addEdge(11, 12);
+    digraph.addEdge(5, 4);
+    Topological topological = new Topological(digraph);
+    System.out.println(topological.isDAG());
+    System.out.println(Arrays.toString(topological.order()));
+  }
 }

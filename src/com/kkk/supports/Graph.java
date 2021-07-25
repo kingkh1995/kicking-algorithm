@@ -3,7 +3,7 @@ package com.kkk.supports;
 import java.util.Arrays;
 
 /**
- * <br>
+ * 无向图 <br>
  *
  * @author KaiKoo
  */
