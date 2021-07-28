@@ -27,12 +27,8 @@ public class Digraph {
   }
 
   public void addEdge(int v, int w) {
-    // 不允许存在自环
-    if (v == w) {
-      return;
-    }
-    //  不允许存在平行边
-    if (hasEdge(v, w)) {
+    // 不允许存在自环 且 不允许存在平行边
+    if (v == w || hasEdge(v, w)) {
       return;
     }
     ListNode nodeW = new ListNode(w);
@@ -71,31 +67,36 @@ public class Digraph {
     return digraph;
   }
 
+  /** 获取拓扑排序 */
   public static class Topological {
     private final boolean[] marked;
-    private final boolean[] onStack;
+    private final boolean[] onStack; // 记录DFS路径的点
     private final Stack reversePost;
+    private final Digraph digraph;
     private boolean hasCycle;
 
     public Topological(Digraph digraph) {
       onStack = new boolean[digraph.vertices()];
       marked = new boolean[digraph.vertices()];
       reversePost = new Stack();
+      this.digraph = digraph;
       for (int v = 0; v < digraph.vertices(); v++) {
-        if (!marked[v]) {
-          dfs(digraph, v);
+        if (!marked[v] && !hasCycle) {
+          dfs(v);
         }
       }
     }
 
-    private void dfs(Digraph digraph, int v) {
+    private void dfs(int v) {
       marked[v] = true;
       onStack[v] = true;
       for (int w : digraph.adj(v)) {
         if (!marked[w]) {
-          dfs(digraph, w);
+          dfs(w);
         } else if (onStack[w]) {
+          // 如果遇到已被遍历点，判断是否在DFS路径上，如果在则表示有环u才存在
           hasCycle = true;
+          return;
         }
       }
       onStack[v] = false;
@@ -116,6 +117,45 @@ public class Digraph {
         order[i] = reversePost.pop();
       }
       return order;
+    }
+  }
+
+  /** 检测给定排序是否是图的拓扑排序 */
+  public static class TopologicalOrderCheck {
+    private final boolean[] marked;
+    private final int[] idx; // 记录每个顶点在给定序列中的序号
+    private boolean isOrder;
+
+    public TopologicalOrderCheck(Digraph digraph, int[] order) {
+      marked = new boolean[digraph.vertices()];
+      idx = new int[order.length];
+      for (int i = 0; i < order.length; i++) {
+        idx[order[i]] = i;
+      }
+      isOrder = true;
+      for (int v = 0; v < digraph.vertices(); v++) {
+        if (!marked[v] && isOrder) {
+          dfs(digraph, v);
+        }
+      }
+    }
+
+    private void dfs(Digraph digraph, int v) {
+      marked[v] = true;
+      for (int w : digraph.adj(v)) {
+        // 无论是否已被访问，先判断边是否是反向的
+        if (idx[w] < idx[v]) {
+          isOrder = false;
+          return;
+        }
+        if (!marked[w]) {
+          dfs(digraph, w);
+        }
+      }
+    }
+
+    public boolean isOrder() {
+      return this.isOrder;
     }
   }
 }

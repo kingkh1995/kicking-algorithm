@@ -1,7 +1,9 @@
 package com.kkk.algs4;
 
+import com.kkk.supports.ArrayUtils;
 import com.kkk.supports.Digraph;
 import com.kkk.supports.Digraph.Topological;
+import com.kkk.supports.Digraph.TopologicalOrderCheck;
 import com.kkk.supports.Graph;
 import com.kkk.supports.Queue;
 import java.util.ArrayList;
@@ -284,6 +286,20 @@ public class GraphsExx {
     digraph.addEdge(5, 4);
     Topological topological = new Topological(digraph);
     System.out.println(topological.isDAG());
-    System.out.println(Arrays.toString(topological.order()));
+    int[] order = topological.order();
+    // 8, 7, 2, 3, 0, 6, 9, 10, 11, 12, 1, 5, 4
+    System.out.println(Arrays.toString(order));
+    TopologicalOrderCheck topologicalOrderCheck1 = new TopologicalOrderCheck(digraph, order);
+    System.out.println(topologicalOrderCheck1.isOrder()); // true
+    // 8, 7, 2, 3, 0, 6, 9, 10, 11, 12, 4, 5, 1
+    ArrayUtils.swap(order, 10, 12);
+    TopologicalOrderCheck topologicalOrderCheck2 = new TopologicalOrderCheck(digraph, order);
+    System.out.println(topologicalOrderCheck2.isOrder()); // false
+    // 8, 7, 2, 3, 0, 6, 9, 10, 11, 12, 5, 4, 1
+    ArrayUtils.swap(order, 10, 11);
+    TopologicalOrderCheck topologicalOrderCheck3 = new TopologicalOrderCheck(digraph, order);
+    System.out.println(topologicalOrderCheck3.isOrder()); // true
   }
+
+  // ===============================================================================================
 }
