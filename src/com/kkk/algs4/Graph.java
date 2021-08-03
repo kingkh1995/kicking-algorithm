@@ -1,5 +1,6 @@
-package com.kkk.supports;
+package com.kkk.algs4;
 
+import com.kkk.supports.ListNode;
 import java.util.Arrays;
 
 /**

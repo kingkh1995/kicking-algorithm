@@ -1,10 +1,8 @@
 package com.kkk.algs4;
 
+import com.kkk.algs4.Digraph.Topological;
+import com.kkk.algs4.Digraph.TopologicalOrderCheck;
 import com.kkk.supports.ArrayUtils;
-import com.kkk.supports.Digraph;
-import com.kkk.supports.Digraph.Topological;
-import com.kkk.supports.Digraph.TopologicalOrderCheck;
-import com.kkk.supports.Graph;
 import com.kkk.supports.Queue;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -302,4 +300,23 @@ public class GraphsExx {
   }
 
   // ===============================================================================================
+
+  public static class LCAInDAG {
+    private final Digraph digraph;
+    private final Digraph reverse;
+    private final int[] maxHeights;
+
+    public LCAInDAG(Digraph digraph) {
+      this.digraph = digraph;
+      this.reverse = digraph.reverse();
+      this.maxHeights = new int[digraph.vertices()];
+      // 计算出每个顶点距离起点的最大高度
+      // 入度为0的则为起点，因为是有向无环图，所以必然存在一个起点
+      for (int i = 0; i < reverse.vertices(); i++) {
+        if (reverse.adj(i).length == 0) {
+          // BFS计算
+        }
+      }
+    }
+  }
 }
