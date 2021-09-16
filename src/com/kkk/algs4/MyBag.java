@@ -1,5 +1,6 @@
 package com.kkk.algs4;
 
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
 
@@ -10,7 +11,7 @@ import java.util.LinkedList;
  */
 public class MyBag<Item> implements Iterable<Item> {
 
-  private final LinkedList<Item> bag = new LinkedList<>();
+  private final Collection<Item> bag = new LinkedList<>();
 
   @Override
   public Iterator<Item> iterator() {

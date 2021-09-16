@@ -8,7 +8,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * 第四章 图
+ * 第四章 图 有向图
  *
  * @author KaiKoo
  */
@@ -551,7 +551,4 @@ public class GraphsExx {
 
   // ===============================================================================================
 
-  public static void main(String[] args) {
-    topologicalTest();
-  }
 }
