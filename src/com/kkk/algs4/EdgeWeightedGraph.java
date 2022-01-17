@@ -79,10 +79,10 @@ public class EdgeWeightedGraph {
       return v;
     }
 
-    public int other(int vertext) {
-      if (vertext == v) {
+    public int other(int vertex) {
+      if (vertex == v) {
         return w;
-      } else if (vertext == w) {
+      } else if (vertex == w) {
         return v;
       } else {
         throw new IllegalArgumentException();
@@ -91,6 +91,10 @@ public class EdgeWeightedGraph {
 
     public double weight() {
       return weight;
+    }
+
+    public boolean has(int vertex) {
+      return v == vertex || w == vertex;
     }
 
     @Override
@@ -147,7 +151,7 @@ public class EdgeWeightedGraph {
 
   public static class PrimMST {
     private boolean[] marked; // 最小生成树顶点
-    private Edge[] edges; // 最小生成树的边
+    private Edge[] edges; // 最小生成树的边，排除index=0
     private IndexMinPQ<Edge> pq; // 只保留每个顶点到树权重最小横切边，辅助索引优先队列
 
     public PrimMST(EdgeWeightedGraph graph) {
