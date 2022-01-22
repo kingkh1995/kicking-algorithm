@@ -1,5 +1,6 @@
 package com.kkk.algs4;
 
+import com.kkk.algs4.EdgeWeightedDigraph.DirectedEdge;
 import com.kkk.algs4.EdgeWeightedGraph.Edge;
 import java.util.HashSet;
 import java.util.IdentityHashMap;
@@ -78,10 +79,10 @@ public class WeightedGraphExx {
         graph.addEdge(newEdge);
       }
       // 判断是否在环路径上，也会存在自环（因为没有过滤失效边）
-      EdgeWeightedCycle edgeWeightedCycle = new EdgeWeightedCycle(graph);
+      EdgeWeightedCircle edgeWeightedCircle = new EdgeWeightedCircle(graph);
       for (Edge edge : map.keySet()) {
         Edge e = map.get(edge);
-        if (!edgeWeightedCycle.onCircle(edge)) {
+        if (!edgeWeightedCircle.onCircle(edge)) {
           result.offer(e);
         }
         int v1 = e.either();
@@ -96,17 +97,16 @@ public class WeightedGraphExx {
     return result;
   }
 
-  public static class EdgeWeightedCycle {
+  public static class EdgeWeightedCircle {
 
     private EdgeWeightedGraph graph;
     private boolean visited[];
     private HashSet<Edge> onCircle;
 
-    public EdgeWeightedCycle(EdgeWeightedGraph graph) {
+    public EdgeWeightedCircle(EdgeWeightedGraph graph) {
       this.graph = graph;
       this.visited = new boolean[graph.vertices()];
       this.onCircle = new HashSet<>();
-      MyBag<Edge> edges = this.graph.edges();
       // dfs访问每个顶点。
       for (int v = 0; v < graph.vertices(); v++) {
         if (!this.visited[v]) {
@@ -214,6 +214,118 @@ public class WeightedGraphExx {
       }
       return next;
     }
+  }
+
+  // ===============================================================================================
+
+  /** 4.4.7 实现DijkstraSP的另一个版本，支持返回从s到t的所有最短路径（不存在负权重，且存在多条权重相同的最短路径） */
+  public static class PathDijkstraSP {
+
+    private final MyBag<Path>[] pathTo; // 指向顶点的路径
+    private final double[] distTo; // 到顶点最短路径的长度，不可达则为无穷大
+    private final IndexMinPQ<Double> pq;
+
+    public PathDijkstraSP(EdgeWeightedDigraph digraph, int s) {
+      this.pathTo = (MyBag<Path>[]) new MyBag[digraph.vertices()];
+      this.distTo = new double[digraph.vertices()];
+      this.pq = new IndexMinPQ<>(digraph.vertices());
+      for (int v = 0; v < digraph.vertices(); v++) {
+        distTo[v] = Double.POSITIVE_INFINITY;
+      }
+      distTo[s] = 0;
+      pq.set(s, 0.0D);
+      while (!pq.isEmpty()) {
+        relax(digraph, pq.delMin());
+      }
+    }
+
+    // 修改relax方法，保存所有权重相同的路径。
+    private void relax(EdgeWeightedDigraph digraph, int v) {
+      for (DirectedEdge e : digraph.adj(v)) {
+        int w = e.to();
+        if (distTo[w] < distTo[v] + e.weight()) {
+          continue;
+        }
+        MyBag<Path> bag;
+        if (distTo[w] > distTo[v] + e.weight()) {
+          // 大于情况直接覆盖
+          bag = new MyBag<>();
+        } else {
+          // 等于情况添加
+          bag = pathTo[w];
+        }
+        if (pathTo[v] == null || pathTo[v].isEmpty()) {
+          bag.add(new Path(null, e));
+        } else {
+          for (Path path : pathTo[v]) {
+            bag.add(new Path(path, e));
+          }
+        }
+        distTo[w] = distTo[v] + e.weight();
+        pathTo[w] = bag;
+        pq.set(w, distTo[w]);
+      }
+    }
+
+    public Iterable<Iterable<DirectedEdge>> pathTo(int v) {
+      if (pathTo[v] == null || pathTo[v].isEmpty()) {
+        return null;
+      }
+      MyBag<Iterable<DirectedEdge>> iterables = new MyBag<>();
+      for (Path path : pathTo[v]) {
+        iterables.add(path.getPath());
+      }
+      return iterables;
+    }
+
+    public static class Path {
+      private Path previousPath;
+      private DirectedEdge directedEdge;
+      private double weight;
+
+      public Path(Path previousPath, DirectedEdge directedEdge) {
+        this.previousPath = previousPath;
+        this.directedEdge = directedEdge;
+        this.weight = directedEdge.weight() + (previousPath == null ? 0.0D : previousPath.weight);
+      }
+
+      public Iterable<DirectedEdge> getPath() {
+        MyQueue<DirectedEdge> queue;
+        if (previousPath == null) {
+          queue = new MyQueue<>();
+        } else {
+          queue = (MyQueue<DirectedEdge>) previousPath.getPath();
+        }
+        queue.offer(directedEdge);
+        return queue;
+      }
+    }
+  }
+
+  public static void pathDijkstraSPTest() {
+    EdgeWeightedDigraph edgeWeightedDigraph = new EdgeWeightedDigraph(8);
+    edgeWeightedDigraph.addEdge(new DirectedEdge(4, 5, 35));
+    edgeWeightedDigraph.addEdge(new DirectedEdge(5, 4, 35));
+    edgeWeightedDigraph.addEdge(new DirectedEdge(4, 7, 37));
+    edgeWeightedDigraph.addEdge(new DirectedEdge(5, 7, 28));
+    edgeWeightedDigraph.addEdge(new DirectedEdge(7, 5, 28));
+    edgeWeightedDigraph.addEdge(new DirectedEdge(5, 1, 32));
+    edgeWeightedDigraph.addEdge(new DirectedEdge(0, 4, 38));
+    edgeWeightedDigraph.addEdge(new DirectedEdge(2, 0, 59));
+    edgeWeightedDigraph.addEdge(new DirectedEdge(7, 3, 39));
+    edgeWeightedDigraph.addEdge(new DirectedEdge(2, 7, 34));
+    edgeWeightedDigraph.addEdge(new DirectedEdge(6, 2, 40));
+    edgeWeightedDigraph.addEdge(new DirectedEdge(3, 6, 52));
+    edgeWeightedDigraph.addEdge(new DirectedEdge(6, 0, 58));
+    edgeWeightedDigraph.addEdge(new DirectedEdge(6, 4, 93));
+    PathDijkstraSP pathDijkstraSP = new PathDijkstraSP(edgeWeightedDigraph, 2);
+    pathDijkstraSP
+        .pathTo(4)
+        .forEach(
+            directedEdges -> {
+              System.out.println("===============");
+              directedEdges.forEach(System.out::println);
+            });
   }
 
   // ===============================================================================================
