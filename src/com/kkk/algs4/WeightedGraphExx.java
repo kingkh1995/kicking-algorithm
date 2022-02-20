@@ -330,4 +330,245 @@ public class WeightedGraphExx {
 
   // ===============================================================================================
 
+  /** 4.4.23 给定两点的最短路径，实现DijkstraSP的改进版本，快速求得给定两点的最短路径 */
+  /**
+   * 只需要在将终点加入最短路径树的时候停止算法即可，因为对一个顶点的放松不会减小该顶点的distTo值，且因为不存在负权重边， <br>
+   * 所以一个顶点被加入最短路径树中（被放松完）后，该顶点的distTo值已经不可能再减小了。
+   */
+
+  // ===============================================================================================
+
+  /** 4.4.41 双向搜索，解决4.4.23给定两点的最短路径问题，在最开始时将起点和终点都加入队列。 */
+  /**
+   * 将终点作为反转图的起点，两个图同时执行Dijkstra算法，每次选择两个图中最近的顶点放松，当该顶点已经加入图和反向图的 <br>
+   * 最短路径树的时候终止算法即可，终止后从取两个图中distTo值和的最小值，得到中间顶点，最后得出最短路径。
+   */
+  public static class DijkstraSPSourceSinkBidirectional {
+
+    // 原图
+    private DirectedEdge[] edgeToSource;
+    private double[] distToSource;
+    private boolean[] relaxedFromSource;
+
+    // 反转图
+    private DirectedEdge[] edgeToTarget;
+    private double[] distToTarget;
+    private boolean[] relaxedFromTarget;
+
+    // 公共队列，反转图序号为vertices+index
+    private final IndexMinPQ<Double> pq;
+
+    // 最短路径
+    public Iterable<DirectedEdge> path;
+    public Double distTo;
+
+    public DijkstraSPSourceSinkBidirectional(EdgeWeightedDigraph digraph, int source, int target) {
+      int vertices = digraph.vertices();
+      this.edgeToSource = new DirectedEdge[vertices];
+      this.distToSource = new double[vertices];
+      this.relaxedFromSource = new boolean[vertices];
+      this.edgeToTarget = new DirectedEdge[vertices];
+      this.distToTarget = new double[vertices];
+      this.relaxedFromTarget = new boolean[vertices];
+      this.pq = new IndexMinPQ<>(2 * vertices);
+      // 反转图
+      EdgeWeightedDigraph reverseDigraph = new EdgeWeightedDigraph(vertices);
+      for (int vertex = 0; vertex < vertices; vertex++) {
+        for (DirectedEdge edge : digraph.adj(vertex)) {
+          reverseDigraph.addEdge(new DirectedEdge(edge.to(), edge.from(), edge.weight()));
+        }
+      }
+      for (int v = 0; v < vertices; v++) {
+        distToSource[v] = Double.POSITIVE_INFINITY;
+        distToTarget[v] = Double.POSITIVE_INFINITY;
+      }
+      distToSource[source] = 0;
+      distToTarget[target] = 0;
+      pq.set(source, 0.0D);
+      pq.set(target + vertices, 0.0D);
+      while (!pq.isEmpty()) {
+        int nextVertexToRelax = pq.delMin();
+        boolean inSource = nextVertexToRelax < vertices;
+        int midVertex = inSource ? nextVertexToRelax : nextVertexToRelax - vertices;
+        if (inSource) {
+          relax(digraph, distToSource, edgeToSource, midVertex, true);
+          relaxedFromSource[midVertex] = true;
+        } else {
+          relax(reverseDigraph, distToTarget, edgeToTarget, midVertex, false);
+          relaxedFromTarget[midVertex] = true;
+        }
+        // 终止条件，顶点已经加入了两个图的最短路径树
+        if (relaxedFromSource[midVertex] && relaxedFromTarget[midVertex]) {
+          compute();
+          break;
+        }
+      }
+    }
+
+    private void relax(
+        EdgeWeightedDigraph digraph,
+        double[] distTo,
+        DirectedEdge[] edgeTo,
+        int v,
+        boolean inSource) {
+      for (DirectedEdge e : digraph.adj(v)) {
+        int w = e.to();
+        if (distTo[w] > distTo[v] + e.weight()) {
+          distTo[w] = distTo[v] + e.weight();
+          edgeTo[w] = e;
+          pq.set(inSource ? w : w + digraph.vertices(), distTo[w]);
+        }
+      }
+    }
+
+    private void compute() {
+      // 先找到到中间顶点
+      int midVertex = -1;
+      double weight = Double.POSITIVE_INFINITY;
+      for (int i = 0; i < distToSource.length; i++) {
+        if (distToSource[i] + distToTarget[i] < weight) {
+          weight = distToSource[i] + distToTarget[i];
+          midVertex = i;
+        }
+      }
+      // 未找到则表示不存在
+      if (midVertex == -1) {
+        return;
+      }
+      MyStack<DirectedEdge> stack = new MyStack<>();
+      // 先从正向图中反向查找
+      for (DirectedEdge e = edgeToSource[midVertex]; e != null; e = edgeToSource[e.from()]) {
+        stack.push(e);
+      }
+      MyQueue<DirectedEdge> queue = new MyQueue<>();
+      stack.forEach(queue::offer);
+      // 再从反向图中反向查找
+      for (DirectedEdge e = edgeToTarget[midVertex]; e != null; e = edgeToTarget[e.from()]) {
+        queue.offer(new DirectedEdge(e.to(), e.from(), e.weight()));
+      }
+      this.path = queue;
+      this.distTo = weight;
+    }
+  }
+
+  public static void DijkstraSPSourceSinkBidirectionalTest() {
+    EdgeWeightedDigraph edgeWeightedDigraph = new EdgeWeightedDigraph(8);
+    edgeWeightedDigraph.addEdge(new DirectedEdge(4, 5, 0.35));
+    edgeWeightedDigraph.addEdge(new DirectedEdge(5, 4, 0.35));
+    edgeWeightedDigraph.addEdge(new DirectedEdge(4, 7, 0.37));
+    edgeWeightedDigraph.addEdge(new DirectedEdge(5, 7, 0.28));
+    edgeWeightedDigraph.addEdge(new DirectedEdge(7, 5, 0.28));
+    edgeWeightedDigraph.addEdge(new DirectedEdge(5, 1, 0.32));
+    edgeWeightedDigraph.addEdge(new DirectedEdge(0, 4, 0.38));
+    edgeWeightedDigraph.addEdge(new DirectedEdge(0, 2, 0.26));
+    edgeWeightedDigraph.addEdge(new DirectedEdge(7, 3, 0.39));
+    edgeWeightedDigraph.addEdge(new DirectedEdge(1, 3, 0.29));
+    edgeWeightedDigraph.addEdge(new DirectedEdge(2, 7, 0.34));
+    edgeWeightedDigraph.addEdge(new DirectedEdge(6, 2, 0.40));
+    edgeWeightedDigraph.addEdge(new DirectedEdge(3, 6, 0.52));
+    edgeWeightedDigraph.addEdge(new DirectedEdge(6, 0, 0.58));
+    edgeWeightedDigraph.addEdge(new DirectedEdge(6, 4, 0.93));
+    int source = 0;
+    int target = 6;
+    DijkstraSPSourceSinkBidirectional dijkstraSPSourceSinkBidirectional =
+        new DijkstraSPSourceSinkBidirectional(edgeWeightedDigraph, source, target);
+    System.out.println("Shortest path from 0 to 6:");
+
+    if (dijkstraSPSourceSinkBidirectional.path != null) {
+      System.out.printf(
+          "%d to %d (%.2f)  ", source, target, dijkstraSPSourceSinkBidirectional.distTo);
+      for (DirectedEdge edge : dijkstraSPSourceSinkBidirectional.path) {
+        System.out.print(edge + "   ");
+      }
+      System.out.println();
+    } else {
+      System.out.printf("%d to %d         no path\n", source, target);
+    }
+    System.out.println("Expected:");
+    System.out.println("0 to 6 (1.51)  0->2 0.26   2->7 0.34   7->3 0.39   3->6 0.52");
+    EdgeWeightedDigraph edgeWeightedDigraph2 = new EdgeWeightedDigraph(8);
+    edgeWeightedDigraph2.addEdge(new DirectedEdge(0, 1, 1));
+    edgeWeightedDigraph2.addEdge(new DirectedEdge(0, 2, 4));
+    edgeWeightedDigraph2.addEdge(new DirectedEdge(1, 3, 5));
+    edgeWeightedDigraph2.addEdge(new DirectedEdge(2, 7, 1));
+    edgeWeightedDigraph2.addEdge(new DirectedEdge(3, 4, 3));
+    edgeWeightedDigraph2.addEdge(new DirectedEdge(4, 6, 1));
+    edgeWeightedDigraph2.addEdge(new DirectedEdge(5, 6, 5));
+    edgeWeightedDigraph2.addEdge(new DirectedEdge(7, 4, 2));
+    int source2 = 0;
+    int target2 = 6;
+    DijkstraSPSourceSinkBidirectional dijkstraSPSourceSinkBidirectional2 =
+        new DijkstraSPSourceSinkBidirectional(edgeWeightedDigraph2, source2, target2);
+    System.out.println("\nShortest path from 0 to 6:");
+    if (dijkstraSPSourceSinkBidirectional2.path != null) {
+      System.out.printf(
+          "%d to %d (%.2f)  ", source2, target2, dijkstraSPSourceSinkBidirectional2.distTo);
+      for (DirectedEdge edge : dijkstraSPSourceSinkBidirectional2.path) {
+        System.out.print(edge + "   ");
+      }
+      System.out.println();
+    } else {
+      System.out.printf("%d to %d         no path\n", source2, target2);
+    }
+    System.out.println("Expected:");
+    System.out.println("0 to 6 (8.00)  0->2 4.00   2->7 1.00   7->4 2.00   4->6 1.00");
+    EdgeWeightedDigraph edgeWeightedDigraph3 = new EdgeWeightedDigraph(5);
+    edgeWeightedDigraph3.addEdge(new DirectedEdge(0, 1, 3));
+    edgeWeightedDigraph3.addEdge(new DirectedEdge(0, 2, 5));
+    edgeWeightedDigraph3.addEdge(new DirectedEdge(1, 3, 3));
+    edgeWeightedDigraph3.addEdge(new DirectedEdge(3, 4, 3));
+    edgeWeightedDigraph3.addEdge(new DirectedEdge(2, 4, 5));
+    int source3 = 0;
+    int target3 = 4;
+    DijkstraSPSourceSinkBidirectional dijkstraSPSourceSinkBidirectional3 =
+        new DijkstraSPSourceSinkBidirectional(edgeWeightedDigraph3, source3, target3);
+    System.out.println("\nShortest path from 0 to 4:");
+    if (dijkstraSPSourceSinkBidirectional3.path != null) {
+      System.out.printf(
+          "%d to %d (%.2f)  ", source3, target3, dijkstraSPSourceSinkBidirectional3.distTo);
+      for (DirectedEdge edge : dijkstraSPSourceSinkBidirectional3.path) {
+        System.out.print(edge + "   ");
+      }
+      System.out.println();
+    } else {
+      System.out.printf("%d to %d         no path\n", source3, target3);
+    }
+    System.out.println("Expected:");
+    System.out.println("0 to 4 (9.00)  0->1 3.00   1->3 3.00   3->4 3.00");
+  }
+
+  // ===============================================================================================
+
+  /** 4.4.36 邻居顶点，找出加权有向图中与给定顶点距离在d之内的所有顶点。 */
+  /** 与4.4.23类似，只需要当前加入最短路径树的顶点距离大于d时终止算法并在最后删除该顶点即可。 */
+
+  // ===============================================================================================
+
+  /** 4.4.25 给定一个起点集合和一个终点集合，实现DijkstraSP的改进版本，快速求得从任意起点到任意终点的最短路径 */
+  /** 在算法最开始时，将所有起点的distTo设为0，同时在所有终点都加入最短路径树的后停止算法即可。 */
+
+  // ===============================================================================================
+
+  /** 4.4.33 网格图的最短路径，给定一个n*n的正整数矩阵，找到从(0,0)到(n-1，n-1)的最短路径，如果存在只能向下和向右限制呢。 */
+  /**
+   * 构造一幅无负权重的有向图，将每一个格子均视为一个顶点，从每一个格子出发构造边，可以向四个方向移动，则每个方向的边为，<br>
+   * 起点为自身，终点为该方向的相邻格，权重为自身数值与相邻格的数值之和，构造有向图完成后，使用Dijkstra算法即可。<br>
+   * 存在只能向下和向右限制则只能选择两个方向构造边，其他相同。
+   */
+
+  // ===============================================================================================
+
+  /** 4.4.34 单调最短路径，该最短路径上边的权重为单调递增或递减。 */
+  /**
+   * 将所有边按权重排序，以递增的顺序放松每一条边，即可得到单调递增的最短路径，同理可以得到单调递减的最短路径，之后对比取短的即可。<br>
+   * 因为最短路径树是从起点开始慢慢构建的，即每条边如果其起点未被加入树中则不可能被放松，则以边权重的单调顺序依次放松，则最短路径也是单调的。
+   */
+
+  // ===============================================================================================
+
+  /** 4.4.43 负权重环检测，基于BellmanFordSP实现， */
+  /** 只需要向原图新增一个起点，并创建其指向所有的顶点的权重为0的边即可，使用BellmanFordSP的构造函数，起点为新增的起点即可。 */
+
+  // ===============================================================================================
+
 }
