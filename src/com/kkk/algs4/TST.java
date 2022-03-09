@@ -36,6 +36,9 @@ public class TST {
   }
 
   public void put(String key, Object val) {
+    if (key.length() == 0) {
+      return;
+    }
     root = put(root, key, val, 0);
   }
 
@@ -55,5 +58,55 @@ public class TST {
       node.val = val;
     }
     return node;
+  }
+
+  public Iterable<String> keysWithPrefix(String pre) {
+    MyQueue<String> queue = new MyQueue<>();
+    // 找到值为pre的结点并以其为起点开始收集
+    Node node = get(root, pre, 0);
+    if (node == null) {
+      return queue;
+    }
+    if (node.val != null) {
+      queue.offer(pre);
+    }
+    collect(node.mid, pre, queue);
+    return queue;
+  }
+
+  private void collect(Node node, String pre, MyQueue<String> queue) {
+    if (node == null) {
+      return;
+    }
+    if (node.val != null) {
+      queue.offer(pre + node.c);
+    }
+    collect(node.left, pre, queue);
+    collect(node.mid, pre + node.c, queue);
+    collect(node.right, pre, queue);
+  }
+
+  public String longestPrefixOf(String s) {
+    return s.substring(0, search(root, s, 0, 0));
+  }
+
+  private int search(Node node, String s, int d, int length) {
+    if (node == null) {
+      return length;
+    }
+    char c = s.charAt(d);
+    if (c < node.c) {
+      return search(node.left, s, d, length);
+    } else if (c > node.c) {
+      return search(node.right, s, d, length);
+    }
+    if (node.val != null) {
+      length = d + 1;
+    }
+    if (d < s.length() - 1) {
+      return search(node.mid, s, d + 1, length);
+    } else {
+      return length;
+    }
   }
 }
