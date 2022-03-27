@@ -1,8 +1,8 @@
 package com.kkk.leetcode;
 
-import com.kkk.algs4.MyStack;
 import com.kkk.supports.Queue;
 import com.kkk.supports.Stack;
+import java.util.LinkedList;
 
 /**
  * 队列和栈 (BFS & DFS) <br>
@@ -227,16 +227,16 @@ public class QueueAndStackExx {
 
   // 字符串解码  形式为 k[s]  ex: 3[z]2[2[y]pq4[2[jk]e1[f]]]ef
   public String decodeString(String s) {
-    MyStack<StringBuilder> stack = new MyStack<>();
+    LinkedList<StringBuilder> stack = new LinkedList<>();
     for (char c : s.toCharArray()) {
       if (Character.isDigit(c)) {
-        if (!stack.isEmpty() && Character.isDigit(stack.top().charAt(0))) { // 当前栈顶为数字直接追加
+        if (!stack.isEmpty() && Character.isDigit(stack.peek().charAt(0))) { // 当前栈顶为数字直接追加
           stack.push(stack.pop().append(c));
         } else {
           stack.push(new StringBuilder().append(c)); // 否则push
         }
       } else if (Character.isLetter(c)) {
-        if (!stack.isEmpty() && Character.isLetter(stack.top().charAt(0))) { // 当前栈顶为字符直接追加
+        if (!stack.isEmpty() && Character.isLetter(stack.peek().charAt(0))) { // 当前栈顶为字符直接追加
           stack.push(stack.pop().append(c));
         } else {
           stack.push(new StringBuilder().append(c)); // 否则push
@@ -249,7 +249,7 @@ public class QueueAndStackExx {
         stack.pop(); // 取出一个左括号
         int i = Integer.parseInt(stack.pop().toString()); // 取出一个数字
         String repeat = string.repeat(i);
-        if (!stack.isEmpty() && Character.isLetter(stack.top().charAt(0))) {
+        if (!stack.isEmpty() && Character.isLetter(stack.peek().charAt(0))) {
           stack.push(stack.pop().append(repeat)); // 栈顶仍然为字符追加
         } else {
           stack.push(new StringBuilder(repeat));

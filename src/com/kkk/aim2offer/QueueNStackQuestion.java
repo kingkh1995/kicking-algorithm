@@ -7,7 +7,7 @@ import com.kkk.supports.Stack;
  *
  * @author KaiKoo
  */
-public class QueueNStackQu {
+public class QueueNStackQuestion {
 
   /**
    * 设计一个能在常数时间内检索到最小元素的栈 <br>

@@ -176,4 +176,66 @@ public class EssentialExx {
 
   // ===============================================================================================
 
+  /** KMP算法完全版，匹配失败时，从模式的前缀找到当前位置处的后缀相同公共字符串。 */
+  public static class KMP {
+
+    private char[] arr;
+    // 辅助数组，表示模式指针在当前位置不匹配时的回退位置，因为当前子字符串的前缀和后缀有相同部分，则可以直接回退到前缀位置。
+    private int[] aux;
+
+    public KMP(char[] arr) {
+      this.arr = arr;
+      int length = arr.length;
+      if (length == 0) {
+        throw new IllegalArgumentException("arr is empty!");
+      }
+      aux = new int[length];
+      aux[0] = -1;
+      if (length == 1) {
+        return;
+      }
+      // 遍历构造aux数组
+      for (int k, j = 1; j < length; j++) {
+        // 设置默认值，不匹配默认回到0位置。
+        aux[j] = 0;
+        k = aux[j - 1];
+        // 可知如果aux[j]大于0，则0到j-1的子字符串必然存在公共的前缀和后缀，故如果在j位置匹配失败，则直接跳到相同前缀之后比对即可。
+        //     k    i  j-1
+        //     |    |   |
+        // ababc?...ababcd?...
+        // 计算aux[j]时，则比对arr[k]和arr[j-1]，因为[0,k-1]和[i,j-2]区间是相同的，如果相同，则aux[j]=k+1，即公共串长度加一。
+        // 如果不等，如果aux[k]大于0，根据性质可知道[0,k-1]区间前缀和[i,j-2]区间后缀也是有公共子串的，则继续比对arr[j-1]即可。
+        while (k != -1) {
+          if (arr[j - 1] == arr[k]) {
+            aux[j] = k + 1;
+            break;
+          } else {
+            k = aux[k];
+          }
+        }
+      }
+    }
+
+    public int indexOf(String text) {
+      if (text == null || text.isBlank()) {
+        return -1;
+      }
+      int i = 0, j = 0;
+      while (i < text.length() && j < arr.length) {
+        // 匹配或者模式指针已经回退到-1处，文本指针和模式指针均前进一步。
+        if (j == -1 || text.charAt(i) == arr[j]) {
+          i++;
+          j++;
+        } else {
+          // 否则模式指针借助辅助数组回退
+          j = aux[j];
+        }
+      }
+      // 终止时，成功匹配则模式扫描完成，失败则文本指针扫描完成。
+      return j == arr.length ? i - j : -1;
+    }
+  }
+
+  // ===============================================================================================
+
 }
