@@ -2,6 +2,7 @@ package com.kkk.leetcode;
 
 import com.kkk.supports.TreeNode;
 import java.util.ArrayList;
+import java.util.Deque;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -21,7 +22,7 @@ public class BinaryTreeExx {
     if (root == null) {
       return res;
     }
-    LinkedList<TreeNode> stack = new LinkedList<>();
+    Deque<TreeNode> stack = new LinkedList<>();
     stack.push(root);
     while (!stack.isEmpty()) {
       TreeNode pop = stack.pop();
@@ -39,7 +40,7 @@ public class BinaryTreeExx {
 
   // 二叉树的中序遍历 使用栈实现
   public List<Integer> inorderTraversal(TreeNode root) {
-    LinkedList<TreeNode> stack = new LinkedList<>();
+    Deque<TreeNode> stack = new LinkedList<>();
     List<Integer> res = new ArrayList<>();
     while (root != null || !stack.isEmpty()) {
       // 一直往左子树移动，并将根结点压入栈
@@ -61,7 +62,7 @@ public class BinaryTreeExx {
     if (root == null) {
       return res;
     }
-    LinkedList<TreeNode> stack = new LinkedList<>();
+    Deque<TreeNode> stack = new LinkedList<>();
     TreeNode prev = null;
     while (root != null || !stack.isEmpty()) {
       // 一直往左子树移动，并将根结点压入栈
@@ -104,7 +105,7 @@ public class BinaryTreeExx {
 
   // 对称二叉树，迭代解法
   public boolean isSymmetric2(TreeNode root) {
-    LinkedList<TreeNode> stack = new LinkedList<>();
+    Deque<TreeNode> stack = new LinkedList<>();
     if (push(root.left, stack) != push(root.right, stack)) {
       return false;
     }
@@ -124,7 +125,7 @@ public class BinaryTreeExx {
     return true;
   }
 
-  private boolean push(TreeNode node, LinkedList<TreeNode> stack) {
+  private boolean push(TreeNode node, Deque<TreeNode> stack) {
     if (node == null) {
       return false;
     }
@@ -134,4 +135,77 @@ public class BinaryTreeExx {
 
   // ===============================================================================================
   /** 拔高题 */
+
+  // 填充节点的next指针
+  public TreeNode connect(TreeNode root) {
+    if (root == null) {
+      return root;
+    }
+    TreeNode lead = root;
+    // 从根节点开始，更新下一层的next指针。
+    while (lead != null) {
+      TreeNode nextLead = null; // 下层开始节点
+      TreeNode prev = null; // 未更新next指针的上一节点
+      for (TreeNode p = lead; p != null; p = p.next) {
+        if (p.left != null) {
+          if (nextLead == null) {
+            nextLead = p.left;
+          }
+          if (prev != null) {
+            prev.next = p.left;
+          }
+          prev = p.left;
+        }
+        if (p.right != null) {
+          if (nextLead == null) {
+            nextLead = p.right;
+          }
+          if (prev != null) {
+            prev.next = p.right;
+          }
+          prev = p.right;
+        }
+      }
+      lead = nextLead;
+    }
+    return root;
+  }
+
+  // ===============================================================================================
+  /** 困难题 */
+
+  // 从前序与中序遍历序列构造二叉树，迭代解法
+  public TreeNode buildTree(int[] preorder, int[] inorder) {
+    if (preorder == null || preorder.length == 0) {
+      return null;
+    }
+    // 前序遍历第一个结点即为根节点
+    TreeNode root = new TreeNode(preorder[0]);
+    // 用一个栈来维护「当前节点的所有还没有考虑过右儿子的祖先节点」，栈顶就是当前节点
+    Deque<TreeNode> stack = new LinkedList<>();
+    stack.push(root);
+    // 前序遍历的某个节点如果是左儿子，则必然只能是上一个节点的左儿子。
+    // 对于前序遍历中的每个节点，我们依次判断它是栈顶节点的左儿子，还是栈中某个节点的右儿子
+    int inorderIndex = 0;
+    for (int i = 1; i < preorder.length; i++) {
+      int preorderVal = preorder[i];
+      TreeNode node = stack.peek();
+      // 栈顶节点依次与中序遍历对比，如果相同表示前序遍历中下一个节点为右儿子，反之为栈顶节点的左儿子。
+      if (node.val != inorder[inorderIndex]) {
+        node.left = new TreeNode(preorderVal);
+        stack.push(node.left);
+      } else {
+        // 因为栈中每一个节点的右儿子都还没有被遍历过，那么这些节点的顺序和它们在中序遍历中出现的顺序一定是相反的
+        while (!stack.isEmpty() && stack.peek().val == inorder[inorderIndex]) {
+          node = stack.pop();
+          inorderIndex++;
+        }
+        // 直到中序遍历中找到一个不存在于栈内的节点，表示只有栈顶节点存在右儿子，则是当前右儿子的父亲。
+        node.right = new TreeNode(preorderVal);
+        // 右儿子也入栈，因为右儿子的右儿子也还没考虑。
+        stack.push(node.right);
+      }
+    }
+    return root;
+  }
 }

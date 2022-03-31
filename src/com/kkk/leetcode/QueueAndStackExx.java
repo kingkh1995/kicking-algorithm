@@ -2,6 +2,7 @@ package com.kkk.leetcode;
 
 import com.kkk.supports.Queue;
 import com.kkk.supports.Stack;
+import java.util.Deque;
 import java.util.LinkedList;
 
 /**
@@ -227,7 +228,7 @@ public class QueueAndStackExx {
 
   // 字符串解码  形式为 k[s]  ex: 3[z]2[2[y]pq4[2[jk]e1[f]]]ef
   public String decodeString(String s) {
-    LinkedList<StringBuilder> stack = new LinkedList<>();
+    Deque<StringBuilder> stack = new LinkedList<>();
     for (char c : s.toCharArray()) {
       if (Character.isDigit(c)) {
         if (!stack.isEmpty() && Character.isDigit(stack.peek().charAt(0))) { // 当前栈顶为数字直接追加
