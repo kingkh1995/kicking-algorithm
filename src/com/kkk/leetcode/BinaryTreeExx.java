@@ -133,6 +133,40 @@ public class BinaryTreeExx {
     return true;
   }
 
+  // 验证是否是二叉搜索树
+  public boolean isValidBST(TreeNode root) {
+    return isValidBST(root, Integer.MIN_VALUE, Integer.MAX_VALUE);
+  }
+
+  private boolean isValidBST(TreeNode node, long lower, long upper) {
+    if (node == null) {
+      return true;
+    }
+    if (node.val <= lower || node.val >= upper) {
+      return false;
+    }
+    return isValidBST(node.left, lower, node.val) && isValidBST(node.right, node.val, upper);
+  }
+
+  // 判断是否为平衡二叉树，自底向上的递归。
+  public boolean isBalanced(TreeNode root) {
+    // 不需要对左右子树调用isBalanced了
+    return height(root) >= 0;
+  }
+
+  private int height(TreeNode node) {
+    if (node == null) {
+      return 0;
+    }
+    int lh = height(node.left);
+    int rh = height(node.right);
+    // 判断高度是否平衡，不平衡则返回-1
+    if (lh < 0 || rh < 0 || Math.abs(lh - rh) > 1) {
+      return -1;
+    }
+    return Math.max(lh, rh) + 1;
+  }
+
   // ===============================================================================================
   /** 拔高题 */
 
