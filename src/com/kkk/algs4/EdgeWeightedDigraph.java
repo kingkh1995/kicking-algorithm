@@ -18,7 +18,7 @@ public class EdgeWeightedDigraph {
     this.edges = new MyBag<>();
     this.adj = (MyBag<DirectedEdge>[]) new MyBag[vertices];
     for (int v = 0; v < vertices; v++) {
-      adj[v] = new MyBag<DirectedEdge>();
+      adj[v] = new MyBag<>();
     }
   }
 
@@ -141,7 +141,7 @@ public class EdgeWeightedDigraph {
   public static class EdgeWeightedDirectedCycle {
 
     private EdgeWeightedDigraph graph;
-    private boolean visited[];
+    private boolean[] visited;
     private boolean hasNegativeCycle;
     private Iterable<DirectedEdge> negativeCycle;
 

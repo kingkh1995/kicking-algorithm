@@ -71,7 +71,7 @@ public class TreeQuestion {
   public void printTreeBreadthFirstSearch(TreeNode treeNode) {
     if (treeNode != null) {
       // 仅仅使用一个队列
-      Queue<TreeNode> queue = new LinkedList();
+      Queue<TreeNode> queue = new LinkedList<>();
       // 根结点入队列
       queue.add(treeNode);
       // 边出边入直到队列为空
@@ -96,8 +96,8 @@ public class TreeQuestion {
    */
   public void printTreeCircleBreadthFirstSearch(TreeNode treeNode) {
     if (treeNode != null) {
-      Deque<TreeNode> stack1 = new LinkedList();
-      Deque<TreeNode> stack2 = new LinkedList();
+      Deque<TreeNode> stack1 = new LinkedList<>();
+      Deque<TreeNode> stack2 = new LinkedList<>();
       // 根结点入栈
       stack1.push(treeNode);
       // 边出边入直到两栈均为空
@@ -137,7 +137,7 @@ public class TreeQuestion {
    */
   public void printLeftViewOfTree(TreeNode treeNode) {
     if (treeNode != null) {
-      Queue<TreeNode> queue = new LinkedList();
+      Queue<TreeNode> queue = new LinkedList<>();
       // 根结点入队列
       queue.add(treeNode);
       int count = 1;

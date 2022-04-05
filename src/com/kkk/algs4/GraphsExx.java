@@ -31,8 +31,8 @@ public class GraphsExx {
       }
       this.sID = quickFind(s);
       this.count = -1;
-      for (int i = 0; i < id.length; i++) {
-        if (id[i] == this.sID) {
+      for (int i : id) {
+        if (i == this.sID) {
           count++;
         }
       }
@@ -75,9 +75,7 @@ public class GraphsExx {
   public static int[] breadthFirstPaths(Graph graph, int source) {
     // 标记是否被访问以及层数（层数即使最短路径的长度）
     int[] distTo = new int[graph.vertices()];
-    for (int i = 0; i < distTo.length; i++) {
-      distTo[i] = Integer.MAX_VALUE;
-    }
+    Arrays.fill(distTo, Integer.MAX_VALUE);
     distTo[source] = 0;
     // 记录最短路径
     int[] edgeTo = new int[graph.vertices()];
@@ -209,7 +207,7 @@ public class GraphsExx {
 
     public List<Bridge> bridges;
 
-    public class Bridge {
+    public static class Bridge {
       int v1;
       int v2;
 
@@ -383,9 +381,7 @@ public class GraphsExx {
     public StrongComponentSearch(Digraph digraph) {
       this.digraph = digraph;
       this.sID = new int[digraph.vertices()];
-      for (int i = 0; i < this.sID.length; i++) {
-        this.sID[i] = -1;
-      }
+      Arrays.fill(this.sID, -1);
       for (int i = 0; i < this.sID.length; i++) {
         if (this.sID[i] < 0) {
           searchStrongComponent(i);

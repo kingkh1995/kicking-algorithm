@@ -175,7 +175,7 @@ public class BinaryTreeExx {
   // 填充节点的next指针
   public TreeNode connect(TreeNode root) {
     if (root == null) {
-      return root;
+      return null;
     }
     TreeNode lead = root;
     // 从根节点开始，更新下一层的next指针。
@@ -208,7 +208,7 @@ public class BinaryTreeExx {
   }
 
   // 找到重复的子树，将子树完全序列化，加入哈希表中查找即可。
-  Map<String, Integer> tree = new HashMap();
+  Map<String, Integer> tree = new HashMap<>();
   List<TreeNode> answer = new LinkedList<>();
 
   public List<TreeNode> findDuplicateSubtrees(TreeNode root) {

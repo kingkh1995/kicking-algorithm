@@ -136,7 +136,7 @@ public class FundamentalsExx {
   // 仅使用 length() indexOf() 方法
   private static boolean circularRotation(String s, String t) {
     // 互为回环变换，则拼接两个t必然包含s
-    return s.length() == t.length() && (t + t).indexOf(s) >= 0;
+    return s.length() == t.length() && (t + t).contains(s);
   }
 
   // ===============================================================================================

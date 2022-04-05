@@ -9,7 +9,7 @@ public class AVLBST {
 
   // ===============================================================================================
 
-  private class Node {
+  private static class Node {
 
     public int val;
 

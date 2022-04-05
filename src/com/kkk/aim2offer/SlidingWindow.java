@@ -23,7 +23,7 @@ public class SlidingWindow {
   时间复杂度：只需要遍历一遍，即为o(n)
    */
   public int lengthOfLongestUnduplicatedSubString(String s) {
-    if (s == null || s == "") {
+    if (s == null || s.isBlank()) {
       return 0;
     }
     // 用ans记录下窗口滑动过程中窗口长度的最大值

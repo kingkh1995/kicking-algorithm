@@ -54,14 +54,14 @@ public class ArrayUtils {
     arr[b] = temp;
   }
 
-  public static void swap(Comparable[] arr, int a, int b) {
+  public static void swap(Comparable<?>[] arr, int a, int b) {
     if (a >= arr.length || a < 0 || b >= arr.length || b < 0) {
       throw new IllegalArgumentException();
     }
     if (a == b) {
       return;
     }
-    Comparable temp = arr[a];
+    Comparable<?> temp = arr[a];
     arr[a] = arr[b];
     arr[b] = temp;
   }

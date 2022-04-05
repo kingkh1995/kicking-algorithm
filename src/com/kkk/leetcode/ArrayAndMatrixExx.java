@@ -3,7 +3,8 @@ package com.kkk.leetcode;
 import com.kkk.supports.ArrayUtils;
 
 /**
- * 数组和矩阵
+ * 数组和矩阵<br>
+ * 498
  *
  * @author KaiKoo
  */
@@ -91,6 +92,23 @@ public class ArrayAndMatrixExx {
     }
   }
 
+  // 找到数组的中心下标，左边元素之和等于右边元素之和。
+  public int pivotIndex(int[] nums) {
+    int total = 0;
+    for (int n : nums) {
+      total += n;
+    }
+    for (int i = 0, sum = 0; i < nums.length; i++) {
+      // 左边元素之和加上右边元素之和加上中间元素等于数组总和
+      if (2 * sum + nums[i] == total) {
+        return i;
+      }
+      // sum为左边元素之和
+      sum += nums[i];
+    }
+    return -1;
+  }
+
   // ===============================================================================================
   /** 拔高题 */
 
@@ -150,7 +168,6 @@ public class ArrayAndMatrixExx {
         // 移动j
         int temp = height[j];
         while (j > 0 && height[--j] <= temp) {}
-
       } else {
         // 移动i
         int temp = height[i];
@@ -175,6 +192,67 @@ public class ArrayAndMatrixExx {
       j++;
     }
     return min == Integer.MAX_VALUE ? 0 : min;
+  }
+
+  // 将n*n的二维矩阵顺时针旋转90度。
+  public void rotate(int[][] matrix) {
+    if (matrix.length == 0 || matrix.length != matrix[0].length) {
+      return;
+    }
+    int n = matrix.length;
+    // 先沿着对角线对折，[a][b]与[n-1-b][n-1-a]交换
+    for (int i = 0; i < n; ++i) {
+      for (int j = 0; j < n - i; ++j) {
+        int temp = matrix[i][j];
+        matrix[i][j] = matrix[n - 1 - j][n - 1 - i];
+        matrix[n - 1 - j][n - 1 - i] = temp;
+      }
+    }
+    // 再沿着中线对折，[a][b]与[n-1-a][b]交换
+    for (int i = 0; i < (n >> 1); ++i) {
+      for (int j = 0; j < n; ++j) {
+        int temp = matrix[i][j];
+        matrix[i][j] = matrix[n - 1 - i][j];
+        matrix[n - 1 - i][j] = temp;
+      }
+    }
+  }
+
+  // 若M × N矩阵中某个元素为0，则将其所在的行与列清零，使用常数级别辅助空间。
+  public void setZeroes(int[][] matrix) {
+    // 需要两个辅助数组，分别标记行和列是否存在0
+    // 为了节约空间，将矩阵第一行和第一列作为辅助数组，由于[0][0]位置同属于两个辅助数组，所以需要一个额外变量。
+    int m = matrix.length;
+    int n = matrix[0].length;
+    // 额外变量用于标记第一列是否存在0，第一行剩余标记其他列，第一列用来标记行。
+    boolean flag = false;
+    // 标记辅助数组
+    for (int i = 0; i < m; i++) {
+      // 单独处理第一列
+      if (matrix[i][0] == 0) {
+        flag = true;
+      }
+      // 处理其余列
+      for (int j = 1; j < n; j++) {
+        // 如果当前为0，在两个辅助数组中均标记为0
+        if (matrix[i][j] == 0) {
+          matrix[i][0] = matrix[0][j] = 0;
+        }
+      }
+    }
+    // 从最下面一行开始逐行清零，因为最后才能清除标记数组。
+    for (int i = m - 1; i >= 0; i--) {
+      // 处理其余列
+      for (int j = 1; j < n; j++) {
+        if (matrix[i][0] == 0 || matrix[0][j] == 0) {
+          matrix[i][j] = 0;
+        }
+      }
+      // 最后处理第一列
+      if (flag) {
+        matrix[i][0] = 0;
+      }
+    }
   }
 
   // ===============================================================================================

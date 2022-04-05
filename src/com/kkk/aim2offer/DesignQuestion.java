@@ -12,8 +12,6 @@ import java.util.Queue;
  */
 public class DesignQuestion {
 
-  private static final DesignQuestion DESIGN_QUESTION = new DesignQuestion();
-
   /*
   用两个栈实现一个队列
    */
@@ -82,7 +80,7 @@ public class DesignQuestion {
   /*
   实现一个栈，包含一个能获取当前最小元素的min函数，min top pop push时间复杂度都是o(1)
    */
-  public static class StackWithMin<T extends Comparable> {
+  public static class StackWithMin<T extends Comparable<T>> {
 
     // 元素存储栈
     private final Deque<T> stack = new LinkedList<>();

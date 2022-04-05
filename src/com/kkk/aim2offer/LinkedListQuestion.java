@@ -4,7 +4,6 @@ package com.kkk.aim2offer;
  * 链表问题
  *
  * @author KaiKoo
- * @date 2020/2/25 13:42
  */
 public class LinkedListQuestion {
 
@@ -195,17 +194,15 @@ public class LinkedListQuestion {
     node5.random = node1;
     ListNode listNode = node1;
     while (listNode != null) {
-      System.out.print(
-          String.format(
-              "%d(%s)-", listNode.val, listNode.random == null ? "null" : listNode.random.val));
+      System.out.printf(
+          "%d(%s)-", listNode.val, listNode.random == null ? "null" : listNode.random.val);
       listNode = listNode.next;
     }
     System.out.println();
     listNode = LINKED_LIST_QUESTION.complexLinkedListClone(node1);
     while (listNode != null) {
-      System.out.print(
-          String.format(
-              "%d(%s)-", listNode.val, listNode.random == null ? "null" : listNode.random.val));
+      System.out.printf(
+          "%d(%s)-", listNode.val, listNode.random == null ? "null" : listNode.random.val);
       listNode = listNode.next;
     }
     System.out.println();

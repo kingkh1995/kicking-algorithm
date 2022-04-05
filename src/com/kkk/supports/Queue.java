@@ -14,11 +14,10 @@ public class Queue {
     count++;
     if (count == 1) {
       this.head = node;
-      this.tail = node;
     } else {
       this.tail.next = node;
-      this.tail = node;
     }
+    this.tail = node;
   }
 
   public int dequeue() {

@@ -4,7 +4,6 @@ package com.kkk.aim2offer;
  * 算法题，突破常规思维
  *
  * @author KaiKoo
- * @date 2020/2/25 12:02
  */
 public class AlgorithmQuestion {
 
@@ -17,7 +16,7 @@ public class AlgorithmQuestion {
   解题思路：从右上角或者左下角开始查找 时间复杂度：o(m+n)
    */
   public boolean findFromIncreasing2DArray(int[][] array, int num) {
-    if (array != null && array.length > 0 && array[0].length >= 0) {
+    if (array != null && array.length > 0) {
       // 列数
       int columnnum = array.length;
       // 行数
@@ -319,10 +318,6 @@ public class AlgorithmQuestion {
       之后从新字符串尾部反向遍历，将原字符移到末尾并替换空格
       时间复杂度：o(n)
    */
-  public String replaceSpace(String s) {
-    char[] chars = s.toCharArray();
-    return null;
-  }
 
   // 测试用例
 

@@ -161,8 +161,8 @@ public class SearchingExx {
     System.out.println(treeNode2);
     NodeUtils.threadedPrint(treeNode2);
     int[] arr2 = ArrayUtils.distinctArr(10, 0, 10);
-    for (int i = 0; i < arr2.length; i++) {
-      treeNode2 = delete(treeNode2, arr2[i]);
+    for (int i : arr2) {
+      treeNode2 = delete(treeNode2, i);
       NodeUtils.threadedPrint(treeNode2);
     }
   }
@@ -225,7 +225,7 @@ public class SearchingExx {
   // ===============================================================================================
 
   /** 3.3.23 非平衡的2-3树 */
-  private class TwoThreeNode {
+  private static class TwoThreeNode {
 
     public int val;
 
@@ -378,7 +378,7 @@ public class SearchingExx {
   // ===============================================================================================
 
   /** 3.4.31 Cuckoo散列函数 维护两张散列表和两个散列函数 如果冲突则替换旧键，并将旧键插入另一张散列表中 */
-  private class CuckooHashSet<Key> {
+  private static class CuckooHashSet<Key> {
 
     // 两个散列表大小相同，同时公用size和n
     private int size = 0;
@@ -408,7 +408,7 @@ public class SearchingExx {
     }
 
     private void resize(int newSize) {
-      if (newSize < 16 || newSize > Integer.MAX_VALUE) {
+      if (newSize < 16) {
         return;
       }
       n = newSize;

@@ -14,7 +14,7 @@ public class QueueNStackQuestion {
    *
    * @author KaiKoo
    */
-  class MinStack {
+  static class MinStack {
 
     private final Stack stack; // 元素存放栈
     private final Stack minStack; // 最小值栈

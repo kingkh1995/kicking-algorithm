@@ -100,7 +100,7 @@ public class WeightedGraphExx {
   public static class EdgeWeightedCircle {
 
     private EdgeWeightedGraph graph;
-    private boolean visited[];
+    private boolean[] visited;
     private HashSet<Edge> onCircle;
 
     public EdgeWeightedCircle(EdgeWeightedGraph graph) {

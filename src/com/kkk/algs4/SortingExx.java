@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
 
 /**
  * 第二章 排序
@@ -152,7 +151,7 @@ public class SortingExx {
         i = j = k = k + 1;
       }
       // 每趟循环结束后判断数组是否已排序 完成
-      if (i == lo && (j == hi || k == hi)) {
+      if (i == lo) {
         break;
       }
     }
@@ -223,7 +222,6 @@ public class SortingExx {
    * @param first 第一个结点是备份虚拟头结点 固定
    * @param second 下一段链表的头结点
    * @param next 剩余未归并链表的头结点
-   * @return
    */
   private static ListNode merge(ListNode prev, ListNode first, ListNode second, ListNode next) {
     ListNode head = first; // 保留虚拟头结点 作为归并后链表的头
@@ -452,7 +450,7 @@ public class SortingExx {
       while (i < j) {
         int com = arr[i].length() + arr[j].length() - length;
         if (com == 0) {
-          if (arr[i] + arr[j] == arr[n] || arr[j] + arr[i] == arr[n]) {
+          if ((arr[i] + arr[j]).equals(arr[n]) || (arr[j] + arr[i]).equals(arr[n])) {
             System.out.println(arr[n]);
             break;
           }
@@ -525,10 +523,7 @@ public class SortingExx {
 
   public static void stabilizeTest() {
     Integer[] array =
-        Arrays.stream(ArrayUtils.randomArr(50, 1, 10))
-            .boxed()
-            .collect(Collectors.toList())
-            .toArray(new Integer[50]);
+        Arrays.stream(ArrayUtils.randomArr(50, 1, 10)).boxed().toList().toArray(new Integer[50]);
     int[] indexs = stabilize(array, EssentialExx::fast3DQuickSort);
     System.out.println(Arrays.toString(array));
     System.out.println(Arrays.toString(indexs));

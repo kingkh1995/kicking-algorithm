@@ -1,5 +1,7 @@
 package com.kkk.aim2offer;
 
+import java.util.Arrays;
+
 /**
  * 递归问题
  *
@@ -155,12 +157,12 @@ public class RecursionQuestion {
       count += Math.pow(10, num.length() - 1);
     } else {
       // 最高位等于1，则1在最高位出现的次数为低位的值+1
-      count += Integer.valueOf(num.substring(1)) + 1;
+      count += Integer.parseInt(num.substring(1)) + 1;
     }
     // 最高位之后出现1的次数
     count +=
         high * (num.length() - 1) * Math.pow(10, num.length() - 2)
-            + count1Between1AndN(Integer.valueOf(num.substring(1)));
+            + count1Between1AndN(Integer.parseInt(num.substring(1)));
     return count;
   }
 
@@ -185,9 +187,7 @@ public class RecursionQuestion {
   private int[] probabilityOfPointSum(int n, int m) {
     int[] ans = new int[n * m];
     if (n == 1) {
-      for (int i = 0; i < ans.length; i++) {
-        ans[i] = 1;
-      }
+      Arrays.fill(ans, 1);
     } else {
       int[] preAns = probabilityOfPointSum(n - 1, m);
       for (int i = 0; i < ans.length; i++) {

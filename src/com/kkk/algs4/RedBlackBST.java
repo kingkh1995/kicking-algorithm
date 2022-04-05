@@ -9,7 +9,7 @@ public class RedBlackBST {
 
   // ===============================================================================================
 
-  private class RBNode {
+  private static class RBNode {
 
     public int val;
 

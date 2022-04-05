@@ -20,7 +20,7 @@ public class EdgeWeightedGraph {
     this.edges = new MyBag<>();
     this.adj = (MyBag<Edge>[]) new MyBag[vertices];
     for (int v = 0; v < vertices; v++) {
-      adj[v] = new MyBag<Edge>();
+      adj[v] = new MyBag<>();
     }
   }
 
