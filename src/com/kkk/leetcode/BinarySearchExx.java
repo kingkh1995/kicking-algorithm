@@ -161,7 +161,26 @@ public class BinarySearchExx {
     return ans;
   }
 
-  // 求最小值 （有重复值） 不同于求极小值 数组分为左右区间且均是有序
+  // 从旋转数组中求最小值 （无有重复值） 不同于求极小值 数组分为左右区间且均是有序
+  public int findMin0(int[] nums) {
+    int lo = 0, hi = nums.length - 1;
+    while (lo < hi) {
+      int mid = lo + (hi - lo) / 2;
+      // 如果已经到了右区间或数组无旋转，直接返回lo指针
+      if (nums[hi] >= nums[lo]) {
+        return nums[lo];
+      }
+      // 因为最小值位于右区间，故hi不能直接跳到mid左侧。
+      if (nums[mid] >= nums[lo]) {
+        lo = mid + 1;
+      } else {
+        hi = mid;
+      }
+    }
+    return nums[lo];
+  }
+
+  // 从旋转数组中求最小值 （有重复值） 不同于求极小值 数组分为左右区间且均是有序
   public int findMin(int[] nums) {
     int low = 0;
     int high = nums.length - 1;

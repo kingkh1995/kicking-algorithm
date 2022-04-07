@@ -58,6 +58,21 @@ public class DoublePointerExx {
     return res;
   }
 
+  // 将所有0移动到数组的末尾，同时保持非零元素的相对顺序
+  public void moveZeroes(int[] nums) {
+    // 双指针，左指针指向当前已经处理好的序列的尾部，右指针指向待处理序列的头部。
+    int index = 0;
+    for (int i = 0; i < nums.length; i++) {
+      if (nums[i] != 0) {
+        nums[index++] = nums[i];
+      }
+    }
+    // 移动完成后剩余位置置为0
+    while (index < nums.length) {
+      nums[index++] = 0;
+    }
+  }
+
   // ===============================================================================================
   /** 拔高题 */
 
