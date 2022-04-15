@@ -109,6 +109,38 @@ public class ArrayAndMatrixExx {
     return -1;
   }
 
+  // 找出数组中乘积最大的非空连续子数组
+  public int maxProduct(int[] nums) {
+    int ans = nums[0];
+    // 记录下包含结尾元素的最大值和最小值
+    int max = nums[0];
+    int min = nums[0];
+    for (int i = 1; i < nums.length; i++) {
+      int mx = nums[i] * max;
+      int nx = nums[i] * min;
+      max = Math.max(nums[i], Math.max(mx, nx));
+      min = Math.min(nums[i], Math.min(mx, nx));
+      ans = Math.max(ans, max);
+    }
+    return ans;
+  }
+
+  // 除自身以外数组的乘积，不使用除法。
+  public int[] productExceptSelf(int[] nums) {
+    int[] ans = new int[nums.length];
+    // 从左遍历求出前缀元素乘积，再从右遍历求出后缀元素乘积。
+    ans[0] = 1;
+    for (int i = 1; i < nums.length; ++i) {
+      ans[i] = ans[i - 1] * nums[i - 1];
+    }
+    int n = 1;
+    for (int i = nums.length - 1; i >= 0; --i) {
+      ans[i] *= n;
+      n *= nums[i];
+    }
+    return ans;
+  }
+
   // ===============================================================================================
   /** 拔高题 */
 
