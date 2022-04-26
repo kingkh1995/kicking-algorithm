@@ -259,4 +259,33 @@ public class QueueAndStackExx {
     }
     return stack.pop().toString();
   }
+
+  // 滑动窗口最大值，使用双端队列。
+  public int[] maxSlidingWindow(int[] nums, int k) {
+    int l = nums.length;
+    int[] ans = new int[Math.max(l + 1 - k, 1)];
+    // 双端队列保存元素的索引，队首保存窗口的最大值，队尾保存比最大值小的值。
+    Deque<Integer> deque = new LinkedList<>();
+    for (int i = 0; i < l; i++) {
+      // 去除所有队首过期元素
+      while (!deque.isEmpty() && deque.peekFirst() + k <= i) {
+        deque.pollFirst();
+      }
+      // 入队，如果是当前最大值则入队首，否则移除队尾所有小的元素并入队尾。
+      if (deque.isEmpty() || nums[i] > nums[deque.peekFirst()]) {
+        deque.addFirst(i);
+      } else {
+        // 等于的元素仍然留在队列中
+        while (nums[i] > nums[deque.peekLast()]) {
+          deque.pollLast();
+        }
+        deque.addLast(i);
+      }
+      // 取最大值
+      if (i >= k - 1) {
+        ans[i + 1 - k] = nums[deque.peekFirst()];
+      }
+    }
+    return ans;
+  }
 }

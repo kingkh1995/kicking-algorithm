@@ -263,4 +263,37 @@ public class BinarySearchExx {
     // 结果一定会匹配，因为数组是有序的，必然能找到切分，此处代码永远不会执行
     return 0;
   }
+
+  // 有序矩阵中第K小的元素，其中每行和每列元素均按升序排序，即左上角为最小值，右下角为最大值。
+  public static int kthSmallest(int[][] matrix, int k) {
+    // 沿着一段锯齿线，可以保证锯齿线左上角的所有值均小于锯齿线上的值。
+    // 对最小值和最大值，使用二分查找，不断确定中间值，统计出小于该值的总数。
+    int n = matrix.length;
+    int left = matrix[0][0];
+    int right = matrix[n - 1][n - 1];
+    while (left < right) {
+      int mid = left + ((right - left) >> 1);
+      // 从左下角出发，向右和向下确定出锯齿线，并统计左上角元素总数是否大于等于k
+      int i = n - 1;
+      int j = 0;
+      int num = 0;
+      while (i >= 0 && j < n) {
+        if (matrix[i][j] <= mid) {
+          // 小于等于则当前元素及其上方的所有元素均小于等于mid
+          num += i + 1;
+          // 移动到下一列，继续计算。
+          j++;
+        } else {
+          // 大于则向上移动一行
+          i--;
+        }
+      }
+      if (num >= k) {
+        right = mid;
+      } else {
+        left = mid + 1;
+      }
+    }
+    return left;
+  }
 }

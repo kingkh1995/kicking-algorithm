@@ -1,10 +1,5 @@
 package com.kkk.aim2offer;
 
-import java.util.ArrayList;
-import java.util.Deque;
-import java.util.LinkedList;
-import java.util.List;
-
 /**
  * 滑动窗口
  *
@@ -44,38 +39,6 @@ public class SlidingWindow {
     return ans;
   }
 
-  /*
-  给定一个数组和滑动窗口的大小，找出所有滑动窗口里数值的最大值。
-   */
-  /*
-  解题思路：使用一个deque维护一个窗口，遍历数组将元素依次加入队列中，大值往队首加，小值往队尾加。
-  时间复杂度：o(n)
-   */
-  public List<Integer> maxInWindows(int[] arr, int size) {
-    List<Integer> ans = new ArrayList<>();
-    Deque<Integer> deque = new LinkedList<>();
-    for (int i = 0; i < arr.length; i++) {
-      // 先去掉已超出窗口的元素
-      while (!deque.isEmpty() && i - deque.peekFirst() >= size) {
-        deque.pollFirst();
-      }
-      if (deque.isEmpty() || arr[i] > arr[deque.peekFirst()]) {
-        // 如果大于则插入队首
-        deque.addFirst(i);
-      } else {
-        // 否则插入队尾，并删除所有比它小的数字，因为之前比它还小的数都没有意义了
-        while (arr[i] > arr[deque.peekLast()]) {
-          deque.pollLast();
-        }
-        deque.addLast(i);
-      }
-      if (i >= size - 1) {
-        ans.add(arr[deque.peekFirst()]);
-      }
-    }
-    return ans;
-  }
-
   // 测试用例
 
   public static void lengthOfLongestUnduplicatedSubStringTest() {
@@ -85,9 +48,5 @@ public class SlidingWindow {
     System.out.println(SLIDING_WINDOW.lengthOfLongestUnduplicatedSubString("aaaaa"));
     System.out.println(SLIDING_WINDOW.lengthOfLongestUnduplicatedSubString("abcabcdea"));
     System.out.println(SLIDING_WINDOW.lengthOfLongestUnduplicatedSubString("wabcawbc"));
-  }
-
-  public static void maxInWindowsTest() {
-    System.out.println(SLIDING_WINDOW.maxInWindows(new int[] {2, 3, 4, 2, 6, 2, 5, 1}, 3));
   }
 }
