@@ -2,11 +2,17 @@ package com.kkk.leetcode;
 
 import com.kkk.supports.Queue;
 import com.kkk.supports.Stack;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Deque;
 import java.util.LinkedList;
+import java.util.List;
+import java.util.PriorityQueue;
+import java.util.stream.IntStream;
 
 /**
- * 队列和栈 (BFS & DFS) <br>
+ * 队列（BFS）& 栈 (DFS) & 堆 <br>
  *
  * @author KaiKoo
  */
@@ -284,6 +290,57 @@ public class QueueAndStackExx {
       // 取最大值
       if (i >= k - 1) {
         ans[i + 1 - k] = nums[deque.peekFirst()];
+      }
+    }
+    return ans;
+  }
+
+  // ===============================================================================================
+  /** 困难题 */
+
+  // 天际线问题
+  public static List<List<Integer>> getSkyline(int[][] buildings) {
+    List<List<Integer>> ans = new ArrayList<>();
+    // 垂直扫描线从左往右扫描，只需要处理大楼的左右边界就可构造出天际线。
+    // 收集大楼左右边界并去重排序之后遍历以确定轮廓
+    int[] boundaries =
+        Arrays.stream(buildings)
+            .flatMapToInt(building -> IntStream.of(building[0], building[1]))
+            .distinct()
+            .sorted()
+            .toArray();
+    // 构建基于大楼高度的最大堆
+    PriorityQueue<int[]> pq = new PriorityQueue<>(Comparator.comparingInt(arr -> -arr[2]));
+    // ph用于记录上次确定的高度
+    int ph = 0;
+    // 按左边界顺序加入大楼，buildings本来就是左边界有序的。
+    int i = 0;
+    for (int line : boundaries) {
+      // 大楼入堆
+      while (i < buildings.length && buildings[i][0] == line) {
+        pq.add(buildings[i++]);
+      }
+      // 处理
+      while (true) {
+        // 为空直接确定
+        if (pq.isEmpty()) {
+          ans.add(List.of(line, 0));
+          ph = 0;
+          break;
+        }
+        int[] highest = pq.peek();
+        // 移除已扫过的大楼
+        if (highest[1] <= line) {
+          pq.poll();
+          continue;
+        }
+        int high = highest[2];
+        // 确定最高的大楼，判断是否需要记录，退出内层循环进入外层循环。
+        if (high != ph) {
+          ans.add(List.of(line, high));
+          ph = high;
+        }
+        break;
       }
     }
     return ans;

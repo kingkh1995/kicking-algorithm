@@ -1,5 +1,6 @@
 package com.kkk.aim2offer;
 
+import com.kkk.supports.TreeNode;
 import java.util.Deque;
 import java.util.LinkedList;
 import java.util.Queue;
@@ -13,24 +14,6 @@ import java.util.Queue;
 public class TreeQuestion {
 
   private static final TreeQuestion TREE_QUESTION = new TreeQuestion();
-
-  public static class TreeNode {
-
-    int val;
-    TreeNode left;
-    TreeNode right;
-    TreeNode parent;
-
-    public TreeNode(int val) {
-      this.val = val;
-    }
-
-    public TreeNode(int val, TreeNode left, TreeNode right) {
-      this.val = val;
-      this.left = left;
-      this.right = right;
-    }
-  }
 
   /*
   根据前序遍历（或后序遍历）和中序遍历重构二叉树（无重复结点）

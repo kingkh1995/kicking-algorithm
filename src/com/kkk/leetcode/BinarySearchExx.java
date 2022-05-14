@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 
 /**
  * 二分查找 <br>
- * 719、410
+ * 410、719
  *
  * @author KaiKoo
  */

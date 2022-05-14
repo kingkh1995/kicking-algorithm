@@ -1,5 +1,7 @@
 package com.kkk.aim2offer;
 
+import com.kkk.supports.ListNode;
+
 /**
  * 链表问题
  *
@@ -8,22 +10,6 @@ package com.kkk.aim2offer;
 public class LinkedListQuestion {
 
   private static final LinkedListQuestion LINKED_LIST_QUESTION = new LinkedListQuestion();
-
-  private static class ListNode {
-
-    int val;
-    ListNode next;
-    ListNode random;
-
-    public ListNode(int val) {
-      this.val = val;
-    }
-
-    public ListNode(int val, ListNode next) {
-      this.val = val;
-      this.next = next;
-    }
-  }
 
   /*
   给定一个单向链表和链表中的一个结点，使用o(1)的复杂度删除该结点
@@ -92,25 +78,27 @@ public class LinkedListQuestion {
   /*
   解题思路：第一次遍历，在链表的每一个结点后添加一个复制结点；第二次遍历，设置随机指针并组装新链表
    */
-  public ListNode complexLinkedListClone(ListNode listNode) {
-    if (listNode == null) {
+  public ListNode complexLinkedListClone(ListNode head) {
+    if (head == null) {
       return null;
     }
-    ListNode tempNode = listNode;
-    while (tempNode != null) {
-      ListNode copy = new ListNode(tempNode.val * 10);
-      copy.next = tempNode.next;
-      tempNode.next = copy;
-      tempNode = copy.next;
+    // 先在每个节点后面添加一个复制节点
+    ListNode node = head;
+    while (node != null) {
+      ListNode copy = new ListNode(node.val * 10);
+      copy.next = node.next;
+      node.next = copy;
+      node = copy.next;
     }
-    ListNode clone = listNode.next;
-    while (listNode != null) {
-      ListNode copy = listNode.next;
-      copy.random = listNode.random == null ? null : listNode.random.next;
-      listNode = copy.next;
-      copy.next = copy.next == null ? null : copy.next.next;
+    // 设置复制节点的随机指针并组件复制链表
+    node = head;
+    while (node != null) {
+      ListNode next = node.next.next;
+      node.next.random = node.random == null ? null : node.random.next;
+      node.next.next = next == null ? null : next.next;
+      node = next;
     }
-    return clone;
+    return head.next;
   }
 
   /*
