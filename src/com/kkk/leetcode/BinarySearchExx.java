@@ -56,7 +56,7 @@ public class BinarySearchExx {
       return hi;
     } else {
       while (lo <= hi) {
-        int mid = lo + (hi - lo) / 2;
+        int mid = lo + ((hi - lo) >> 1);
         int cmp = target - nums[mid];
         if (cmp == 0) {
           return mid;
@@ -84,17 +84,19 @@ public class BinarySearchExx {
 
   // 求区间极小值
   public int findPeakElement(int[] nums) {
-    // 找到任意一个极限值 保证区间元素至少有两个
+    // 找到任意一个极限值即可，可以认为 nums[-1] = nums[n] = -∞。
+    // 故只需要保证区间内元素至少两个即可，使用二分查找，每次往数值大的一半寻找即可，不断逼近最终一定能找到。
     int l = 0, r = nums.length - 1;
     while (l < r) {
-      int m = l + (r - l) / 2;
-      // 最后一步l=m=r-1 所以先判断右边 并保证右边一定是小值
+      int m = l + ((r - l) >> 1);
+      // 比较m和m+1，因为最后一步l=r-1=m，故m+1肯定存在。
       if (nums[m] > nums[m + 1]) {
         r = m;
       } else {
         l = m + 1;
       }
     }
+    // 退出循环时，l=r，返回l即可。
     return l;
   }
 
@@ -165,7 +167,7 @@ public class BinarySearchExx {
   public int findMin0(int[] nums) {
     int lo = 0, hi = nums.length - 1;
     while (lo < hi) {
-      int mid = lo + (hi - lo) / 2;
+      int mid = lo + ((hi - lo) >> 1);
       // 如果已经到了右区间或数组无旋转，直接返回lo指针
       if (nums[hi] >= nums[lo]) {
         return nums[lo];
@@ -185,7 +187,7 @@ public class BinarySearchExx {
     int low = 0;
     int high = nums.length - 1;
     while (low < high) {
-      int pivot = low + (high - low) / 2;
+      int pivot = low + ((high - low) >> 1);
       if (nums[pivot] < nums[high]) {
         high = pivot; // 小于必然在右区间 忽略右边
       } else if (nums[pivot] > nums[high]) {
@@ -195,6 +197,26 @@ public class BinarySearchExx {
       }
     }
     return nums[low];
+  }
+
+  // 计算右侧小于当前元素的个数
+  public int[] countSmaller(int[] nums) {
+    int n = nums.length;
+    int[] ans = new int[n];
+    int[] sorted = new int[n];
+    // 从右往左插入排序。
+    for (int i = n - 1; i >= 0; --i) {
+      // 当前排序数组的长度
+      int bound = n - 1 - i;
+      // 使用二分查找获取元素应该插入的位置
+      int rank = ArrayUtils.rank(sorted, nums[i], 0, bound - 1);
+      // rank即为有序数组中比当前元素小的元素的个数，因为是从右往左依次添加，即为元素右边比其小的元素的个数。
+      ans[i] = rank;
+      // 数组后部分元素右移一位，然后插入元素。
+      System.arraycopy(sorted, rank, sorted, rank + 1, bound - rank);
+      sorted[rank] = nums[i];
+    }
+    return ans;
   }
 
   // ===============================================================================================

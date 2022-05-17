@@ -51,7 +51,7 @@ public class AlgorithmQuestion {
       return rotatedArray[0];
     }
     // 特殊情况2：low=high=mid 只能顺序查找
-    if (rotatedArray[low] == rotatedArray[(low + high) / 2]
+    if (rotatedArray[low] == rotatedArray[(low + high) >> 1]
         && rotatedArray[low] == rotatedArray[high]) {
       // 从最左边开始遍历，返回第一个比第一个元素小的元素，否则返回第一个元素
       for (int i : rotatedArray) {
@@ -63,7 +63,7 @@ public class AlgorithmQuestion {
     }
     // 普遍情况下low大于等于high，因为旋转数组的最大值和和最小值是相邻的，所以终止条件是low和high相临
     while (low < high - 1) {
-      int mid = (low + high) / 2;
+      int mid = low + ((high - low) >> 1);
       // mid只能大于等于low和high，或者小于等于low和high 如果小于则替代high，如果大于则替代low
       if (rotatedArray[mid] >= rotatedArray[low]) {
         low = mid;
@@ -138,7 +138,7 @@ public class AlgorithmQuestion {
     int row = rectangle.length;
     int column = rectangle[0].length;
     // 总共需要的圈数 (Math.min(row, column) + 1) / 2
-    for (int n = 0; n < (Math.min(row, column) + 1) / 2; n++) {
+    for (int n = 0; n < (Math.min(row, column) + 1) >> 1; n++) {
       for (int i = n; i < column - n; i++) {
         System.out.print(rectangle[n][i] + " ");
       }
@@ -236,7 +236,7 @@ public class AlgorithmQuestion {
     }
     int low = 1, high = 2;
     int sum = low + high;
-    while (low < high && high <= (n + 1) / 2) {
+    while (low < high && high <= (n + 1) >> 1) {
       while (sum <= n) {
         if (sum == n) {
           for (int i = low; i <= high; i++) {

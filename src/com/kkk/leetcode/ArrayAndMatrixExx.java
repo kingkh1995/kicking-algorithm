@@ -1,10 +1,12 @@
 package com.kkk.leetcode;
 
 import com.kkk.supports.ArrayUtils;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * 数组和矩阵<br>
- * 498
+ * 324、498
  *
  * @author KaiKoo
  */
@@ -141,25 +143,79 @@ public class ArrayAndMatrixExx {
     return ans;
   }
 
+  // 计算右侧小于当前元素的个数
+  static class CountSmallerSolution {
+
+    private int[] index; // 索引数组
+    private int[] temp; // 归并排序辅助数组
+    private int[] tempIndex; // 归并排序辅助索引数组
+    private int[] ans; // 结果
+
+    public List<Integer> countSmaller(int[] nums) {
+      int n = nums.length;
+      this.index = new int[n];
+      this.temp = new int[n];
+      this.tempIndex = new int[n];
+      this.ans = new int[n];
+      for (int i = 0; i < n; ++i) {
+        index[i] = i;
+      }
+      mergeSort(nums, 0, n - 1);
+      return Arrays.stream(ans).boxed().toList();
+    }
+
+    private void mergeSort(int[] a, int l, int r) {
+      if (l >= r) {
+        return;
+      }
+      int mid = (l + r) >> 1;
+      mergeSort(a, l, mid);
+      mergeSort(a, mid + 1, r);
+      merge(a, l, mid, r);
+    }
+
+    private void merge(int[] a, int l, int mid, int r) {
+      // 归并排序，左边l-mid，右边(mid+1)-r
+      int i = l, j = mid + 1, p = l;
+      while (i <= mid && j <= r) {
+        if (a[i] <= a[j]) {
+          temp[p] = a[i];
+          tempIndex[p] = index[i];
+          // 右边比其小的元素区间为 mid+1 - j-1，个数为j-(mid+1)。
+          ans[index[i]] += (j - mid - 1);
+          ++i;
+          ++p;
+        } else {
+          temp[p] = a[j];
+          tempIndex[p] = index[j];
+          ++j;
+          ++p;
+        }
+      }
+      // 排序剩余元素
+      while (i <= mid) {
+        temp[p] = a[i];
+        tempIndex[p] = index[i];
+        ans[index[i]] += (j - mid - 1);
+        ++i;
+        ++p;
+      }
+      while (j <= r) {
+        temp[p] = a[j];
+        tempIndex[p] = index[j];
+        ++j;
+        ++p;
+      }
+      // 复制回原数组
+      for (int k = l; k <= r; ++k) {
+        index[k] = tempIndex[k];
+        a[k] = temp[k];
+      }
+    }
+  }
+
   // ===============================================================================================
   /** 拔高题 */
-
-  // n+1大小的数组，元素在[1,n]之间，只有一个元素重复出现了多次，求出该值且不能修改数组
-  // 转换为求链表的环，使用快慢指针法
-  // 证明至少存在一个重复的数字：快慢指针相遇就能证明
-  public int findDuplicate(int[] nums) {
-    int slow = 0, fast = 0;
-    do {
-      slow = nums[slow];
-      fast = nums[nums[fast]];
-    } while (slow != fast);
-    slow = 0;
-    do {
-      slow = nums[slow];
-      fast = nums[fast];
-    } while (slow != fast);
-    return slow;
-  }
 
   // 找到第k大的元素 普通三向切分快排
   public static int findKthLargest(int[] arr, int k) {
@@ -241,7 +297,7 @@ public class ArrayAndMatrixExx {
       }
     }
     // 再沿着中线对折，[a][b]与[n-1-a][b]交换
-    for (int i = 0; i < (n >> 1); ++i) {
+    for (int i = 0; i < n >> 1; ++i) {
       for (int j = 0; j < n; ++j) {
         int temp = matrix[i][j];
         matrix[i][j] = matrix[n - 1 - i][j];

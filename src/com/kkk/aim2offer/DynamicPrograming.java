@@ -58,7 +58,7 @@ public class DynamicPrograming {
     dp[3] = 3;
     for (int i = 4; i <= n; i++) {
       long max = 0;
-      for (int j = 1; j <= i / 2; j++) {
+      for (int j = 1; j <= i >> 1; j++) {
         max = Math.max(max, dp[j] * dp[i - j]);
       }
       dp[i] = max;

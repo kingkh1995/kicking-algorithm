@@ -320,27 +320,21 @@ public class QueueAndStackExx {
       while (i < buildings.length && buildings[i][0] == line) {
         pq.add(buildings[i++]);
       }
-      // 处理
-      while (true) {
-        // 为空直接确定
-        if (pq.isEmpty()) {
-          ans.add(List.of(line, 0));
-          ph = 0;
-          break;
-        }
-        int[] highest = pq.peek();
-        // 移除已扫过的大楼
-        if (highest[1] <= line) {
-          pq.poll();
-          continue;
-        }
-        int high = highest[2];
-        // 确定最高的大楼，判断是否需要记录，退出内层循环进入外层循环。
-        if (high != ph) {
-          ans.add(List.of(line, high));
-          ph = high;
-        }
-        break;
+      // 处理已扫过大楼
+      while (!pq.isEmpty() && pq.peek()[1] <= line) {
+        pq.poll();
+      }
+      // 为空直接确定
+      if (pq.isEmpty()) {
+        ans.add(List.of(line, 0));
+        ph = 0;
+        continue;
+      }
+      int high = pq.peek()[2];
+      // 确定最高的大楼，判断是否需要记录，退出内层循环进入外层循环。
+      if (high != ph) {
+        ans.add(List.of(line, high));
+        ph = high;
       }
     }
     return ans;

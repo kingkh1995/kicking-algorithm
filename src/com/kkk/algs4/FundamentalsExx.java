@@ -98,7 +98,7 @@ public class FundamentalsExx {
     // 等于情况下，向左遍历直到第一个不等于（小于）key的元素
     // 其余情况下等同于二分查找
     while (lo <= hi) {
-      int mid = lo + (hi - lo) / 2;
+      int mid = lo + ((hi - lo) >> 1);
       if (a[mid] == key) {
         while (--mid >= 0 && a[mid] == key) {}
         return ++mid;
@@ -319,7 +319,7 @@ public class FundamentalsExx {
     // 转移时只把一半放过去，确保左右弹栈时不用一直来回倒
     private void moveHalf(Stack from, Stack to) {
       int n = from.size();
-      for (int i = 0; i < n / 2; i++) {
+      for (int i = 0; i < n >> 1; i++) {
         temp.push(from.pop());
       }
       while (!from.isEmpty()) {

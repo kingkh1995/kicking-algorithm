@@ -5,7 +5,9 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-/** @author KaiKoo */
+/**
+ * @author KaiKoo
+ */
 public class ArrayUtils {
 
   private static final ThreadLocalRandom random = ThreadLocalRandom.current();
@@ -79,18 +81,22 @@ public class ArrayUtils {
     return true;
   }
 
-  public static int rank(int[] a, int key) {
-    int lo = 0, hi = a.length - 1, i = a.length;
+  public static int rank(int[] sorted, int key) {
+    return rank(sorted, key, 0, sorted.length - 1);
+  }
+
+  public static int rank(int[] sorted, int key, int lo, int hi) {
+    int i = hi + 1;
     while (lo <= hi) {
-      int mid = lo + (hi - lo) / 2;
-      if (a[mid] < key) {
+      int mid = lo + ((hi - lo) >> 1);
+      if (sorted[mid] < key) {
         lo = mid + 1;
       } else {
         i = mid; // 大于等于情况下，将i设置为mid
         hi = mid - 1;
       }
     }
-    // i对应的值必然大于等于key 或者等于数组长度
+    // i即为key应该插入的位置，也等于小于key元素的个数。
     return i;
   }
 }
