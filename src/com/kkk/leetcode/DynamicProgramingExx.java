@@ -1,5 +1,6 @@
 package com.kkk.leetcode;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -14,12 +15,26 @@ public class DynamicProgramingExx {
   // ===============================================================================================
   /** 基础题 */
 
+  // 打家劫舍
+  public int rob(int[] nums) {
+    int l = nums.length;
+    if (l < 2) {
+      return nums[0];
+    }
+    int[] dp = new int[l];
+    dp[0] = nums[0];
+    dp[1] = Math.max(nums[0], nums[1]);
+    for (int i = 2; i < l; ++i) {
+      dp[i] = Math.max(dp[i - 1], nums[i] + dp[i - 2]);
+    }
+    return dp[l - 1];
+  }
+
   // 完全平方数
   public int numSquares(int n) {
     int[] dp = new int[n + 1];
     dp[0] = 0;
     dp[1] = 1;
-    // dp[n] = dp[?] + 1 遍历1-n找出最小的dp[?]
     for (int i = 2; i <= n; i++) {
       int count = dp[i - 1] + 1;
       for (int j = 2; j < i; j++) {
@@ -32,6 +47,39 @@ public class DynamicProgramingExx {
       dp[i] = count;
     }
     return dp[n];
+  }
+
+  // 最长上升子序列
+  public int lengthOfLIS(int[] nums) {
+    int l = nums.length;
+    int[] dp = new int[l];
+    dp[0] = 1;
+    int ans = 1;
+    for (int i = 1; i < l; ++i) {
+      dp[i] = 1;
+      for (int j = i - 1; j >= 0; j--) {
+        if (nums[i] > nums[j]) {
+          dp[i] = Math.max(1 + dp[j], dp[i]);
+        }
+      }
+      ans = Math.max(ans, dp[i]);
+    }
+    return ans;
+  }
+
+  // 零钱兑换
+  public int coinChange(int[] coins, int amount) {
+    int[] dp = new int[amount + 1];
+    Arrays.fill(dp, amount + 1);
+    dp[0] = 0;
+    for (int i = 1; i <= amount; ++i) {
+      for (int n : coins) {
+        if (n <= i) {
+          dp[i] = Math.min(dp[i], dp[i - n] + 1);
+        }
+      }
+    }
+    return dp[amount] > amount ? -1 : dp[amount];
   }
 
   // 最长回文子串

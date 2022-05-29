@@ -216,6 +216,32 @@ public class BinaryTreeExx {
     return left != null ? right != null ? root : left : right;
   }
 
+  // 二叉树中的最大路径和，从任意节点出发到达任意节点，路径不允许重复。
+  static class MaxPathSumSolution {
+
+    int max = Integer.MIN_VALUE;
+
+    public int maxPathSum(TreeNode root) {
+      if (root == null) {
+        return 0;
+      }
+      max(root);
+      return max;
+    }
+
+    // 返回结点的最大贡献值，即左路径和右路径的大值
+    private int max(TreeNode node) {
+      if (node == null) {
+        return 0;
+      }
+      int maxLeft = Math.max(max(node.left), 0);
+      int maxRight = Math.max(max(node.right), 0);
+      // 更新最大值
+      max = Math.max(max, node.val + maxLeft + maxRight);
+      return node.val + Math.max(maxLeft, maxRight);
+    }
+  }
+
   // ===============================================================================================
   /** 困难题 */
 

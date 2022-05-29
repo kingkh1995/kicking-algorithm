@@ -1,5 +1,6 @@
 package com.kkk.leetcode;
 
+import java.util.Arrays;
 import java.util.HashMap;
 
 /**
@@ -63,4 +64,53 @@ public class SlidingWindowExx {
 
   // ===============================================================================================
   /** 困难题 */
+
+  // 仅有小写字母组成的字符串，找出最长子串，要求该子串中的每一字符出现次数都不少于k。
+  public int longestSubstring(String s, int k) {
+    int ans = 0;
+    // 辅助数组，记录当前窗口内，字符出现的频次。
+    int[] aux = new int[26];
+    // 求出子串中字符种类1-26下的答案，取最大值。
+    for (int total = 1; total <= 26; ++total) {
+      Arrays.fill(aux, 0);
+      // 左右窗口
+      int l = 0, r = 0;
+      // 当前窗口内出现的频次小于k的字符的个数
+      int less = 0;
+      // 当前窗口内字符的种类
+      int cnt = 0;
+      while (r < s.length()) {
+        int i = s.charAt(r++) - 'a';
+        aux[i]++;
+        // 新增字符种类
+        if (aux[i] == 1) {
+          cnt++;
+          less++;
+        }
+        // 字符频次达到k
+        if (aux[i] == k) {
+          less--;
+        }
+        // 字符种类超过了限制则需要左移窗口使字符种类减少
+        while (cnt > total) {
+          i = s.charAt(l++) - 'a';
+          aux[i]--;
+          // 字符种类减少
+          if (aux[i] == 0) {
+            cnt--;
+            less--;
+          }
+          // 字符频次少于了k
+          if (aux[i] == k - 1) {
+            less++;
+          }
+        }
+        // 判断是否符合
+        if (less == 0) {
+          ans = Math.max(ans, r - l);
+        }
+      }
+    }
+    return ans;
+  }
 }
