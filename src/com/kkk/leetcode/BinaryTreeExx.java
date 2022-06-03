@@ -217,7 +217,7 @@ public class BinaryTreeExx {
   }
 
   // 二叉树中的最大路径和，从任意节点出发到达任意节点，路径不允许重复。
-  static class MaxPathSumSolution {
+  static class maxPathSumSolution {
 
     int max = Integer.MIN_VALUE;
 

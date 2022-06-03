@@ -144,7 +144,7 @@ public class ArrayAndMatrixExx {
   }
 
   // 计算右侧小于当前元素的个数
-  static class CountSmallerSolution {
+  static class countSmallerSolution {
 
     private int[] index; // 索引数组
     private int[] temp; // 归并排序辅助数组

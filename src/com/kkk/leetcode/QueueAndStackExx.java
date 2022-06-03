@@ -6,8 +6,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Deque;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.stream.IntStream;
 
@@ -23,81 +25,66 @@ public class QueueAndStackExx {
 
   // 岛屿问题
   // 解法：遍历所有格子 找到第一个陆地 通过遍历相邻的陆地，并将探索过的陆地标记为已探索
-  public int numIslands(char[][] grid) {
-    int count = 0;
-    for (int i = 0; i < grid.length; i++) {
-      for (int j = 0; j < grid[0].length; j++) {
-        if (grid[i][j] == '1') {
-          count++;
-          // 找到第一个陆地探索
-          bfs(grid, i, j); // 使用BFS或DFS
+  static class numIslandsSolution {
+
+    static final int[][] dirs = new int[][] {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
+
+    public int numIslands(char[][] grid) {
+      int count = 0;
+      for (int i = 0; i < grid.length; i++) {
+        for (int j = 0; j < grid[0].length; j++) {
+          if (grid[i][j] == '1') {
+            count++;
+            // 使用BFS或DFS
+            bfs(grid, i, j);
+          }
+        }
+      }
+      return count;
+    }
+
+    // 解法1：BFS 使用队列
+    private void bfs(char[][] grid, int i, int j) {
+      // 起始点先置为0
+      grid[i][j] = '0';
+      Queue queue = new Queue();
+      // 只使用一个数字表示坐标 i必然小于grid.length
+      queue.enqueue(i + j * grid.length);
+      while (!queue.isEmpty()) {
+        // 出队列
+        int code = queue.dequeue();
+        int co = code % grid.length;
+        int ro = code / grid.length;
+        for (int[] dir : dirs) {
+          int column = co + dir[0];
+          int row = ro + dir[1];
+          if (column >= 0
+              && column < grid.length
+              && row >= 0
+              && row < grid[0].length
+              && grid[column][row] == '1') {
+            grid[column][row] = '0';
+            queue.enqueue(column + row * grid.length);
+          }
         }
       }
     }
-    return count;
-  }
 
-  // 解法1：BFS 使用队列
-  private void bfs(char[][] grid, int i, int j) {
-    // 起始点先置为0
-    grid[i][j] = '0';
-    int column = grid.length;
-    int row = grid[0].length;
-    Queue queue = new Queue();
-    // 起始点入队列
-    // 只使用一个数字表示坐标 ro必定小于row co=code/row ro=code%row
-    queue.enqueue(i * row + j);
-    while (!queue.isEmpty()) {
-      // 出队列
-      int code = queue.dequeue();
-      int co = code / row;
-      int ro = code % row;
-      // 上下左右入队列 如果为1 则设为0并且加入队列
-      // 上
-      if (co > 0 && grid[co - 1][ro] == '1') {
-        grid[co - 1][ro] = '0';
-        queue.enqueue((co - 1) * row + ro);
+    // 解法2：DFS 使用递归（即不显示使用栈，而是使用系统的方法栈）
+    private void dfs(char[][] grid, int co, int ro) {
+      // 当前点置为0
+      grid[co][ro] = '0';
+      for (int[] dir : dirs) {
+        int column = co + dir[0];
+        int row = ro + dir[1];
+        if (column >= 0
+            && column < grid.length
+            && row >= 0
+            && row < grid[0].length
+            && grid[column][row] == '1') {
+          dfs(grid, column, row);
+        }
       }
-      // 下
-      if (co < column - 1 && grid[co + 1][ro] == '1') {
-        grid[co + 1][ro] = '0';
-        queue.enqueue((co + 1) * row + ro);
-      }
-      // 左
-      if (ro > 0 && grid[co][ro - 1] == '1') {
-        grid[co][ro - 1] = '0';
-        queue.enqueue(co * row + ro - 1);
-      }
-      // 右
-      if (ro < row - 1 && grid[co][ro + 1] == '1') {
-        grid[co][ro + 1] = '0';
-        queue.enqueue(co * row + ro + 1);
-      }
-    }
-  }
-
-  // 解法2：DFS 使用递归（即不显示使用栈，而是使用系统的方法栈）
-  private void dfs(char[][] grid, int co, int ro) {
-    // 当前点置为0
-    grid[co][ro] = '0';
-    int column = grid.length;
-    int row = grid[0].length;
-    // 上下左递归探索
-    // 上
-    if (co > 0 && grid[co - 1][ro] == '1') {
-      dfs(grid, co - 1, ro);
-    }
-    // 下
-    if (co < column - 1 && grid[co + 1][ro] == '1') {
-      dfs(grid, co + 1, ro);
-    }
-    // 左
-    if (ro > 0 && grid[co][ro - 1] == '1') {
-      dfs(grid, co, ro - 1);
-    }
-    // 右
-    if (ro < row - 1 && grid[co][ro + 1] == '1') {
-      dfs(grid, co, ro + 1);
     }
   }
 
@@ -295,6 +282,103 @@ public class QueueAndStackExx {
     return ans;
   }
 
+  // 矩阵中的最长递增路径
+  static class longestIncreasingPathPathSolution {
+    static final int[][] dirs = new int[][] {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
+    int[][] matrix;
+    int rows;
+    int columns;
+    int[][] cache; // 缓存结果，从当前位置出发的最长递增路径长度。
+    int ans;
+
+    public int longestIncreasingPath(int[][] matrix) {
+      if (matrix == null || matrix.length == 0 || matrix[0].length == 0) {
+        return 0;
+      }
+      this.matrix = matrix;
+      this.rows = matrix.length;
+      this.columns = matrix[0].length;
+      this.cache = new int[rows][columns];
+      // dfs
+      for (int i = 0; i < rows; ++i) {
+        for (int j = 0; j < columns; ++j) {
+          ans = Math.max(ans, dfs(i, j));
+        }
+      }
+      return ans;
+    }
+
+    private int dfs(int i, int j) {
+      if (cache[i][j] != 0) {
+        return cache[i][j];
+      }
+      cache[i][j] = 1;
+      for (int[] dir : dirs) {
+        int row = i + dir[0];
+        int colum = j + dir[1];
+        if (row >= 0
+            && row < rows
+            && colum >= 0
+            && colum < columns
+            && matrix[row][colum] > matrix[i][j]) {
+          cache[i][j] = Math.max(cache[i][j], 1 + dfs(row, colum));
+        }
+      }
+      return cache[i][j];
+    }
+  }
+
+  // 课程表，返回学习顺序，即求有向图的拓扑排序。
+  static class findOrderSolution {
+    List<Integer>[] adj; // 有向图邻接表
+    private boolean[] marked; // 标记数组
+    private boolean[] onStack; // 记录DFS路径
+    private boolean hasCycle; // 是否存在环
+    private int p; // 指针
+    private int[] ans; // 顶点的逆后序排列，即拓扑序列
+
+    public int[] findOrder(int numCourses, int[][] prerequisites) {
+      marked = new boolean[numCourses];
+      onStack = new boolean[numCourses];
+      hasCycle = false;
+      p = numCourses;
+      ans = new int[numCourses];
+      //  构建有向图
+      adj = (List<Integer>[]) new List[numCourses];
+      for (int[] edge : prerequisites) {
+        // 添加第二个元素指向第一个元素的边
+        (adj[edge[1]] == null ? (adj[edge[1]] = new ArrayList<>()) : adj[edge[1]]).add(edge[0]);
+      }
+      // dfs求拓扑序列
+      for (int i = 0; i < numCourses; ++i) {
+        // 存在环则无拓扑序列
+        if (hasCycle) {
+          return new int[0];
+        } else if (!marked[i]) {
+          dfs(i);
+        }
+      }
+      return ans;
+    }
+
+    private void dfs(int i) {
+      marked[i] = true;
+      onStack[i] = true;
+      if (adj[i] != null) {
+        for (int v : adj[i]) {
+          if (onStack[v]) {
+            hasCycle = true;
+            return;
+          } else if (!marked[v]) {
+            dfs(v);
+          }
+        }
+      }
+      onStack[i] = false;
+      ans[--p] = i;
+    }
+  }
+
   // ===============================================================================================
   /** 困难题 */
 
@@ -338,5 +422,89 @@ public class QueueAndStackExx {
       }
     }
     return ans;
+  }
+
+  static class ladderLengthSolution {
+
+    int id = 0; // id生成
+    Map<String, Integer> wordId = new HashMap<>();
+    List<List<Integer>> adj = new ArrayList<>();
+
+    public int ladderLength(String beginWord, String endWord, List<String> wordList) {
+      // endWord不存在wordList则直接返回
+      if (!wordList.contains(endWord)) {
+        return 0;
+      }
+      // 构造无向图
+      for (String word : wordList) {
+        addEdge(word);
+      }
+      addEdge(beginWord);
+      // 双向bfs查找，添加顶点和终点。
+      int beginId = wordId.get(beginWord), endId = wordId.get(endWord);
+      Queue queue = new Queue();
+      queue.enqueue(beginId);
+      queue.enqueue(endId + id);
+      // 前半部分是顶点到begin的距离，后半部分是顶点到end的距离
+      int[] dis = new int[2 * id];
+      Arrays.fill(dis, -1);
+      dis[beginId] = 0;
+      dis[endId + id] = 0;
+      while (!queue.isEmpty()) {
+        int x = queue.dequeue();
+        // begin端BFS
+        if (x < id) {
+          for (int v : adj.get(x)) {
+            if (dis[v] < 0) {
+              dis[v] = dis[x] + 1;
+              queue.enqueue(v);
+            }
+          }
+          continue;
+        }
+        // end端BFS时的真实顶点id
+        int rx = x - id;
+        // 如过已经从begin端BFS到该节点了，则返回结果。
+        if (dis[rx] >= 0) {
+          return dis[rx] + 1;
+        }
+        for (int v : adj.get(rx)) {
+          if (dis[v + id] < 0) {
+            dis[v + id] = dis[x] + 1;
+            queue.enqueue(v + id);
+          }
+        }
+      }
+      return 0;
+    }
+
+    // 图构造，每个单词为顶点，同时添加虚拟顶点，每个单词的任一字符被替换为*，如dog的三个虚拟顶点，*og、d*g、do*
+    public void addEdge(String word) {
+      addWord(word);
+      int id1 = wordId.get(word);
+      char[] array = word.toCharArray();
+      int length = array.length;
+      for (int i = 0; i < length; ++i) {
+        char tmp = array[i];
+        array[i] = '*';
+        // 创建虚拟顶点
+        String newWord = new String(array);
+        addWord(newWord);
+        int id2 = wordId.get(newWord);
+        // 添加普通单词顶点到虚拟顶点的边
+        adj.get(id1).add(id2);
+        // 添加虚拟顶点到该普通单词顶点的边
+        adj.get(id2).add(id1);
+        array[i] = tmp;
+      }
+    }
+
+    // 添加单词顶点映射
+    public void addWord(String word) {
+      if (!wordId.containsKey(word)) {
+        wordId.put(word, id++);
+        adj.add(new ArrayList<>());
+      }
+    }
   }
 }

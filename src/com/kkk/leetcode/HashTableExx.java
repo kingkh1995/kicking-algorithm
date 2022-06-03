@@ -64,7 +64,7 @@ public class HashTableExx {
   /** 拔高题 */
 
   // 一个未排序的整数数组，找出数字连续的最长序列，实现时间复杂度为 O(n)。
-  static class LongestConsecutiveSolution {
+  static class longestConsecutiveSolution {
 
     // 解法一：从连续序列最小的元素开始往后查找，使用Set将查找复杂度降为 O(1)，查找次数会小于2n，故时间复杂度为 O(n)。
     public int longestConsecutive1(int[] nums) {
