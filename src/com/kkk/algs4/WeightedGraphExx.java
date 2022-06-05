@@ -203,7 +203,7 @@ public class WeightedGraphExx {
           edges[w] = e;
         }
       }
-      // 模拟IndexMinPQ的delmin操作，遍历选出下一个顶点，即目前未加入树中且距离最短的顶点
+      // 模拟IndexMinPQ的delMin操作，遍历选出下一个顶点，即目前未加入树中且距离最短的顶点
       int next = -1;
       double min = Double.POSITIVE_INFINITY;
       for (int i = 0; i < edges.length; i++) {

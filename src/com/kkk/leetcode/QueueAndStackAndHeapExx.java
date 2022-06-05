@@ -18,7 +18,7 @@ import java.util.stream.IntStream;
  *
  * @author KaiKoo
  */
-public class QueueAndStackExx {
+public class QueueAndStackAndHeapExx {
 
   // ===============================================================================================
   /** 基础题 */

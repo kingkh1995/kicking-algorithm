@@ -90,7 +90,7 @@ public class DesignQuestion {
     public void push(T t) {
       stack.push(t);
       // push时同时存储push该值后的当前最小值
-      // element() = peek() = peekfirst()
+      // element() = peek() = peekFirst()
       T minTop = minStack.element();
       minStack.push(minTop == null || minTop.compareTo(t) > 0 ? t : minTop);
     }

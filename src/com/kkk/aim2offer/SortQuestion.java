@@ -35,9 +35,9 @@ public class SortQuestion {
       int index1;
       int index2;
       while (true) {
-        int[] indexs = partition(arr, start, end);
-        index1 = indexs[0];
-        index2 = indexs[1];
+        int[] indexes = partition(arr, start, end);
+        index1 = indexes[0];
+        index2 = indexes[1];
         if (index2 < k - 1) {
           // pivot区间在k左边，重排区间右侧开始到数组尾端
           start = index2 + 1;

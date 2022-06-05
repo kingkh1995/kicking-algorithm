@@ -497,12 +497,12 @@ public class SortingExx {
         }
       }
     }
-    int[] indexs = new int[arr.length];
+    int[] indexes = new int[arr.length];
     for (int i = 0; i < wrappers.length; i++) {
       arr[i] = wrappers[i].v;
-      indexs[i] = wrappers[i].index;
+      indexes[i] = wrappers[i].index;
     }
-    return indexs;
+    return indexes;
   }
 
   private static class Wrapper<T extends Comparable> implements Comparable<Wrapper<T>> {
@@ -524,9 +524,9 @@ public class SortingExx {
   public static void stabilizeTest() {
     Integer[] array =
         Arrays.stream(ArrayUtils.randomArr(50, 1, 10)).boxed().toList().toArray(new Integer[50]);
-    int[] indexs = stabilize(array, EssentialExx::fast3DQuickSort);
+    int[] indexes = stabilize(array, EssentialExx::fast3DQuickSort);
     System.out.println(Arrays.toString(array));
-    System.out.println(Arrays.toString(indexs));
+    System.out.println(Arrays.toString(indexes));
   }
 
   // ===============================================================================================

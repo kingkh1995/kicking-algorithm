@@ -12,7 +12,7 @@ import java.util.List;
  *
  * @author KaiKoo
  */
-public class BinaryTreeExx {
+public class TreeExx {
 
   // ===============================================================================================
   /** 基础题 */

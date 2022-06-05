@@ -150,26 +150,26 @@ public class TreeQuestion {
   /*
   判断树1是不是树2的子结构（空树不是任意一个树的子结构）
    */
-  public boolean isTree1SubStuctOfTree2(TreeNode treeNode1, TreeNode treeNode2) {
+  public boolean isTree1SubStructOfTree2(TreeNode treeNode1, TreeNode treeNode2) {
     if (treeNode1 == null || treeNode2 == null) {
       return false;
     } else {
-      return isTree1SubStuctOfTree2FromRoot(treeNode1, treeNode2)
-          || isTree1SubStuctOfTree2(treeNode1, treeNode2.left)
-          || isTree1SubStuctOfTree2(treeNode1, treeNode2.right);
+      return isTree1SubStructOfTree2FromRoot(treeNode1, treeNode2)
+          || isTree1SubStructOfTree2(treeNode1, treeNode2.left)
+          || isTree1SubStructOfTree2(treeNode1, treeNode2.right);
     }
   }
 
   // 从根结点开始树1是不是树2的子结构
-  private boolean isTree1SubStuctOfTree2FromRoot(TreeNode treeNode1, TreeNode treeNode2) {
+  private boolean isTree1SubStructOfTree2FromRoot(TreeNode treeNode1, TreeNode treeNode2) {
     if (treeNode1 == null) {
       return true;
     } else if (treeNode2 == null) {
       return false;
     } else {
       return treeNode1.val == treeNode2.val
-          && isTree1SubStuctOfTree2FromRoot(treeNode1.left, treeNode2.left)
-          && isTree1SubStuctOfTree2FromRoot(treeNode1.right, treeNode2.right);
+          && isTree1SubStructOfTree2FromRoot(treeNode1.left, treeNode2.left)
+          && isTree1SubStructOfTree2FromRoot(treeNode1.right, treeNode2.right);
     }
   }
 
@@ -276,7 +276,7 @@ public class TreeQuestion {
     TREE_QUESTION.printLeftViewOfTree(node1);
   }
 
-  public static void isTree1SubStuctOfTree2Test() {
+  public static void isTree1SubStructOfTree2Test() {
     TreeNode node9 = new TreeNode(9);
     TreeNode node8 = new TreeNode(8, node9, null);
     TreeNode node7 = new TreeNode(7);
@@ -286,20 +286,20 @@ public class TreeQuestion {
     TreeNode node3 = new TreeNode(3, node5, node6);
     TreeNode node2 = new TreeNode(2, node4, null);
     TreeNode node1 = new TreeNode(1, node2, node3);
-    System.out.println(TREE_QUESTION.isTree1SubStuctOfTree2(null, node1));
-    System.out.println(TREE_QUESTION.isTree1SubStuctOfTree2(node1, null));
-    System.out.println(TREE_QUESTION.isTree1SubStuctOfTree2(node1, node1));
-    System.out.println(TREE_QUESTION.isTree1SubStuctOfTree2(new TreeNode(5), node1));
-    System.out.println(TREE_QUESTION.isTree1SubStuctOfTree2(new TreeNode(9), node1));
-    System.out.println(TREE_QUESTION.isTree1SubStuctOfTree2(node2, node1));
+    System.out.println(TREE_QUESTION.isTree1SubStructOfTree2(null, node1));
+    System.out.println(TREE_QUESTION.isTree1SubStructOfTree2(node1, null));
+    System.out.println(TREE_QUESTION.isTree1SubStructOfTree2(node1, node1));
+    System.out.println(TREE_QUESTION.isTree1SubStructOfTree2(new TreeNode(5), node1));
+    System.out.println(TREE_QUESTION.isTree1SubStructOfTree2(new TreeNode(9), node1));
+    System.out.println(TREE_QUESTION.isTree1SubStructOfTree2(node2, node1));
     TreeNode anode6 = new TreeNode(6);
     TreeNode anode5 = new TreeNode(5);
     TreeNode anode3 = new TreeNode(3, anode5, anode6);
-    System.out.println(TREE_QUESTION.isTree1SubStuctOfTree2(anode3, node1));
+    System.out.println(TREE_QUESTION.isTree1SubStructOfTree2(anode3, node1));
     TreeNode bnode4 = new TreeNode(4);
     TreeNode bnode3 = new TreeNode(3);
     TreeNode bnode2 = new TreeNode(2, bnode3, bnode4);
-    System.out.println(TREE_QUESTION.isTree1SubStuctOfTree2(bnode2, node1));
+    System.out.println(TREE_QUESTION.isTree1SubStructOfTree2(bnode2, node1));
   }
 
   public static void convertBinaryTreeToDoubleLinkedListTest() {
