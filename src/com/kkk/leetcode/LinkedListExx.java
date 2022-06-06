@@ -28,50 +28,6 @@ public class LinkedListExx {
     return node1; // 最终一定会相等，有交点则为相交结点，否则同为null，则返回node1即可
   }
 
-  // 删除链表倒数第n个节点 只遍历一遍 使用快慢指针法
-  public ListNode removeNthFromEnd(ListNode head, int n) {
-    if (head == null || n < 1) {
-      return head;
-    }
-    // 添加一个起始节点
-    ListNode t = new ListNode(0);
-    t.next = head;
-    ListNode fast = t, slow = t;
-    // 从起始结点开始 让快指针先走n个结点 直到快指针到了最后一个结点
-    // 则慢指针到了倒数第n+1个结点 删除掉慢指针的下一个结点则删除了倒数第n个结点
-    while (fast.next != null) { // next为空则到了最后一个结点
-      fast = fast.next;
-      if (n-- <= 0) {
-        slow = slow.next;
-      }
-    }
-    if (n > 0) { // n大于链表长度
-      return head;
-    } else if (n == 0) { // n刚好等于链表长度
-      return head.next;
-    }
-    // 删除下一个结点
-    slow.next = slow.next.next;
-    return head;
-  }
-
-  // 合并两个有序的链表 递归解决
-  public ListNode mergeTwoLists(ListNode l1, ListNode l2) {
-    if (l2 == null) {
-      return l1;
-    }
-    if (l1 == null) {
-      return l2;
-    }
-    if (l1.val <= l2.val) {
-      l1.next = mergeTwoLists(l1.next, l2);
-      return l1;
-    } else {
-      l2.next = mergeTwoLists(l1, l2.next);
-      return l2;
-    }
-  }
-
   // 旋转链表，将链表每个节点向右移动 k 个位置
   public ListNode rotateRight(ListNode head, int k) {
     if (head == null || head.next == null) {

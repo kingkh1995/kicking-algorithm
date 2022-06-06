@@ -254,38 +254,6 @@ public class BinarySearchExx {
   // ===============================================================================================
   /** 困难题 */
 
-  // 找到两个排序数组的中位数
-  public static double findMedianSortedArrays(int[] nums1, int[] nums2) {
-    // 数组小的放左边 将两个数组都分为两个区间
-    if (nums1.length > nums2.length) {
-      return findMedianSortedArrays(nums2, nums1);
-    }
-    int l = 0, h = nums1.length;
-    while (l <= h) {
-      // 双指针
-      int i = (l + h) / 2;
-      int j = (nums1.length + nums2.length) / 2 - i;
-      // 左边区间为i-1,j-1 右边区间为i,j 左边个数等于右边或比右边小1
-      // 要保证左边区间所有值都小于右边区间
-      int nums_im1 = (i == 0 ? Integer.MIN_VALUE : nums1[i - 1]); // i-1要小于j
-      int nums_i = (i == nums1.length ? Integer.MAX_VALUE : nums1[i]); // i
-      int nums_jm1 = (j == 0 ? Integer.MIN_VALUE : nums2[j - 1]); // j-1要小于i
-      int nums_j = (j == nums2.length ? Integer.MAX_VALUE : nums2[j]); // j
-      if (nums_im1 > nums_j) {
-        h = i - 1;
-      } else if (nums_jm1 > nums_i) {
-        l = i + 1;
-      } else {
-        // 找到了正确的切分
-        int m1 = Math.max(nums_im1, nums_jm1); // 左边区间取大值
-        int m2 = Math.min(nums_i, nums_j); // 右边区间取小值
-        return ((nums1.length + nums2.length) & 1) == 0 ? (m1 + m2) / 2.0 : m2; // 右边长度大于等于左边
-      }
-    }
-    // 结果一定会匹配，因为数组是有序的，必然能找到切分，此处代码永远不会执行
-    return 0;
-  }
-
   // 有序矩阵中第K小的元素，其中每行和每列元素均按升序排序，即左上角为最小值，右下角为最大值。
   public static int kthSmallest(int[][] matrix, int k) {
     // 沿着一段锯齿线，可以保证锯齿线左上角的所有值均小于锯齿线上的值。

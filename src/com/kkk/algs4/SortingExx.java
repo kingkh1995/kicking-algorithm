@@ -181,9 +181,9 @@ public class SortingExx {
   /** 2.2.17 链表排序 使用自然归并排序的方式排序，这是链表最佳的排序方法 */
   private static ListNode linkedNodeSort(ListNode node) {
     // 添加一个虚拟头结点
-    ListNode head = new ListNode(0);
+    ListNode head = new ListNode();
     head.next = node;
-    ListNode tempHead = new ListNode(0); // 备用虚拟结点
+    ListNode tempHead = new ListNode(); // 备用虚拟结点
     ListNode first, prev;
     while (true) {
       ListNode block1Tail, block2Tail;

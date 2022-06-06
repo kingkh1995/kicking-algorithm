@@ -1,8 +1,6 @@
 package com.kkk.leetcode;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 /**
  * 双指针 <br>
@@ -24,38 +22,6 @@ public class DoublePointerExx {
       }
     }
     return -1;
-  }
-
-  // 三数之和为0，且组合不能重复。
-  public List<List<Integer>> threeSum(int[] arr) {
-    List<List<Integer>> res = new ArrayList<>();
-    Arrays.sort(arr);
-    for (int i = 0; i < arr.length - 2; i++) {
-      // 不能重复
-      if (i > 0 && arr[i] == arr[i - 1]) {
-        continue;
-      }
-      int lo = i + 1;
-      int hi = arr.length - 1;
-      while (lo < hi) {
-        int sum = arr[i] + arr[lo] + arr[hi];
-        // 不能重复，由算法原理只需判断lo即可。
-        if (lo > i + 1 && arr[lo] == arr[lo - 1]) {
-          lo++;
-          continue;
-        }
-        if (sum > 0) {
-          hi--;
-        } else if (sum < 0) {
-          lo++;
-        } else {
-          res.add(Arrays.asList(arr[i], arr[lo], arr[hi]));
-          lo++;
-          hi--;
-        }
-      }
-    }
-    return res;
   }
 
   // 将所有0移动到数组的末尾，同时保持非零元素的相对顺序

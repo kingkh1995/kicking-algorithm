@@ -82,30 +82,6 @@ public class DynamicProgramingExx {
     return dp[amount] > amount ? -1 : dp[amount];
   }
 
-  // 最长回文子串
-  public static String longestPalindrome(String s) {
-    int l = s.length();
-    // dp[i][j]表示索引位置从i至j的子串是否为回文字符串
-    boolean[][] dp = new boolean[l][l];
-    String res = "";
-    // 遍历方向为从下至上，从左至右。
-    for (int i = l - 1; i >= 0; i--) {
-      for (int j = i; j < l; j++) {
-        if (s.charAt(i) == s.charAt(j)) {
-          if (j - i > 1) {
-            dp[i][j] = dp[i + 1][j - 1];
-          } else {
-            dp[i][j] = true;
-          }
-          if (dp[i][j] && j - i + 1 > res.length()) {
-            res = s.substring(i, j + 1);
-          }
-        }
-      }
-    }
-    return res;
-  }
-
   // 单词拆分，判断由给定字典是否可拼凑出给定单词。
   public boolean wordBreak(String s, List<String> wordDict) {
     // 以字典中单词最后一个字符构造符号表

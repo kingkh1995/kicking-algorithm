@@ -99,4 +99,12 @@ public class ArrayUtils {
     // i即为key应该插入的位置，也等于小于key元素的个数。
     return i;
   }
+
+  public static void reverse(int[] nums, int left, int right) {
+    while (left < right) {
+      swap(nums, left, right);
+      left++;
+      right--;
+    }
+  }
 }

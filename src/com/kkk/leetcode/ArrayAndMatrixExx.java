@@ -246,25 +246,6 @@ public class ArrayAndMatrixExx {
     }
   }
 
-  // 盛最多水的容器 选择两块板让装水量最多
-  public int maxArea(int[] height) {
-    int i = 0, j = height.length - 1, max = 0;
-    while (i < j) {
-      max = Math.max(max, Math.min(height[i], height[j]) * (j - i));
-      // 短板效应 从短板一侧向中间找到第一个比它长的板
-      if (height[i] > height[j]) {
-        // 移动j
-        int temp = height[j];
-        while (j > 0 && height[--j] <= temp) {}
-      } else {
-        // 移动i
-        int temp = height[i];
-        while (i < height.length - 1 && height[++i] <= temp) {}
-      }
-    }
-    return max;
-  }
-
   // 长度最小的子数组 找到和满足大于等于target的长度最小的连续子数组
   public static int minSubArrayLen(int target, int[] nums) {
     int min = Integer.MAX_VALUE, sum = 0;
