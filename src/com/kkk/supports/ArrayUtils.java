@@ -86,18 +86,18 @@ public class ArrayUtils {
   }
 
   public static int rank(int[] sorted, int key, int lo, int hi) {
-    int i = hi + 1;
+    int index = hi + 1;
     while (lo <= hi) {
       int mid = lo + ((hi - lo) >> 1);
       if (sorted[mid] < key) {
         lo = mid + 1;
       } else {
-        i = mid; // 大于等于情况下，将i设置为mid
+        index = mid; // 大于等于情况下，将index设置为mid。
         hi = mid - 1;
       }
     }
-    // i即为key应该插入的位置，也等于小于key元素的个数。
-    return i;
+    // index即为key应该插入的位置，也为数组中小于key的元素个数。
+    return index;
   }
 
   public static void reverse(int[] nums, int left, int right) {

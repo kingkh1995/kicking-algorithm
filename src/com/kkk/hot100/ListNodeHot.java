@@ -14,14 +14,13 @@ public class ListNodeHot {
    * 模拟加法运算即可
    */
   public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
-    ListNode head = new ListNode(); // 虚拟头节点
-    ListNode node = head;
+    ListNode head = new ListNode(), cur = head;
     int carry = 0; // 进位
     while (l1 != null || l2 != null || carry != 0) {
       int val = (l1 != null ? l1.val : 0) + (l2 != null ? l2.val : 0) + carry;
-      node.next = new ListNode(val % 10);
+      cur.next = new ListNode(val % 10);
       carry = val / 10;
-      node = node.next;
+      cur = cur.next;
       l1 = l1 != null ? l1.next : l1;
       l2 = l2 != null ? l2.next : l2;
     }
@@ -57,19 +56,18 @@ public class ListNodeHot {
     } else if (list2 == null) {
       return list1;
     }
-    ListNode head = new ListNode(); // 虚拟头节点
-    ListNode node = head;
+    ListNode head = new ListNode(), cur = head;
     while (list1 != null && list2 != null) {
       if (list1.val < list2.val) {
-        node.next = list1;
+        cur.next = list1;
         list1 = list1.next;
       } else {
-        node.next = list2;
+        cur.next = list2;
         list2 = list2.next;
       }
-      node = node.next;
+      cur = cur.next;
     }
-    node.next = list1 == null ? list2 : list1;
+    cur.next = list1 == null ? list2 : list1;
     return head.next;
   }
 

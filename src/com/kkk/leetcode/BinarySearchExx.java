@@ -45,43 +45,6 @@ public class BinarySearchExx {
     return hi;
   }
 
-  // 在旋转排序数组中搜索元素
-  public static int search(int[] nums, int target) {
-    int lo = 0, hi = nums.length - 1;
-    int left = nums[lo], right = nums[hi];
-    // 先和左右对比，这样之后的对比可以去掉=判断
-    if (target == left) {
-      return lo;
-    } else if (target == right) {
-      return hi;
-    } else {
-      while (lo <= hi) {
-        int mid = lo + ((hi - lo) >> 1);
-        int cmp = target - nums[mid];
-        if (cmp == 0) {
-          return mid;
-        }
-        // 找到有序的一半数组，必然至少有一半数组是有序的，不需要取lo hi处的元素，只需查两端即可
-        if (nums[mid] >= left) {
-          // 如果左边有序 判断是否在该区间（小于mid且大于left）则在该区间查找 否则去另一半区间查找
-          if (cmp < 0 && target > left) {
-            hi = mid - 1;
-          } else {
-            lo = mid + 1;
-          }
-        } else {
-          // 如果右边有序 也判断是否在该区间（大于mid小于right）则在该区间查找 否则去另一半区间查找
-          if (cmp > 0 && target < right) {
-            lo = mid + 1;
-          } else {
-            hi = mid - 1;
-          }
-        }
-      }
-      return -1;
-    }
-  }
-
   // 求区间极小值
   public int findPeakElement(int[] nums) {
     // 找到任意一个极限值即可，可以认为 nums[-1] = nums[n] = -∞。
@@ -98,15 +61,6 @@ public class BinarySearchExx {
     }
     // 退出循环时，l=r，返回l即可。
     return l;
-  }
-
-  // 从排序数组中找到等于target的区间
-  public int[] searchRange(int[] nums, int target) {
-    // 小于target的元素的个数
-    int leftIdx = ArrayUtils.rank(nums, target);
-    // 小于target+1的元素的个数
-    int rightIdx = ArrayUtils.rank(nums, target + 1);
-    return leftIdx < rightIdx ? new int[] {leftIdx, rightIdx - 1} : new int[] {-1, -1};
   }
 
   // 查找数组中最接近x的k个数 二分查找 + 双指针法

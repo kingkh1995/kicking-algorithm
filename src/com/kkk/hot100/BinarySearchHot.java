@@ -1,5 +1,6 @@
 package com.kkk.hot100;
 
+import com.kkk.supports.ArrayUtils;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -29,14 +30,14 @@ public class BinarySearchHot {
           continue;
         }
         // 二分查找
-        int l = j + 1, h = nums.length - 1;
+        int lo = j + 1, hi = nums.length - 1;
         int t = -nums[i] - nums[j];
-        while (l <= h) {
-          int mid = l + ((h - l) >> 1);
+        while (lo <= hi) {
+          int mid = lo + ((hi - lo) >> 1);
           if (nums[mid] < t) {
-            l = mid + 1;
+            lo = mid + 1;
           } else if (nums[mid] > t) {
-            h = mid - 1;
+            hi = mid - 1;
           } else {
             ans.add(Arrays.asList(nums[i], nums[j], t));
             break;
@@ -45,6 +46,47 @@ public class BinarySearchHot {
       }
     }
     return ans;
+  }
+
+  /**
+   * 33. 搜索旋转排序数组 <br>
+   * mid的左区间或右区间一定至少有一个是有序的，未旋转的情景下则都是有序的。
+   */
+  public int search(int[] nums, int target) {
+    int n = nums.length, lo = 0, hi = n - 1;
+    while (lo <= hi) {
+      int mid = lo + ((hi - lo) >> 1);
+      int cmp = nums[mid] - target;
+      if (cmp == 0) {
+        return mid;
+      }
+      // 确定出必定是有序的半区后，判断target是否位于该半区。
+      if (nums[mid] >= nums[0]) {
+        // mid左半边区间为有序的，且target位于该半区，则移动h。
+        if (target >= nums[0] && cmp > 0) {
+          hi = mid - 1;
+        } else {
+          lo = mid + 1;
+        }
+      } else {
+        // mid右半边区间为有序的，且target位于该半区，则移动l。
+        if (target <= nums[n - 1] && cmp < 0) {
+          lo = mid + 1;
+        } else {
+          hi = mid - 1;
+        }
+      }
+    }
+    return -1;
+  }
+
+  /**
+   * 34. 在排序数组中查找元素的第一个和最后一个位置 <br>
+   * 使用rank方法查找 target 和 target+1 即可，处理 target 不存在的情况。
+   */
+  public int[] searchRange(int[] nums, int target) {
+    int i1 = ArrayUtils.rank(nums, target), i2 = ArrayUtils.rank(nums, target + 1);
+    return i1 == i2 ? new int[] {-1, -1} : new int[] {i1, i2 - 1};
   }
 
   // ===============================================================================================
@@ -58,10 +100,10 @@ public class BinarySearchHot {
     if (nums1.length > nums2.length) {
       return findMedianSortedArrays(nums2, nums1);
     }
-    int l = 0, r = nums1.length;
+    int lo = 0, hi = nums1.length; // hi可以为nums1.length
     int ml = 0, mh = 0; // 左侧区间的最大值和右侧区间的最小值
-    while (l <= r) {
-      int mid1 = l + ((r - l) >> 1);
+    while (lo <= hi) {
+      int mid1 = lo + ((hi - lo) >> 1);
       // mid位于右侧区间，左侧区间元素总数等于或比右侧区间元素总数小1
       int mid2 = ((nums1.length + nums2.length) >> 1) - mid1;
       int n1m1 = mid1 == 0 ? Integer.MIN_VALUE : nums1[mid1 - 1]; // mid1-1
@@ -72,13 +114,12 @@ public class BinarySearchHot {
         // mid1-1小于mid2则更新值，另一条件mid2-1小于mid1会在后续缩小区间中满足。
         ml = Math.max(n1m1, n2m1);
         mh = Math.min(n1, n2);
-        l = mid1 + 1;
+        lo = mid1 + 1;
       } else {
-        r = mid1 - 1;
+        hi = mid1 - 1;
       }
     }
     // 元素总数为奇数则直接返回右侧值，因为右侧元素多1。
     return ((nums1.length + nums2.length) & 1) == 1 ? mh : (ml + mh) / 2D;
   }
-
 }

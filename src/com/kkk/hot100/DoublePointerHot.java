@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * <br>
+ * 双指针 <br>
  *
  * @author KaiKoo
  */
@@ -16,8 +16,7 @@ public class DoublePointerHot {
    * 双指针从两端往中心逼近计算即可，为了使容积变大，每次需要移动短的一边。
    */
   public int maxArea(int[] height) {
-    int ans = 0;
-    int l = 0, r = height.length - 1;
+    int ans = 0, l = 0, r = height.length - 1;
     while (l < r) {
       ans = Math.max(ans, Math.min(height[l], height[r]) * (r - l));
       if (height[l] < height[r]) {
@@ -60,6 +59,32 @@ public class DoublePointerHot {
           l++;
           r--;
         }
+      }
+    }
+    return ans;
+  }
+
+  // ===============================================================================================
+
+  /**
+   * 42. 接雨水 <br>
+   * 双指针解法，只需遍历一遍，无需辅助空间。<br>
+   * 判断指针位置能否接雨水，要看它两侧是不是都有高度大于等于它的高点存在，故两个指针更高的一方可以作为另外一方的一侧高点，<br>
+   * 遍历过程中，分别记录了两侧的最高高度，那么同一侧的最大高度就是另一侧高点，因此两个指针中矮的一方可以接雨水，<br>
+   * 每个位置能接到的雨水也由同一侧的最大高度决定，因为另一侧一定存在不低于其的高度，可知每次都只移动矮的那一侧指针， <br>
+   * 那么当任一指针移动到最大高度位置后就再也不会移动了，因为接雨水时最大高度总是在指针另一侧。
+   */
+  public int trap(int[] height) {
+    int ans = 0, l = 0, r = height.length - 1, lm = 0, rm = 0;
+    while (l < r) {
+      lm = Math.max(lm, height[l]);
+      rm = Math.max(rm, height[r]);
+      if (height[l] < height[r]) {
+        ans += lm - height[l];
+        l++;
+      } else {
+        ans += rm - height[r];
+        r--;
       }
     }
     return ans;

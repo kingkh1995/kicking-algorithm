@@ -263,30 +263,6 @@ public class ArrayAndMatrixExx {
     return min == Integer.MAX_VALUE ? 0 : min;
   }
 
-  // 将n*n的二维矩阵顺时针旋转90度。
-  public void rotate(int[][] matrix) {
-    if (matrix.length == 0 || matrix.length != matrix[0].length) {
-      return;
-    }
-    int n = matrix.length;
-    // 先沿着对角线对折，[a][b]与[n-1-b][n-1-a]交换
-    for (int i = 0; i < n; ++i) {
-      for (int j = 0; j < n - i; ++j) {
-        int temp = matrix[i][j];
-        matrix[i][j] = matrix[n - 1 - j][n - 1 - i];
-        matrix[n - 1 - j][n - 1 - i] = temp;
-      }
-    }
-    // 再沿着中线对折，[a][b]与[n-1-a][b]交换
-    for (int i = 0; i < n >> 1; ++i) {
-      for (int j = 0; j < n; ++j) {
-        int temp = matrix[i][j];
-        matrix[i][j] = matrix[n - 1 - i][j];
-        matrix[n - 1 - i][j] = temp;
-      }
-    }
-  }
-
   // 若M × N矩阵中某个元素为0，则将其所在的行与列清零，使用常数级别辅助空间。
   public void setZeroes(int[][] matrix) {
     // 需要两个辅助数组，分别标记行和列是否存在0
