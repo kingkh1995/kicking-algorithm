@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 /**
  * 滑动窗口 <br>
+ * 遍历过程中更新结果，窗口右端永远在当前位置，每次移动窗口左端。
  *
  * @author KaiKoo
  */

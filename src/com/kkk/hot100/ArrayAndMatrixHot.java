@@ -1,6 +1,9 @@
 package com.kkk.hot100;
 
 import com.kkk.supports.ArrayUtils;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.LinkedList;
 
 /**
  * 数组和矩阵 <br>
@@ -34,15 +37,38 @@ public class ArrayAndMatrixHot {
   }
 
   /**
-   * 53.最大子数组和 <br>
-   * 可以使用动态规划，但没必要，只需要使用一个变量即可。
+   * 56. 合并区间 <br>
+   * 按区间左端点排序数组之后合并区间
    */
-  public int maxSubArray(int[] nums) {
-    int ans = nums[0], dp = nums[0];
-    for (int i = 1; i < nums.length; ++i) {
-      ans = Math.max(ans, dp = nums[i] + Math.max(dp, 0));
+  public int[][] merge(int[][] intervals) {
+    Arrays.sort(intervals, Comparator.comparingInt(i -> i[0]));
+    LinkedList<int[]> ans = new LinkedList<>();
+    int[] last;
+    for (int[] i : intervals) {
+      if (!ans.isEmpty() && (last = ans.peekLast())[1] >= i[0]) {
+        last[1] = Math.max(last[1], i[1]);
+      } else {
+        ans.offer(i);
+      }
     }
-    return ans;
+    return ans.toArray(new int[0][0]);
+  }
+
+  /**
+   * 75. 颜色分类 <br>
+   * 实际上就是三向切分快速排序，选择1作为切分，同时指针从0位置出发，只需要排序一次即可。
+   */
+  public void sortColors(int[] nums) {
+    int lt = 0, i = 0, gt = nums.length - 1, cmp;
+    while (i <= gt) { // 未排序区间为[i,gt]
+      if ((cmp = nums[i] - 1) < 0) {
+        ArrayUtils.swap(nums, lt++, i++);
+      } else if (cmp > 0) {
+        ArrayUtils.swap(nums, gt--, i);
+      } else {
+        i++;
+      }
+    }
   }
 
   // ===============================================================================================

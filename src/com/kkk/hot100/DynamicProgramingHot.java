@@ -34,6 +34,56 @@ public class DynamicProgramingHot {
     return res;
   }
 
+  /** 62. 不同路径 <br> */
+  public int uniquePaths(int m, int n) {
+    int[][] dp = new int[m][n]; // dp[i][j]表示可到达该位置的路径数量
+    for (int i = 0; i < m; ++i) {
+      for (int j = 0; j < n; ++j) {
+        if (i == 0 || j == 0) {
+          dp[i][j] = 1; // 因为只能下移和右移，故第一行和第一列结果为1。
+        } else {
+          dp[i][j] = dp[i - 1][j] + dp[i][j - 1];
+        }
+      }
+    }
+    return dp[m - 1][n - 1];
+  }
+
+  /**
+   * 64. 最小路径和 <br>
+   * 直接原地DP，不需要辅助空间。
+   */
+  public int minPathSum(int[][] grid) {
+    int m = grid.length, n = grid[0].length;
+    // 因为只能下移和右移，故第一行和第一列只能沿着直线移动。
+    for (int i = 1; i < m; ++i) {
+      grid[i][0] = grid[i - 1][0] + grid[i][0];
+    }
+    for (int i = 1; i < n; ++i) {
+      grid[0][i] = grid[0][i - 1] + grid[0][i];
+    }
+    for (int i = 1; i < m; ++i) {
+      for (int j = 1; j < n; ++j) {
+        grid[i][j] = Math.min(grid[i - 1][j], grid[i][j - 1]) + grid[i][j];
+      }
+    }
+    return grid[m - 1][n - 1];
+  }
+
+  /**
+   * 70. 爬楼梯 <br>
+   * 实际上就是计算斐波那契数列，不使用用递归，会超出时间限制，使用隐式动态规划。
+   */
+  public int climbStairs(int n) {
+    int p, q = 0, r = 1;
+    for (int i = 1; i <= n; ++i) {
+      p = q;
+      q = r;
+      r = p + q;
+    }
+    return r;
+  }
+
   // ===============================================================================================
 
   /**
@@ -102,4 +152,30 @@ public class DynamicProgramingHot {
    * 42. 接雨水 <br>
    * todo... 动态规划解法
    */
+
+  /**
+   * 72. 编辑距离 <br>
+   * 注意处理空字符串
+   */
+  public int minDistance(String word1, String word2) {
+    int m = word1.length(), n = word2.length();
+    // dp[i][j]表示将0-(i-1)位置的word1子串转换为0-(j-1)位置的word2子串需要的最小操作数
+    int[][] dp = new int[m + 1][n + 1];
+    for (int i = 1; i <= m; ++i) {
+      dp[i][0] = i; // word2为空串，需要i次删除操作。
+    }
+    for (int i = 1; i <= n; ++i) {
+      dp[0][i] = i; // word1为空串，需要i次插入操作。
+    }
+    for (int i = 1; i <= m; ++i) {
+      for (int j = 1; j <= n; ++j) {
+        // 对比上一状态，im1需要一次删除；jm1需要一次插入；im1jm1如果最后一位字符不匹配则要一次替换。
+        int im1 = dp[i - 1][j] + 1, jm1 = dp[i][j - 1] + 1;
+        int im1jm1 = dp[i - 1][j - 1] + (word1.charAt(i - 1) == word2.charAt(j - 1) ? 0 : 1);
+        // 取im1、jm1、im1jm1三者最小
+        dp[i][j] = Math.min(Math.min(im1, jm1), im1jm1);
+      }
+    }
+    return dp[m][n];
+  }
 }

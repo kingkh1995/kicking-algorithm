@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 递归和迭代 【回溯法属于递归】 <br>
+ * 递归和迭代 【回溯法属于递归、贪心属于迭代】 <br>
  *
  * @author KaiKoo
  */
@@ -185,6 +185,95 @@ public class RecursionAndIterationHot {
           marked[n + 10] = true; // 重新标记为不可用
         }
       }
+    }
+  }
+
+  /**
+   * 55. 跳跃游戏 <br>
+   * 贪心算法，遍历数组，记录下可以达到的最远距离max，因为从0位置到max的所有位置都一定可达，判断max能否到达最后一个位置。
+   */
+  public boolean canJump(int[] nums) {
+    for (int i = 0, max = nums[0]; i <= max; ++i) {
+      if (max >= nums.length - 1) {
+        return true;
+      }
+      max = Math.max(max, i + nums[i]); // 遍历过程中更新可达的最远位置
+    }
+    return false; // 如果最终循环结束表示最后一个位置不可达
+  }
+
+  /**
+   * 78. 子集 <br>
+   * 每个元素有两种情况，被选择或不被选择，然后使用回溯法收集即可。
+   */
+  class subsetsSolution {
+    List<List<Integer>> ans;
+    LinkedList<Integer> stack;
+
+    public List<List<Integer>> subsets(int[] nums) {
+      ans = new ArrayList<>();
+      stack = new LinkedList<>();
+      backTrack(nums, 0);
+      return ans;
+    }
+
+    private void backTrack(int[] nums, int i) {
+      if (i == nums.length) {
+        ans.add(new ArrayList<>(stack));
+        return;
+      }
+      stack.push(nums[i]);
+      backTrack(nums, i + 1);
+      stack.pop();
+      backTrack(nums, i + 1);
+    }
+  }
+
+  /** 79. 单词搜索 <br> */
+  class existSolution {
+    static final int[][] dirs = new int[][] {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
+    char[][] board;
+    boolean[][] marked;
+    char[] charAt;
+
+    public boolean exist(char[][] board, String word) {
+      int m = board.length, n = board[0].length;
+      this.board = board;
+      this.marked = new boolean[m][n];
+      this.charAt = word.toCharArray();
+      for (int i = 0; i < m; ++i) {
+        for (int j = 0; j < n; ++j) {
+          if (backTrack(i, j, 0)) {
+            return true;
+          }
+        }
+      }
+      return false;
+    }
+
+    private boolean backTrack(int i, int j, int index) {
+      // 终止条件包括当前位置字符是否匹配以及指针位置
+      if (board[i][j] != charAt[index]) {
+        return false;
+      } else if (index == charAt.length - 1) {
+        return true;
+      }
+      marked[i][j] = true;
+      boolean result = false;
+      for (int[] dir : dirs) {
+        int ni = i + dir[0], nj = j + dir[1];
+        if (ni >= 0
+            && ni < board.length
+            && nj >= 0
+            && nj < board[0].length
+            && !marked[ni][nj]
+            && backTrack(ni, nj, index + 1)) {
+          result = true;
+          break;
+        }
+      }
+      marked[i][j] = false; // 回退过程中会重置marked数组
+      return result;
     }
   }
 

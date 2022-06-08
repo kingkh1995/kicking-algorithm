@@ -2,6 +2,7 @@ package com.kkk.leetcode;
 
 /**
  * 贪心算法 <br>
+ * 不从整体最优上加以考虑，而是考虑某种意义上的局部最优解。
  *
  * @author KaiKoo
  */

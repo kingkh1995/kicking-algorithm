@@ -15,6 +15,7 @@ import java.util.stream.IntStream;
 
 /**
  * 队列（BFS）& 栈 (DFS) & 堆 <br>
+ * 回溯法需要回退，而dfs不需要。
  *
  * @author KaiKoo
  */

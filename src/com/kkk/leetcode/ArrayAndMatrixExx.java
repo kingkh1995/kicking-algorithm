@@ -75,25 +75,6 @@ public class ArrayAndMatrixExx {
     return index;
   }
 
-  // 数组只有0，1，2 进行原地排序  使用类似三向切分快速排序
-  public void sortColors(int[] nums) {
-    // 选择切分元素1 排序一次就能有序
-    // (0,l)=0 [l,i)=1 [i,h]未排序 (h,tail)=2
-    int l = 0, i = 0, h = nums.length - 1;
-    while (i <= h) {
-      if (nums[i] == 1) {
-        i++;
-      } else if (nums[i] == 0) {
-        ArrayUtils.swap(nums, i, l);
-        l++;
-        i++;
-      } else {
-        ArrayUtils.swap(nums, i, h);
-        h--;
-      }
-    }
-  }
-
   // 找到数组的中心下标，左边元素之和等于右边元素之和。
   public int pivotIndex(int[] nums) {
     int total = 0;
