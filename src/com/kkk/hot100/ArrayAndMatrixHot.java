@@ -3,6 +3,7 @@ package com.kkk.hot100;
 import com.kkk.supports.ArrayUtils;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.Deque;
 import java.util.LinkedList;
 
 /**
@@ -42,7 +43,7 @@ public class ArrayAndMatrixHot {
    */
   public int[][] merge(int[][] intervals) {
     Arrays.sort(intervals, Comparator.comparingInt(i -> i[0]));
-    LinkedList<int[]> ans = new LinkedList<>();
+    Deque<int[]> ans = new LinkedList<>();
     int[] last;
     for (int[] i : intervals) {
       if (!ans.isEmpty() && (last = ans.peekLast())[1] >= i[0]) {

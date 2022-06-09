@@ -1,6 +1,8 @@
 package com.kkk.hot100;
 
-import java.util.LinkedList;
+import java.util.ArrayDeque;
+import java.util.Arrays;
+import java.util.Deque;
 import java.util.Map;
 
 /**
@@ -13,7 +15,7 @@ public class StackAndQueueHot {
   /** 20. 有效的括号 <br> */
   public boolean isValid(String s) {
     Map<Character, Character> map = Map.of(')', '(', '}', '{', ']', '[');
-    LinkedList<Character> stack = new LinkedList<>();
+    Deque<Character> stack = new ArrayDeque<>(s.length());
     for (char c : s.toCharArray()) {
       if (!map.containsKey(c)) {
         stack.push(c);
@@ -33,7 +35,7 @@ public class StackAndQueueHot {
    */
   public int longestValidParentheses(String s) {
     int ans = 0;
-    LinkedList<Integer> stack = new LinkedList<>();
+    Deque<Integer> stack = new ArrayDeque<>(s.length());
     stack.push(-1); // 处理边界条件，默认最后一个没有被匹配的右括号的下标为-1。
     for (int i = 0; i < s.length(); i++) {
       if (s.charAt(i) == '(') {
@@ -59,7 +61,7 @@ public class StackAndQueueHot {
    */
   public int trap(int[] height) {
     int ans = 0;
-    LinkedList<Integer> stack = new LinkedList<>();
+    Deque<Integer> stack = new ArrayDeque<>(height.length);
     for (int i = 0; i < height.length; ++i) {
       // 一旦高度高于栈顶了则可以计算雨水，边pop边计算。
       while (!stack.isEmpty() && height[stack.peek()] < height[i]) {
@@ -74,6 +76,48 @@ public class StackAndQueueHot {
         ans += curWidth * curHeight;
       }
       stack.push(i); // 最终都要入栈
+    }
+    return ans;
+  }
+
+  /**
+   * 84. 柱状图中最大的矩形 <br>
+   * 单调栈，与接雨水类似，找到一个反向桶。维护严格单调递增的栈，遍历过程中确定每个位置的左右边界。
+   */
+  public int largestRectangleArea(int[] heights) {
+    int ans = 0, len = heights.length;
+    int[] left = new int[len], right = new int[len]; // 左右边界均不包含
+    Arrays.fill(right, len); // 设置默认右边界，否则最后还需要出栈设置。
+    Deque<Integer> deque = new ArrayDeque<>(len);
+    for (int i = 0; i < heights.length; ++i) {
+      while (!deque.isEmpty() && heights[deque.peek()] >= heights[i]) {
+        right[deque.pop()] = i; // 栈内的右边界为当前
+      }
+      left[i] = deque.isEmpty() ? -1 : deque.peek(); // 递增则当前位置左边界为栈顶
+      deque.push(i);
+    }
+    for (int i = 0; i < len; ++i) { // 计算并确定最大值
+      ans = Math.max(ans, (right[i] - left[i] - 1) * heights[i]);
+    }
+    return ans;
+  }
+
+  /**
+   * 85. 最大矩形 <br>
+   * 该矩阵每一行至第一行可以看成一个柱状图，那么可以逐行使用84题的解法求出每层柱状图的最大值，最后汇总即可。
+   */
+  public int maximalRectangle(char[][] matrix) {
+    int ans = 0, m = matrix.length, n = matrix[0].length;
+    int[][] heights = new int[m][n]; // 每个位置柱状图的高度
+    for (int i = 0; i < m; ++i) {
+      for (int j = 0; j < n; j++) {
+        if (matrix[i][j] == '1') { // 为1表示该位置有柱状图
+          heights[i][j] = i == 0 ? 1 : heights[i - 1][j] + 1; // 当前位置高度为上一行柱状图的高度加1
+        }
+      }
+    }
+    for (int i = 0; i < m; i++) { // 开始逐行计算并汇总结果
+      ans = Math.max(ans, largestRectangleArea(heights[i]));
     }
     return ans;
   }

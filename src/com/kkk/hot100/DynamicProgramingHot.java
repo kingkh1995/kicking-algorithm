@@ -1,5 +1,7 @@
 package com.kkk.hot100;
 
+import java.util.List;
+
 /**
  * 动态规划 <br>
  *
@@ -82,6 +84,25 @@ public class DynamicProgramingHot {
       r = p + q;
     }
     return r;
+  }
+
+  /**
+   * 139. 单词拆分 <br>
+   * 可以使用哈希表优化，用单词最后一个字符作为键收集单词，这样可以减少不必要的比对。
+   */
+  public boolean wordBreak(String s, List<String> wordDict) {
+    boolean[] dp = new boolean[s.length() + 1];
+    dp[0] = true;
+    for (int i = 1, index; i <= s.length(); ++i) {
+      for (String word : wordDict) {
+        if ((index = i - word.length()) >= 0 // index为单词首字母在字符串中的索引
+            && word.equals(s.substring(index, i)) // 当前子串尾部匹配了单词
+            && (dp[i] = dp[index])) { // 状态转移
+          break;
+        }
+      }
+    }
+    return dp[s.length()];
   }
 
   // ===============================================================================================

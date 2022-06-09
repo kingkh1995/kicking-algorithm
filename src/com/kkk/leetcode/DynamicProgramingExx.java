@@ -1,8 +1,6 @@
 package com.kkk.leetcode;
 
 import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * 动态规划 <br>
@@ -86,28 +84,6 @@ public class DynamicProgramingExx {
       }
     }
     return dp[amount] > amount ? -1 : dp[amount];
-  }
-
-  // 单词拆分，判断由给定字典是否可拼凑出给定单词。
-  public boolean wordBreak(String s, List<String> wordDict) {
-    // 以字典中单词最后一个字符构造符号表
-    var lastCWordMap =
-        wordDict.stream().collect(Collectors.groupingBy(word -> word.charAt(word.length() - 1)));
-    boolean[] dp = new boolean[s.length() + 1];
-    dp[0] = true;
-    for (int i = 1; i <= s.length(); i++) {
-      var words = lastCWordMap.get(s.charAt(i - 1));
-      if (words != null) {
-        for (String word : words) {
-          int start = i - word.length();
-          if (start >= 0 && dp[start] && word.equals(s.substring(start, i))) {
-            dp[i] = true;
-            break;
-          }
-        }
-      }
-    }
-    return dp[s.length()];
   }
 
   // ===============================================================================================

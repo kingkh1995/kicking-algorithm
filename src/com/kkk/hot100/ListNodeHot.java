@@ -90,4 +90,34 @@ public class ListNodeHot {
     }
     return lists[0];
   }
+
+  /** 141. 环形链表 <br> */
+  public boolean hasCycle(ListNode head) {
+    ListNode fast = head, slow = head;
+    do {
+      if (fast == null || (fast = fast.next) == null) {
+        return false;
+      }
+    } while ((fast = fast.next) != (slow = slow.next));
+    return true;
+  }
+
+  /**
+   * 142. 环形链表 II <br>
+   * 快指针每次两步，慢指针每次一步，相遇后，一个指针从起点出发，一个从相遇点出发，最后相遇的点即是入环的第一个节点。
+   */
+  public ListNode detectCycle(ListNode head) {
+    ListNode fast = head, slow = head;
+    do {
+      if (fast == null || (fast = fast.next) == null) {
+        return null;
+      }
+    } while ((fast = fast.next) != (slow = slow.next));
+    fast = head;
+    while (fast != slow) { // 可能第一个节点是交点，不能先赋值。
+      fast = fast.next;
+      slow = slow.next;
+    }
+    return fast;
+  }
 }

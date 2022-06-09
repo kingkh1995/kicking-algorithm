@@ -1,8 +1,10 @@
 package com.kkk.hot100;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Deque;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -162,7 +164,7 @@ public class RecursionAndIterationHot {
     boolean[] marked; // 标记数字是否可用，数字不重复且范围为-10到10，则使用长度21的boolean数组。
 
     public List<List<Integer>> permute(int[] nums) {
-      ans = new LinkedList<>();
+      ans = new ArrayList<>();
       list = new ArrayList<>(nums.length); // list最大容量固定
       marked = new boolean[21];
       for (int n : nums) {
@@ -208,11 +210,11 @@ public class RecursionAndIterationHot {
    */
   class subsetsSolution {
     List<List<Integer>> ans;
-    LinkedList<Integer> stack;
+    Deque<Integer> stack;
 
     public List<List<Integer>> subsets(int[] nums) {
       ans = new ArrayList<>();
-      stack = new LinkedList<>();
+      stack = new ArrayDeque<>(nums.length);
       backTrack(nums, 0);
       return ans;
     }
@@ -275,6 +277,15 @@ public class RecursionAndIterationHot {
       marked[i][j] = false; // 回退过程中会重置marked数组
       return result;
     }
+  }
+
+  /** 121. 买卖股票的最佳时机 <br> */
+  public int maxProfit(int[] prices) {
+    int ans = 0, min = Integer.MAX_VALUE; // min为遍历过程中的最低价格
+    for (int n : prices) {
+      ans = Math.max(ans, n - (min = Math.min(min, n)));
+    }
+    return ans;
   }
 
   // ===============================================================================================
