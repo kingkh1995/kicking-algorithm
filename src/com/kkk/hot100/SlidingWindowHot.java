@@ -2,6 +2,7 @@ package com.kkk.hot100;
 
 /**
  * 滑动窗口 <br>
+ * 【滑动窗口属于动态规划的一种】
  *
  * @author KaiKoo
  */
@@ -23,17 +24,6 @@ public class SlidingWindowHot {
     return ans;
   }
 
-  /**
-   * 53.最大子数组和 <br>
-   * 可以使用动态规划，但没必要，只需要隐式维护一个滑动窗口，使用一个变量记录窗口内子数组和即可。
-   */
-  public int maxSubArray(int[] nums) {
-    int ans = nums[0], max = nums[0]; // dp表示滑动窗口内子数组的和
-    for (int i = 1; i < nums.length; ++i) {
-      ans = Math.max(ans, max = nums[i] + Math.max(max, 0));
-    }
-    return ans;
-  }
 
   // ===============================================================================================
 

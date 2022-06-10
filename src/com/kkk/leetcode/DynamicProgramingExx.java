@@ -19,21 +19,6 @@ public class DynamicProgramingExx {
   // ===============================================================================================
   /** 基础题 */
 
-  // 打家劫舍
-  public int rob(int[] nums) {
-    int l = nums.length;
-    if (l < 2) {
-      return nums[0];
-    }
-    int[] dp = new int[l];
-    dp[0] = nums[0];
-    dp[1] = Math.max(nums[0], nums[1]);
-    for (int i = 2; i < l; ++i) {
-      dp[i] = Math.max(dp[i - 1], nums[i] + dp[i - 2]);
-    }
-    return dp[l - 1];
-  }
-
   // 完全平方数
   public int numSquares(int n) {
     int[] dp = new int[n + 1];

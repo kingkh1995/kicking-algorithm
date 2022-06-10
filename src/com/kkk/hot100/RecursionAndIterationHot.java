@@ -11,7 +11,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 递归和迭代 【回溯法属于递归、贪心属于迭代】 <br>
+ * 递归和迭代 【回溯 & 贪心】 <br>
+ * 【回溯属于递归、贪心属于迭代】
  *
  * @author KaiKoo
  */
@@ -284,6 +285,24 @@ public class RecursionAndIterationHot {
     int ans = 0, min = Integer.MAX_VALUE; // min为遍历过程中的最低价格
     for (int n : prices) {
       ans = Math.max(ans, n - (min = Math.min(min, n)));
+    }
+    return ans;
+  }
+
+  /**
+   * 238. 除自身以外数组的乘积 <br>
+   * 先从左往右遍历，求出前缀元素乘积，再从右往左遍历，累乘上所有后缀元素。
+   */
+  public int[] productExceptSelf(int[] nums) {
+    int[] ans = new int[nums.length];
+    ans[0] = 1;
+    for (int i = 1; i < nums.length; ++i) {
+      ans[i] = ans[i - 1] * nums[i - 1];
+    }
+    int m = 1; // 从右往左遍历使用辅助变量
+    for (int i = nums.length - 1; i >= 0; --i) {
+      ans[i] *= m;
+      m *= nums[i];
     }
     return ans;
   }

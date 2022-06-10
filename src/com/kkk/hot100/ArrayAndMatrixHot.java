@@ -72,6 +72,116 @@ public class ArrayAndMatrixHot {
     }
   }
 
+  /**
+   * 169. 多数元素 <br>
+   * 【投票算法】，如果存在多数元素，等于多数元素则为1，否则为-1，遍历数组累加完结果肯定大于0。 <br>
+   * 随机选取一个元素作为多数元素，如果累加结果小0了，则抛弃上一段区间，在下一段区间内重新选择多数元素并累加结果， <br>
+   * 遍历完成后，最后选择的一个多数元素肯定是数组的多数元素，因为之前的统计区间内真正多数元素的个数没超过区间的一半 <br>
+   * 故最后一段统计区间内多数元素的个数肯定超过最后一段区间的一半，即最后一段统计区间内的多数元素肯定是数组的多数元素。 <br>
+   * 【则如果确定存在多数元素遍历一遍即可找出，否则需要再遍历一遍判断最后一段统计区间内多数元素是不是整个数组的多数元素。】
+   */
+  public int majorityElement(int[] nums) {
+    int ans = 0, count = 0;
+    for (int n : nums) {
+      count += n == (ans = count == 0 ? n : ans) ? 1 : -1; // count为0了则重新选择多数元素
+    }
+    return ans;
+  }
+
+  /** 208. 实现 Trie (前缀树) <br> */
+  class Trie {
+    private Trie[] children = new Trie[26]; // 字符集只包含小写字母
+    private boolean existed = false; // 是否存在单词
+
+    public void insert(String word) {
+      Trie node = this;
+      for (int i = 0; i < word.length(); i++) {
+        int index = word.charAt(i) - 'a';
+        node =
+            node.children[index] = null == node.children[index] ? new Trie() : node.children[index];
+      }
+      node.existed = true;
+    }
+
+    public boolean search(String word) {
+      Trie node = searchPrefix(word);
+      return node != null && node.existed;
+    }
+
+    public boolean startsWith(String prefix) {
+      return searchPrefix(prefix) != null;
+    }
+
+    private Trie searchPrefix(String prefix) {
+      Trie node = this;
+      for (int i = 0; i < prefix.length(); i++) {
+        int index = prefix.charAt(i) - 'a';
+        if (node.children[index] == null) {
+          return null;
+        }
+        node = node.children[index];
+      }
+      return node;
+    }
+  }
+
+  /**
+   * 215. 数组中的第K个最大元素 <br>
+   * 可以使用快速排序（递归）、三向切分排序（迭代）、快速三向切分排序（迭代）。
+   */
+  class findKthLargestSolution { // 普通的快速排序，使用三取样切分。
+    public int findKthLargest(int[] nums, int k) {
+      return quickSelect(nums, 0, nums.length - 1, nums.length - k);
+    }
+
+    private int quickSelect(int[] nums, int lo, int hi, int index) { // 快速选择排序后在index位置的值
+      if (lo >= hi) {
+        return nums[lo];
+      }
+      int p = partition(nums, lo, hi);
+      if (p == index) {
+        return nums[p];
+      }
+      return p > index ? quickSelect(nums, lo, p - 1, index) : quickSelect(nums, p + 1, hi, index);
+    }
+
+    private int partition(int[] nums, int lo, int hi) {
+      int mid = (lo + hi) / 2, a = nums[lo], b = nums[mid], c = nums[hi]; // 三取样
+      if ((a - b) * (b - c) > 0) {
+        ArrayUtils.swap(nums, lo, mid);
+      } else if ((a - c) * (c - b) > 0) {
+        ArrayUtils.swap(nums, lo, hi);
+      }
+      int pivot = nums[lo], i = hi + 1; // [i,hi]区间为大于等于pivot的区间
+      for (int j = hi; j > lo; --j) {
+        if (nums[j] >= pivot) { // 从右边开始找到大于等于pivot的元素则交换到区间最右边
+          ArrayUtils.swap(nums, --i, j);
+        }
+      }
+      ArrayUtils.swap(nums, --i, lo); // 最后把pivot放到[i,hi]区间的左边
+      return i;
+    }
+  }
+
+  /**
+   * 240. 搜索二维矩阵 II <br>
+   * 从左下角或右上角出发查找即可。
+   */
+  public boolean searchMatrix(int[][] matrix, int target) {
+    int m = matrix.length, n = matrix[0].length;
+    for (int i = 0, j = n - 1; i < m && j >= 0; ) {
+      int cmp = target - matrix[i][j];
+      if (cmp == 0) {
+        return true;
+      } else if (cmp > 0) {
+        i++;
+      } else {
+        j--;
+      }
+    }
+    return false;
+  }
+
   // ===============================================================================================
 
   /**

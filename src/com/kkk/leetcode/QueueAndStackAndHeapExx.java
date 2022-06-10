@@ -15,7 +15,6 @@ import java.util.stream.IntStream;
 
 /**
  * 队列（BFS）& 栈 (DFS) & 堆 <br>
- * 回溯法需要回退，而dfs不需要。
  *
  * @author KaiKoo
  */
@@ -23,71 +22,6 @@ public class QueueAndStackAndHeapExx {
 
   // ===============================================================================================
   /** 基础题 */
-
-  // 岛屿问题
-  // 解法：遍历所有格子 找到第一个陆地 通过遍历相邻的陆地，并将探索过的陆地标记为已探索
-  static class numIslandsSolution {
-
-    static final int[][] dirs = new int[][] {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
-
-    public int numIslands(char[][] grid) {
-      int count = 0;
-      for (int i = 0; i < grid.length; i++) {
-        for (int j = 0; j < grid[0].length; j++) {
-          if (grid[i][j] == '1') {
-            count++;
-            // 使用BFS或DFS
-            bfs(grid, i, j);
-          }
-        }
-      }
-      return count;
-    }
-
-    // 解法1：BFS 使用队列
-    private void bfs(char[][] grid, int i, int j) {
-      // 起始点先置为0
-      grid[i][j] = '0';
-      Queue queue = new Queue();
-      // 只使用一个数字表示坐标 i必然小于grid.length
-      queue.enqueue(i + j * grid.length);
-      while (!queue.isEmpty()) {
-        // 出队列
-        int code = queue.dequeue();
-        int co = code % grid.length;
-        int ro = code / grid.length;
-        for (int[] dir : dirs) {
-          int column = co + dir[0];
-          int row = ro + dir[1];
-          if (column >= 0
-              && column < grid.length
-              && row >= 0
-              && row < grid[0].length
-              && grid[column][row] == '1') {
-            grid[column][row] = '0';
-            queue.enqueue(column + row * grid.length);
-          }
-        }
-      }
-    }
-
-    // 解法2：DFS 使用递归（即不显示使用栈，而是使用系统的方法栈）
-    private void dfs(char[][] grid, int co, int ro) {
-      // 当前点置为0
-      grid[co][ro] = '0';
-      for (int[] dir : dirs) {
-        int column = co + dir[0];
-        int row = ro + dir[1];
-        if (column >= 0
-            && column < grid.length
-            && row >= 0
-            && row < grid[0].length
-            && grid[column][row] == '1') {
-          dfs(grid, column, row);
-        }
-      }
-    }
-  }
 
   // 完全平方数
   public int numSquares(int n) {
@@ -252,35 +186,6 @@ public class QueueAndStackAndHeapExx {
       }
     }
     return stack.pop().toString();
-  }
-
-  // 滑动窗口最大值，使用双端队列。
-  public int[] maxSlidingWindow(int[] nums, int k) {
-    int l = nums.length;
-    int[] ans = new int[Math.max(l + 1 - k, 1)];
-    // 双端队列保存元素的索引，队首保存窗口的最大值，队尾保存比最大值小的值。
-    Deque<Integer> deque = new LinkedList<>();
-    for (int i = 0; i < l; i++) {
-      // 去除所有队首过期元素
-      while (!deque.isEmpty() && deque.peekFirst() + k <= i) {
-        deque.pollFirst();
-      }
-      // 入队，如果是当前最大值则入队首，否则移除队尾所有小的元素并入队尾。
-      if (deque.isEmpty() || nums[i] > nums[deque.peekFirst()]) {
-        deque.addFirst(i);
-      } else {
-        // 等于的元素仍然留在队列中
-        while (nums[i] > nums[deque.peekLast()]) {
-          deque.pollLast();
-        }
-        deque.addLast(i);
-      }
-      // 取最大值
-      if (i >= k - 1) {
-        ans[i + 1 - k] = nums[deque.peekFirst()];
-      }
-    }
-    return ans;
   }
 
   // 矩阵中的最长递增路径

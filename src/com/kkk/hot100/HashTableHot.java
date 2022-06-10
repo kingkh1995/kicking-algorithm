@@ -58,8 +58,6 @@ public class HashTableHot {
       Node prev;
       Node next;
 
-      public Node() {}
-
       public Node(int key, int val) {
         this.key = key;
         this.val = val;
@@ -73,7 +71,7 @@ public class HashTableHot {
     public LRUCache(int capacity) {
       this.map = new HashMap<>(capacity);
       this.capacity = capacity;
-      head = tail = new Node(); // 可以使用同一个虚拟节点
+      head = tail = new Node(0, 0); // 可以使用同一个虚拟节点
       head.next = tail;
       tail.prev = head;
     }

@@ -467,17 +467,17 @@ public class GraphsExx {
       throw new UnsupportedOperationException();
     }
     boolean[] marked = new boolean[digraph.vertices()];
-    int[] indegrees = new int[digraph.vertices()];
+    int[] inDegree = new int[digraph.vertices()];
     //  计算入度
     Digraph reverse = digraph.reverse();
     for (int i = 0; i < digraph.vertices(); i++) {
-      indegrees[i] = reverse.adj(i).length;
+      inDegree[i] = reverse.adj(i).length;
     }
     int[] sort = new int[digraph.vertices()];
     Queue queue = new Queue();
     // 入度为0为起点 入队列
     for (int i = 0; i < digraph.vertices(); i++) {
-      if (indegrees[i] == 0) {
+      if (inDegree[i] == 0) {
         queue.enqueue(i);
       }
     }
@@ -492,11 +492,11 @@ public class GraphsExx {
           continue;
         }
         // 邻接点入度减去1
-        int indegree = indegrees[i];
+        int indegree = inDegree[i];
         if (indegree == 1) {
           queue.enqueue(i);
         }
-        indegrees[i] = indegree - 1;
+        inDegree[i] = indegree - 1;
       }
     }
     return sort;

@@ -1,8 +1,6 @@
 package com.kkk.algs4;
 
 import com.kkk.supports.ArrayUtils;
-import com.kkk.supports.ListNode;
-import com.kkk.supports.NodeUtils;
 import com.kkk.supports.Queue;
 import com.kkk.supports.Stack;
 import java.util.Arrays;
@@ -168,56 +166,6 @@ public class FundamentalsExx {
     System.out.println(isPopSequence(new int[] {0, 4, 6, 5, 3, 8, 1, 7, 2, 9}));
     System.out.println(isPopSequence(new int[] {1, 4, 7, 9, 8, 6, 5, 3, 0, 2}));
     System.out.println(isPopSequence(new int[] {2, 1, 4, 3, 6, 5, 8, 7, 9, 0}));
-  }
-
-  // ===============================================================================================
-
-  /** 1.3.30 反转链表 */
-  // 迭代方法 按原始顺序迭代结点从后往前构建一条新链表
-  private static ListNode reverse1(ListNode t) {
-    // 指向剩余未反转链表的首结点
-    ListNode first = t;
-    // 指向反转链表的首结点
-    ListNode reverse = null;
-    // 循环终止条件 所有链表都反转完
-    while (first != null) {
-      // 指向剩余结点的第二个结点
-      ListNode second = first.next;
-      // 将当前首结点移到反转链表上
-      first.next = reverse;
-      // 反转链表首结点变成当前首结点
-      reverse = first;
-      // 未反转链表首结点后移
-      first = second;
-    }
-    return reverse;
-  }
-
-  // 递归方法
-  private static ListNode reverse2(ListNode first) {
-    if (first == null || first.next == null) {
-      return first;
-    }
-    // 记录下一个结点，将剩余的链表反转后，该结点就是最后一个结点
-    ListNode second = first.next;
-    // 反转剩余链表得到首结点
-    ListNode rest = reverse2(second);
-    // 将当前first移到反转链表最后面
-    second.next = first;
-    first.next = null;
-    return rest;
-  }
-
-  public static void reverseTest() {
-    ListNode first = NodeUtils.distinctSortedLinkedList(10, 1, 11);
-    first = reverse1(first);
-    NodeUtils.printNode(first);
-    first = reverse2(first);
-    NodeUtils.printNode(first);
-    first = reverse2(first);
-    NodeUtils.printNode(first);
-    first = reverse1(first);
-    NodeUtils.printNode(first);
   }
 
   // ===============================================================================================

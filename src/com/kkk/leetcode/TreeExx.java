@@ -143,16 +143,6 @@ public class TreeExx {
     return root;
   }
 
-  // 二叉树的最近公共祖先，自顶向下递归求解。
-  public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
-    if (root == null || root == p || root == q) {
-      return root;
-    }
-    TreeNode left = lowestCommonAncestor(root.left, p, q);
-    TreeNode right = lowestCommonAncestor(root.right, p, q);
-    return left != null ? right != null ? root : left : right;
-  }
-
   // 从前序与中序遍历序列构造二叉树，递归解法
   public TreeNode buildTree(int[] preorder, int[] inorder) {
     return buildTree(preorder, 0, preorder.length - 1, inorder, 0, inorder.length - 1);

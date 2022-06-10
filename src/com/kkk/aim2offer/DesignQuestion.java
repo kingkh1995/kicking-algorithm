@@ -77,39 +77,6 @@ public class DesignQuestion {
     }
   }
 
-  /*
-  实现一个栈，包含一个能获取当前最小元素的min函数，min top pop push时间复杂度都是o(1)
-   */
-  public static class StackWithMin<T extends Comparable<T>> {
-
-    // 元素存储栈
-    private final Deque<T> stack = new LinkedList<>();
-    // 最小值存储栈
-    private final Deque<T> minStack = new LinkedList<>();
-
-    public void push(T t) {
-      stack.push(t);
-      // push时同时存储push该值后的当前最小值
-      // element() = peek() = peekFirst()
-      T minTop = minStack.element();
-      minStack.push(minTop == null || minTop.compareTo(t) > 0 ? t : minTop);
-    }
-
-    public T pop() {
-      // 最小值存储栈也要pop
-      minStack.pop();
-      return stack.pop();
-    }
-
-    public T top() {
-      return stack.element();
-    }
-
-    public T min() {
-      return minStack.element();
-    }
-  }
-
   // 测试用例
 
   public static void myQueueTest() {
@@ -142,24 +109,4 @@ public class DesignQuestion {
     System.out.print(myStack.pop());
   }
 
-  public static void stackWithMinTest() {
-    StackWithMin<Integer> stack = new StackWithMin<>();
-    System.out.println("top->" + stack.top() + "min->" + stack.min());
-    stack.push(3);
-    System.out.println("top->" + stack.top() + "min->" + stack.min());
-    stack.push(4);
-    System.out.println("top->" + stack.top() + "min->" + stack.min());
-    stack.push(2);
-    System.out.println("top->" + stack.top() + "min->" + stack.min());
-    stack.push(1);
-    System.out.println("top->" + stack.top() + "min->" + stack.min());
-    stack.push(1);
-    System.out.println("top->" + stack.top() + "min->" + stack.min());
-    stack.pop();
-    System.out.println("top->" + stack.top() + "min->" + stack.min());
-    stack.pop();
-    System.out.println("top->" + stack.top() + "min->" + stack.min());
-    stack.push(0);
-    System.out.println("top->" + stack.top() + "min->" + stack.min());
-  }
 }

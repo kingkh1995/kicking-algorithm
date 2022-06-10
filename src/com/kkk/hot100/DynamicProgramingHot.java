@@ -4,6 +4,7 @@ import java.util.List;
 
 /**
  * 动态规划 <br>
+ * 【隐式动态规划：如果不需要查看所有之前状态则可以直接使用变量保存状态】
  *
  * @author KaiKoo
  */
@@ -34,6 +35,18 @@ public class DynamicProgramingHot {
       }
     }
     return res;
+  }
+
+  /**
+   * 53.最大子数组和 <br>
+   * 隐式动态规划，只使用一个变量即可。
+   */
+  public int maxSubArray(int[] nums) {
+    int ans = nums[0], max = nums[0];
+    for (int i = 1; i < nums.length; ++i) {
+      ans = Math.max(ans, max = nums[i] + Math.max(max, 0));
+    }
+    return ans;
   }
 
   /** 62. 不同路径 <br> */
@@ -74,7 +87,7 @@ public class DynamicProgramingHot {
 
   /**
    * 70. 爬楼梯 <br>
-   * 实际上就是计算斐波那契数列，不使用用递归，会超出时间限制，使用隐式动态规划。
+   * 实际上就是计算斐波那契数列，不使用递归，会超出时间限制，使用隐式动态规划。
    */
   public int climbStairs(int n) {
     int p, q = 0, r = 1;
@@ -103,6 +116,49 @@ public class DynamicProgramingHot {
       }
     }
     return dp[s.length()];
+  }
+
+  /**
+   * 152. 乘积最大子数组 <br>
+   * 隐式动态规划，记录乘积最大值和最小值。nums[i]、nums[i]*max[i-1]、nums[i]*min[i-1]三者最大为max[i]最小为min[i]。
+   */
+  public int maxProduct(int[] nums) {
+    int ans = nums[0], max = ans, min = ans, maxN, minN;
+    for (int i = 1; i < nums.length; ++i) { // 注意从索引1位置开始
+      max = Math.max(nums[i], Math.max(maxN = max * nums[i], minN = min * nums[i]));
+      min = Math.min(nums[i], Math.min(maxN, minN));
+      ans = Math.max(ans, max);
+    }
+    return ans;
+  }
+
+  /**
+   * 198. 打家劫舍 <br>
+   * 因为只需要查看上个状态和上上个状态，则可以使用变量保存以节约空间。
+   */
+  public int rob(int[] nums) {
+    int m2 = 0, m1 = nums[0], max = m1;
+    for (int i = 1; i < nums.length; ++i) {
+      max = Math.max(nums[i] + m2, m1);
+      m2 = m1; // 上上个状态
+      m1 = max; // 上个状态
+    }
+    return max;
+  }
+
+  /** 221. 最大正方形 <br> */
+  public int maximalSquare(char[][] matrix) {
+    int ans = 0, m = matrix.length, n = matrix[0].length;
+    int[][] dp = new int[m + 1][n + 1];
+    for (int i = 1; i <= m; ++i) {
+      for (int j = 1; j <= n; ++j) {
+        if (matrix[i - 1][j - 1] == '1') {
+          dp[i][j] = 1 + Math.min(Math.min(dp[i - 1][j], dp[i][j - 1]), dp[i - 1][j - 1]);
+          ans = Math.max(ans, dp[i][j] * dp[i][j]);
+        }
+      }
+    }
+    return ans;
   }
 
   // ===============================================================================================

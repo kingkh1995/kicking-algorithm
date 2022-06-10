@@ -1,12 +1,19 @@
 package com.kkk.hot100;
 
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Deque;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
+import java.util.PriorityQueue;
+import java.util.Queue;
 
 /**
- * 栈和队列 【DFS & BFS】<br>
+ * 栈和队列和优先队列 【DFS & BFS】<br>
+ * 【回溯法回退时需要重置状态，而DFS不需要】
  *
  * @author KaiKoo
  */
@@ -24,6 +31,167 @@ public class StackAndQueueHot {
       }
     }
     return stack.isEmpty(); // 结束时栈为空则表示有效
+  }
+
+  /** 155. 最小栈 <br> */
+  class MinStack {
+    private Deque<Integer> stack = new LinkedList<>();
+    private Deque<Integer> min = new LinkedList<>();
+
+    public MinStack() {}
+
+    public void push(int val) {
+      stack.push(val);
+      min.push(min.isEmpty() || val <= min.peek() ? val : min.peek()); // push时将push后最小值push到min
+    }
+
+    public void pop() {
+      stack.pop();
+      min.pop();
+    }
+
+    public int top() {
+      return stack.peek();
+    }
+
+    public int getMin() {
+      return min.peek();
+    }
+  }
+
+  /**
+   * 200. 岛屿数量 <br>
+   * DFS & BFS都可以，并将给定数组作为标记数组。
+   */
+  class numIslandsSolution {
+    static final int[][] dirs = new int[][] {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
+
+    public int numIslands(char[][] grid) {
+      int count = 0;
+      for (int i = 0; i < grid.length; ++i) {
+        for (int j = 0; j < grid[0].length; ++j) {
+          if (grid[i][j] == '1') {
+            dfs(grid, i, j);
+            count++;
+          }
+        }
+      }
+      return count;
+    }
+
+    private void dfs(char[][] grid, int i, int j) {
+      grid[i][j] = '0';
+      for (int[] dir : dirs) {
+        int ni = i + dir[0], nj = j + dir[1];
+        if (ni >= 0 && ni < grid.length && nj >= 0 && nj < grid[0].length && grid[ni][nj] == '1') {
+          dfs(grid, ni, nj);
+        }
+      }
+    }
+
+    public int numIslands0(char[][] grid) {
+      int m = grid.length, n = grid[0].length, count = 0;
+      Queue<Integer> queue = new ArrayDeque<>(m * n); // 使用BFS，需要借助队列。
+      for (int i = 0; i < m; ++i) {
+        for (int j = 0; j < n; ++j) {
+          if (grid[i][j] == '1') {
+            count++;
+            grid[i][j] = '0';
+            queue.offer(i + j * m);
+            while (!queue.isEmpty()) {
+              int code = queue.poll(), row = code % m, col = code / m;
+              for (int[] dir : dirs) {
+                int nr = row + dir[0], nc = col + dir[1];
+                if (nr >= 0
+                    && nr < grid.length
+                    && nc >= 0
+                    && nc < grid[0].length
+                    && grid[nr][nc] == '1') {
+                  grid[nr][nc] = '0';
+                  queue.offer(nr + nc * m);
+                }
+              }
+            }
+          }
+        }
+      }
+      return count;
+    }
+  }
+
+  /** 207. 课程表 <br> */
+  class canFinishSolution {
+    List<List<Integer>> adj; // 有向图邻接表
+
+    private void build(int numCourses, int[][] prerequisites) {
+      adj = new ArrayList<>(numCourses);
+      for (int i = 0; i < numCourses; ++i) {
+        adj.add(new LinkedList<>());
+      }
+      inDegree = new int[numCourses];
+      for (int[] p : prerequisites) {
+        adj.get(p[1]).add(p[0]); // 前置为p[1]，则边为p[1]->p[0]。
+        ++inDegree[p[0]]; // p[0]入度加一
+      }
+    }
+
+    // DFS：拓扑排序即是DFS的逆后续排列
+    private int[] visited; // 1表示在DFS路径上、2表示在拓扑排序中。
+    private boolean hasCycle; // 是否存在环，有环则表示无法完成。
+
+    public boolean canFinish1(int numCourses, int[][] prerequisites) {
+      build(numCourses, prerequisites);
+      visited = new int[numCourses];
+      hasCycle = false;
+      for (int i = 0; i < numCourses; ++i) {
+        if (hasCycle) {
+          return false;
+        } else if (visited[i] == 0) {
+          dfs(i); // dfs求拓扑排序
+        }
+      }
+      return true;
+    }
+
+    private void dfs(int i) {
+      visited[i] = 1; // 先标记为在DFS路径上
+      for (int v : adj.get(i)) {
+        if (visited[v] == 0) {
+          dfs(v);
+          if (hasCycle) {
+            return;
+          }
+        } else if (visited[v] == 1) {
+          hasCycle = true;
+          return;
+        }
+      }
+      visited[i] = 2; // 因为拓扑排序是逆后续排列，故dfs回退后才标记为在拓扑排序中。
+    }
+
+    // BFS：计算每个顶点的入度，如果为0则可以加入拓扑排序，之后删去其作为起点的边。
+    int[] inDegree; // 表示每个点的入度
+
+    public boolean canFinish2(int numCourses, int[][] prerequisites) {
+      build(numCourses, prerequisites);
+      int count = 0; // 当前拓扑排序中的点个数，最终如果个数小于顶点总数则表示无法完成。
+      Queue<Integer> queue = new ArrayDeque<>(numCourses);
+      for (int i = 0; i < numCourses; ++i) {
+        if (inDegree[i] == 0) { // 入度为0的顶点入队列
+          queue.offer(i);
+        }
+      }
+      while (!queue.isEmpty()) {
+        int poll = queue.poll();
+        count++; // 入度为0的顶点可以加入拓扑排序，因为已经不存在其前置顶点了。
+        for (int v : adj.get(poll)) {
+          if (--inDegree[v] == 0) { // 删去边终点的入度减一
+            queue.offer(v); // 如果终点入度为0了则也可以加入拓扑排序
+          }
+        }
+      }
+      return count == numCourses;
+    }
   }
 
   // ===============================================================================================
@@ -120,5 +288,45 @@ public class StackAndQueueHot {
       ans = Math.max(ans, largestRectangleArea(heights[i]));
     }
     return ans;
+  }
+
+  /**
+   * 239. 滑动窗口最大值 <br>
+   * 【单调双端队列】，使队内元素大小为严格单调递减，将元素加入队尾并维护单调性，同时从队首获取最大值。
+   */
+  public int[] maxSlidingWindow(int[] nums, int k) {
+    int[] ans = new int[nums.length - k + 1];
+    Deque<Integer> deque = new ArrayDeque<>(nums.length);
+    for (int i = 0; i < nums.length; ) {
+      while (!deque.isEmpty() && nums[deque.peekLast()] <= nums[i]) { // 维护队列单调性
+        deque.pollLast();
+      }
+      deque.offer(i); // 元素入单调队列
+      while (!deque.isEmpty() && deque.peek() + k <= i) { // 清除队首过期元素（索引小于i-k+1）
+        deque.poll();
+      }
+      if (++i >= k) { // 取最大值
+        ans[i - k] = nums[deque.peek()];
+      }
+    }
+    return ans;
+  }
+
+  /**
+   * 253. 会议室 II <br>
+   * 【优先队列】，使用最小堆模拟会议室，在每次会议开始时判断会议室的状态。
+   */
+  public int minMeetingRooms(int[][] intervals) {
+    Arrays.sort(intervals, Comparator.comparingInt(i -> i[0])); // 按会议开始时间排序
+    PriorityQueue<Integer> pq = new PriorityQueue<>(intervals.length); // 维护会议结束时间的最小堆
+    pq.offer(intervals[0][1]); // 第一场会议开始，开启一间会议室。
+    for (int i = 1; i < intervals.length; ++i) {
+      // 本场会议开始了，如果堆顶的会议室里的会议已经结束了，则直接使用该会议室即可，否则需要再开一间。
+      if (intervals[i][0] >= pq.peek()) {
+        pq.poll(); // 因为一场会议只能使用一个会议室，故只需要poll出一个。
+      }
+      pq.offer(intervals[i][1]); // 会议开始，加入会议结束时间。
+    }
+    return pq.size(); // 遍历完成，即所有会议都开始了，此时堆的大小即是总共开启的会议室的个数。
   }
 }

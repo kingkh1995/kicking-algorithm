@@ -8,7 +8,8 @@ import java.util.List;
 import java.util.Queue;
 
 /**
- * 树【节点非结点】 <br>
+ * 树 <br>
+ * 【节点非结点】
  *
  * @author KaiKoo
  */
@@ -153,6 +154,38 @@ public class TreeHot {
     }
   }
 
+  /**
+   * 226. 翻转二叉树 <br>
+   * 递归和迭代
+   */
+  class invertTreeSolution {
+    public TreeNode invertTree(TreeNode root) {
+      if (root == null) {
+        return null;
+      }
+      TreeNode tmp = root.left;
+      root.left = invertTree(root.right);
+      root.right = invertTree(tmp);
+      return root;
+    }
+
+    public TreeNode invertTree0(TreeNode root) {
+      Queue<TreeNode> queue = new LinkedList<>();
+      queue.offer(root);
+      while (!queue.isEmpty()) {
+        TreeNode node = queue.poll();
+        if (node != null) {
+          queue.offer(node.left);
+          queue.offer(node.right);
+          TreeNode tmp = node.left;
+          node.left = node.right;
+          node.right = tmp;
+        }
+      }
+      return root;
+    }
+  }
+
   // ===============================================================================================
 
   /**
@@ -251,5 +284,21 @@ public class TreeHot {
         prev = pop;
       }
     }
+  }
+
+  /**
+   * 236. 二叉树的最近公共祖先 <br>
+   * 找到从根节点到两个节点的路径并进行比对路径找出最近公共祖先，使用递归。<br>
+   * 分别从左右子树查找节点，如果两个节点都被找到，则当前节点为最近公共祖先，向上返回即可，否则返回找到的节点。<br>
+   * 拓展：如果是二叉搜索树，只要找到第一个位于两个值中间的值即可。<br>
+   */
+  public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+    if (root == null || root == p || root == q) { // 找到任一节点则返回该节点
+      return root;
+    }
+    TreeNode left = lowestCommonAncestor(root.left, p, q);
+    TreeNode right = lowestCommonAncestor(root.right, p, q);
+    // left和right都非空则返回root，否则返回其中非空的那个。
+    return null != left ? null != right ? root : left : right;
   }
 }

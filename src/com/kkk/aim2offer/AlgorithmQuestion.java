@@ -162,41 +162,6 @@ public class AlgorithmQuestion {
   }
 
   /*
-  未排序数组(设数字均大于0)中*可能*有一个数字出现的次数超过数组长度的一半，请找出这个数字
-   */
-  /*
-  解题思路：最多遍历两遍，时间复杂度o(n)
-   */
-  public int findNumberAppearMoreThanHalfTimes(int[] array) {
-    int ans = array[0];
-    int count = 1;
-    // 如果存在出现的次数超过数组长度的一半的数字，则遍历过后，ans必然是该数字
-    for (int n : array) {
-      if (count == 0) {
-        ans = n;
-        count++;
-      } else if (ans == n) {
-        count++;
-      } else {
-        count--;
-      }
-    }
-    // 此时结果，可能0（不存在该数字直接返回），大于等于1（需要再次遍历，判断一次）、
-    if (count == 0) {
-      return count;
-    }
-    count = 0;
-    for (int n : array) {
-      if (n == ans) {
-        count++;
-      } else {
-        count--;
-      }
-    }
-    return count < 1 ? 0 : ans;
-  }
-
-  /*
   获取第i个丑数，丑数的因子只能为2,3,5 第一个丑数是1
    */
   /*
@@ -357,15 +322,6 @@ public class AlgorithmQuestion {
     ALGORITHM_QUESTION.printRectangleClockwise(
         new int[][] {{1, 2, 3, 4, 5}, {6, 7, 8, 9, 10}, {11, 12, 13, 14, 15}});
     System.out.println();
-  }
-
-  public static void findNumberAppearMoreThanHalfTimesTest() {
-    System.out.println(
-        ALGORITHM_QUESTION.findNumberAppearMoreThanHalfTimes(
-            new int[] {1, 2, 1, 2, 1, 2, 3, 3, 3}));
-    System.out.println(
-        ALGORITHM_QUESTION.findNumberAppearMoreThanHalfTimes(
-            new int[] {1, 2, 3, 2, 2, 2, 5, 2, 4}));
   }
 
   public static void getKthUglyNumberTest() {
