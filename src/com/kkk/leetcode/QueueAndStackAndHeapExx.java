@@ -14,7 +14,7 @@ import java.util.PriorityQueue;
 import java.util.stream.IntStream;
 
 /**
- * 队列（BFS）& 栈 (DFS) & 堆 <br>
+ * 队列（BFS）& 栈 (DFS) & 堆（优先队列） <br>
  *
  * @author KaiKoo
  */
@@ -22,38 +22,6 @@ public class QueueAndStackAndHeapExx {
 
   // ===============================================================================================
   /** 基础题 */
-
-  // 完全平方数
-  public int numSquares(int n) {
-    Queue queue = new Queue();
-    queue.enqueue(0);
-    int count = 1;
-    // 标记数组
-    boolean[] visited = new boolean[n];
-    while (!queue.isEmpty()) {
-      int size = queue.size();
-      while (size-- > 0) {
-        int sum = queue.dequeue();
-        // 标记
-        visited[sum] = true;
-        // 添加子节点
-        for (int i = 1; i <= n; i++) {
-          int t = sum + i * i;
-          if (t == n) {
-            return count; // 等于则表示找到
-          } else if (t < n) {
-            if (!visited[t]) {
-              queue.enqueue(t); // 小于且未标记过则加入
-            }
-          } else {
-            break; // 大于了则退出循环，后面的结点已经没意义了
-          }
-        }
-      }
-      count++;
-    }
-    return count;
-  }
 
   // ===============================================================================================
   /** 拔高题 */

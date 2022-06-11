@@ -1,7 +1,5 @@
 package com.kkk.leetcode;
 
-import java.util.Arrays;
-
 /**
  * 动态规划 <br>
  * 494
@@ -14,62 +12,11 @@ public class DynamicProgramingExx {
    * 三个模板： <br>
    * 1、dp[i][j]: i-j的区间；2、dp[i]：0-i区间；3、dp[i]：以i结尾的最大连续区间。 <br>
    * <br>
+   * 确定遍历顺序要看需要查看哪个方向的状态，则提前计算出该方向的状态。
    */
 
   // ===============================================================================================
   /** 基础题 */
-
-  // 完全平方数
-  public int numSquares(int n) {
-    int[] dp = new int[n + 1];
-    dp[0] = 0;
-    dp[1] = 1;
-    for (int i = 2; i <= n; i++) {
-      int count = dp[i - 1] + 1;
-      for (int j = 2; j < i; j++) {
-        int p = j * j;
-        if (p > i) {
-          break;
-        }
-        count = Math.min(dp[i - p] + 1, count);
-      }
-      dp[i] = count;
-    }
-    return dp[n];
-  }
-
-  // 最长上升子序列
-  public int lengthOfLIS(int[] nums) {
-    int l = nums.length;
-    int[] dp = new int[l];
-    dp[0] = 1;
-    int ans = 1;
-    for (int i = 1; i < l; ++i) {
-      dp[i] = 1;
-      for (int j = i - 1; j >= 0; j--) {
-        if (nums[i] > nums[j]) {
-          dp[i] = Math.max(1 + dp[j], dp[i]);
-        }
-      }
-      ans = Math.max(ans, dp[i]);
-    }
-    return ans;
-  }
-
-  // 零钱兑换
-  public int coinChange(int[] coins, int amount) {
-    int[] dp = new int[amount + 1];
-    Arrays.fill(dp, amount + 1);
-    dp[0] = 0;
-    for (int i = 1; i <= amount; ++i) {
-      for (int n : coins) {
-        if (n <= i) {
-          dp[i] = Math.min(dp[i], dp[i - n] + 1);
-        }
-      }
-    }
-    return dp[amount] > amount ? -1 : dp[amount];
-  }
 
   // ===============================================================================================
   /** 拔高题 */

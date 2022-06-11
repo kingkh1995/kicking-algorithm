@@ -205,4 +205,17 @@ public class ArrayAndMatrixHot {
     // 反转递减序列，如果i=-1则会重置。
     ArrayUtils.reverse(nums, i + 1, nums.length - 1);
   }
+
+  /**
+   * 287. 寻找重复数 <br>
+   * 最佳解法：转换为求有环链表的交点问题，链表头节点为0，同时交点不可能为0。 <br>
+   * 如何证明数组中存在了重复数？只需要将数字交换到索引值等于它的位置，如果发现位置上的值已经等于它了，则表示存在重复数。
+   */
+  public int findDuplicate(int[] nums) {
+    int slow = 0, fast = 0;
+    while ((slow = nums[slow]) != (fast = nums[nums[fast]])) {}
+    slow = 0;
+    while ((slow = nums[slow]) != (fast = nums[fast])) {}
+    return slow;
+  }
 }

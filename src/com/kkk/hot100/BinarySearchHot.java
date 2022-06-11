@@ -122,4 +122,9 @@ public class BinarySearchHot {
     // 元素总数为奇数则直接返回右侧值，因为右侧元素多1。
     return ((nums1.length + nums2.length) & 1) == 1 ? mh : (ml + mh) / 2D;
   }
+
+  /**
+   * 287. 寻找重复数 <br>
+   * todo... 二分查找解法 <br>
+   */
 }

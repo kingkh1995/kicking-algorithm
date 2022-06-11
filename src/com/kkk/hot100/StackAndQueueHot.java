@@ -5,11 +5,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Deque;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Queue;
+import java.util.Set;
 
 /**
  * 栈和队列和优先队列 【DFS & BFS】<br>
@@ -194,6 +196,36 @@ public class StackAndQueueHot {
     }
   }
 
+  /**
+   * 279. 完全平方数 <br>
+   * 最优解法：【BFS】从0出发，下一节点为当前节点值加上任一平方数，bfs搜索直到找到。 <br>
+   */
+  public int numSquares(int n) {
+    Queue<Integer> queue = new ArrayDeque<>(n);
+    boolean[] marked = new boolean[n]; // 标记数组，长度n即可，最多只到n-1节点
+    int count = 0; // bfs层数，即完全平方数的最少数量
+    queue.offer(0);
+    while (!queue.isEmpty()) {
+      ++count;
+      int size = queue.size(); // 本层节点数量
+      while (size-- > 0) {
+        int curr = queue.poll(); // 为当前节点寻找下层节点，加上任一平方数即可。
+        for (int i = 1; i <= n; ++i) {
+          int next = curr + i * i;
+          if (next == n) { // 找到结果直接返回
+            return count;
+          } else if (next > n) { // 超出范围则退出寻找
+            break;
+          } else if (!marked[next]) { // 节点加入下一层
+            marked[next] = true; // 标记
+            queue.offer(next);
+          }
+        }
+      }
+    }
+    return count;
+  }
+
   // ===============================================================================================
 
   /**
@@ -328,5 +360,45 @@ public class StackAndQueueHot {
       pq.offer(intervals[i][1]); // 会议开始，加入会议结束时间。
     }
     return pq.size(); // 遍历完成，即所有会议都开始了，此时堆的大小即是总共开启的会议室的个数。
+  }
+
+  /**
+   * 301. 删除无效的括号 <br>
+   * 【BFS】，每轮删除一个括号，直到该轮出现有效的字符串为止。
+   */
+  public List<String> removeInvalidParentheses(String s) {
+    List<String> ans = new ArrayList<>();
+    Set<String> curr = new HashSet<>(); // 为了去重使用两个Set替代Queue
+    curr.add(s);
+    while (!curr.isEmpty()) {
+      if (ans.size() > 0) {
+        break;
+      }
+      Set<String> next = new HashSet<>();
+      for (String poll : curr) {
+        // 判断当前字符串是否有效
+        int count = 0;
+        for (int i = 0; i < poll.length() && count >= 0; ++i) {
+          char c = poll.charAt(i);
+          if (c == '(') {
+            count++;
+          } else if (c == ')') {
+            count--;
+          }
+        }
+        if (count == 0) { // 有效则添加结果
+          ans.add(poll);
+        } else { // 字符串无效则删除任一字符
+          for (int i = 0; i < poll.length(); ++i) {
+            char c = poll.charAt(i);
+            if (c == '(' || c == ')') {
+              next.add(poll.substring(0, i) + poll.substring(i + 1));
+            }
+          }
+        }
+      }
+      curr = next; // 转到下一层
+    }
+    return ans;
   }
 }

@@ -15,36 +15,6 @@ public class ArrayAndMatrixExx {
   // ===============================================================================================
   /** 基础题 */
 
-  // 将0全部移到末位，原地稳定排序
-  // 解法1：类似冒泡排序 为0则交换
-  public void moveZeroes1(int[] nums) {
-    boolean flag = true;
-    for (int i = nums.length - 1; i > 0 && flag; i--) {
-      flag = false;
-      for (int j = 0; j < i; j++) {
-        if (nums[j] == 0 && nums[j + 1] != 0) {
-          int temp = nums[j + 1];
-          nums[j + 1] = nums[j];
-          nums[j] = temp;
-          flag = true;
-        }
-      }
-    }
-  }
-
-  // 解法2：遍历 如果不为0则移动到前端 然后后端全设为0
-  public void moveZeroes2(int[] nums) {
-    int index = 0;
-    for (int i = 0; i < nums.length; i++) {
-      if (nums[i] != 0) {
-        nums[index++] = nums[i];
-      }
-    }
-    while (index < nums.length) {
-      nums[index++] = 0;
-    }
-  }
-
   // 给定一个有序的数组 删除重复的元素，将不重复的元素全部移到数组前端
   public int removeDuplicates(int[] nums) {
     if (nums.length <= 1) {

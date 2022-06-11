@@ -2,7 +2,7 @@ package com.kkk.hot100;
 
 /**
  * 滑动窗口 <br>
- * 【滑动窗口属于动态规划的一种】
+ * 【滑动窗口属于动态规】
  *
  * @author KaiKoo
  */

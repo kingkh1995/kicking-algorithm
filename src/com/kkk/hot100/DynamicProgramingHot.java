@@ -1,5 +1,6 @@
 package com.kkk.hot100;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -149,7 +150,7 @@ public class DynamicProgramingHot {
   /** 221. 最大正方形 <br> */
   public int maximalSquare(char[][] matrix) {
     int ans = 0, m = matrix.length, n = matrix[0].length;
-    int[][] dp = new int[m + 1][n + 1];
+    int[][] dp = new int[m + 1][n + 1]; // 表示最大正方形的长度
     for (int i = 1; i <= m; ++i) {
       for (int j = 1; j <= n; ++j) {
         if (matrix[i - 1][j - 1] == '1') {
@@ -159,6 +160,56 @@ public class DynamicProgramingHot {
       }
     }
     return ans;
+  }
+
+  /** 279. 完全平方数 <br> */
+  public int numSquares(int n) {
+    int[] dp = new int[n + 1];
+    for (int i = 1; i <= n; ++i) {
+      dp[i] = dp[i - 1] + 1; // 默认值
+      for (int j = 2; j * j <= i; ++j) {
+        dp[i] = Math.min(dp[i], dp[i - j * j] + 1);
+      }
+    }
+    return dp[n];
+  }
+
+  /**
+   * 300. 最长递增子序列 <br>
+   * 每一个元素前面的每一个比其小的元素，都可以与当前元素构成一个严格递增的子序列。
+   */
+  public int lengthOfLIS(int[] nums) {
+    int ans = 1;
+    int[] dp = new int[nums.length];
+    dp[0] = 1;
+    for (int i = 1; i < nums.length; ++i) {
+      dp[i] = 1;
+      for (int j = 0; j < i; ++j) {
+        if (nums[i] > nums[j]) {
+          dp[i] = Math.max(1 + dp[j], dp[i]);
+        }
+      }
+      ans = Math.max(ans, dp[i]);
+    }
+    return ans;
+  }
+
+  /**
+   * 322. 零钱兑换 <br>
+   * 也可以使用BFS或DFS，与279题完全平方数相似。
+   */
+  public int coinChange(int[] coins, int amount) {
+    int[] dp = new int[amount + 1];
+    Arrays.fill(dp, amount + 1);
+    dp[0] = 0;
+    for (int i = 1; i <= amount; ++i) {
+      for (int n : coins) {
+        if (n <= i) {
+          dp[i] = Math.min(dp[i], dp[i - n] + 1);
+        }
+      }
+    }
+    return dp[amount] > amount ? -1 : dp[amount];
   }
 
   // ===============================================================================================
@@ -254,5 +305,47 @@ public class DynamicProgramingHot {
       }
     }
     return dp[m][n];
+  }
+
+  /**
+   * 309. 最佳买卖股票时机含冷冻期 <br>
+   * 每一天结束对应三种状态：1、持有股票；2、不持有股票处于冷冻期；3、不持有股票不处于冷冻期。<br>
+   * 买入视作负收益，卖出视作正收益，记录下三种状态下每天的最大收益，因为只会查看前一天的状态，故使用变量保存。
+   */
+  public int maxProfit(int[] prices) {
+    int n = prices.length, m1 = -prices[0], m2 = 0, m3 = 0;
+    for (int i = 1; i < n; ++i) {
+      int mm1 = Math.max(m1, m3 - prices[i]); // 状态1：昨天就持有股票今天不操作、昨天不持有股票今天买入
+      int mm2 = Math.max(m2, m1 + prices[i]); // 状态2：昨天卖出、今天卖出
+      int mm3 = Math.max(m2, m3); // 状态3：昨天就不持有股票
+      m1 = mm1;
+      m2 = mm2;
+      m3 = mm3;
+    }
+    return Math.max(m2, m3); // 最后一天的最大收益只能是不持有股票的状态
+  }
+
+  /**
+   * 312. 戳气球 <br>
+   * 反向思维，由戳气球看成填气球，这样则不需要考虑气球相邻关系的改变。<br>
+   * 使用分治的思想，确定了某个气球是第一个填充之后，可以将求该区间的结果拆分为分别求左右区间的结果，<br>
+   * 因为左右区间被隔离开来，故两个区间的气球永远不可能作为另外区间的邻居，所以两个问题是独立的。
+   */
+  public int maxCoins(int[] nums) {
+    int n = nums.length + 2; // 创建新气球数组，处理越界问题。
+    int[] aux = new int[n];
+    aux[0] = aux[n - 1] = 1;
+    System.arraycopy(nums, 0, aux, 1, n - 2);
+    int[][] dp = new int[n][n]; // dp[i][j]表示气球填满(i,j)开区间的最大值
+    // 因为要查找左边和下方的状态，故遍历顺序为从下往上，从左往右。
+    for (int i = n - 2; i >= 0; --i) {
+      for (int j = i + 2; j < n; ++j) { // 区间至少包含一个气球
+        for (int k = i + 1; k < j; ++k) { // 依次将区间内每一个气球作为第一个填充（最后一个戳破）的气球
+          // 左边区间结果为dp[i][k]，右边区间结果为dp[k][j]，中间气球由于是第一个填充，则其边界为i和j。
+          dp[i][j] = Math.max(dp[i][j], dp[i][k] + dp[k][j] + aux[i] * aux[k] * aux[j]);
+        }
+      }
+    }
+    return dp[0][n - 1]; // 返回(0,n-1)开区间的结果，即不填充左右两端新增的气球。
   }
 }

@@ -40,24 +40,4 @@ public class LinkedListExx {
     node.next = null;
     return next;
   }
-
-  // ===============================================================================================
-  /** 拔高题 */
-
-  // n+1大小的数组，元素在[1,n]之间，只有一个元素重复出现了多次，求出该值且不能修改数组
-  // 转换为求有环链表的交点，链表从0位置出发开始构建。
-  // 如果是证明至少存在一个重复的数字，只需要快慢指针相遇就能证明。
-  public int findDuplicate(int[] nums) {
-    int slow = 0, fast = 0;
-    do {
-      slow = nums[slow];
-      fast = nums[nums[fast]];
-    } while (slow != fast);
-    slow = 0;
-    do {
-      slow = nums[slow];
-      fast = nums[fast];
-    } while (slow != fast);
-    return slow;
-  }
 }
