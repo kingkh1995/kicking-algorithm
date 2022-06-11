@@ -191,6 +191,40 @@ public class TreeHot {
    * todo... 【深度优先搜索】按先序遍历的方式遍历二叉树的所有节点，并标记空子树。 <br>
    */
 
+  /**
+   * 337. 打家劫舍 III <br>
+   * 有两种情况：1、选择根节点；2、不选择根节点。
+   */
+  class robSolution {
+    public int rob(TreeNode root) {
+      int[] dfs = dfs(root);
+      return Math.max(dfs[0], dfs[1]);
+    }
+
+    private int[] dfs(TreeNode root) { // 深度优先搜索并返回两种情况下的最大值
+      if (root == null) {
+        return new int[] {0, 0};
+      }
+      int[] left = dfs(root.left), right = dfs(root.right);
+      return new int[] {
+        root.val + left[1] + right[1], Math.max(left[0], left[1]) + Math.max(right[0], right[1])
+      };
+    }
+  }
+
+  /** 617. 合并二叉树 <br> */
+  public TreeNode mergeTrees(TreeNode root1, TreeNode root2) {
+    if (root1 == null) {
+      return root2;
+    } else if (root2 == null) {
+      return root1;
+    }
+    root1.val = root1.val + root2.val;
+    root1.left = mergeTrees(root1.left, root2.left);
+    root1.right = mergeTrees(root1.right, root2.right);
+    return root1;
+  }
+
   // ===============================================================================================
 
   /**

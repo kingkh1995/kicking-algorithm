@@ -226,6 +226,60 @@ public class StackAndQueueHot {
     return count;
   }
 
+  /** 394. 字符串解码 <br> */
+  class decodeStringSolution {
+    public String decodeString(String s) {
+      Deque<String> stack = new LinkedList<>();
+      for (int i = 0; i < s.length(); i++) {
+        char c = s.charAt(i);
+        if (Character.isLetter(c)) { // 找出一个字符串
+          int j = i + 1;
+          for (; j < s.length() && Character.isLetter(s.charAt(j)); j++) {}
+          putString(stack, s.substring(i, j));
+          i = j - 1;
+        } else if (Character.isDigit(c)) { // 找出一个数字
+          int j = i + 1;
+          for (; j < s.length() && Character.isDigit(s.charAt(j)); j++) {}
+          stack.push(s.substring(i, j));
+          i = j - 1;
+        } else if (c == '[') {
+          stack.push("[");
+        } else { // == ']'
+          String lastString = stack.pop(); // pop一个字符串
+          stack.pop(); // pop一个[
+          int count = Integer.parseInt(stack.pop()); // pop一个数字
+          putString(stack, lastString.repeat(count)); // 构建字符串并入栈
+        }
+      }
+      return stack.pop(); // 最终栈内只有一个字符串为结果
+    }
+
+    private void putString(Deque<String> stack, String s) {
+      if (!stack.isEmpty() && !"[".equals(stack.peek())) { // 栈顶只能为字符串或[，字符串则追加，[入栈。
+        stack.push(stack.pop() + s);
+      } else {
+        stack.push(s);
+      }
+    }
+  }
+
+  /**
+   * 739. 每日温度 <br>
+   * 【单调栈】
+   */
+  public int[] dailyTemperatures(int[] temperatures) {
+    int[] ans = new int[temperatures.length];
+    Deque<Integer> stack = new ArrayDeque<>(temperatures.length);
+    for (int i = 0; i < temperatures.length; ++i) {
+      while (!stack.isEmpty() && temperatures[i] > temperatures[stack.peek()]) {
+        int pop = stack.pop();
+        ans[pop] = i - pop;
+      }
+      stack.push(i);
+    }
+    return ans;
+  }
+
   // ===============================================================================================
 
   /**
@@ -401,4 +455,9 @@ public class StackAndQueueHot {
     }
     return ans;
   }
+
+  /**
+   * 399. 除法求值 <br>
+   * todo...
+   */
 }

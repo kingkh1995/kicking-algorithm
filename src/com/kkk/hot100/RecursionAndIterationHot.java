@@ -87,6 +87,31 @@ public class RecursionAndIterationHot {
     }
   }
 
+  /**
+   * 647. 回文子串 <br>
+   * 与第5题相同使用中心扩散法判断回文子串。
+   */
+  class countSubstringsSolution {
+    char[] charAt;
+    int count;
+
+    public int countSubstrings(String s) {
+      charAt = s.toCharArray();
+      count = 0;
+      for (int i = 0; i < s.length(); i++) {
+        expandAroundCenter(i, i); // 奇数回文串
+        expandAroundCenter(i, i + 1); // 偶数回文串
+      }
+      return count;
+    }
+
+    private void expandAroundCenter(int l, int h) {
+      while (l >= 0 && h < charAt.length && charAt[l--] == charAt[h++]) {
+        count++;
+      }
+    }
+  }
+
   // ===============================================================================================
 
   /**

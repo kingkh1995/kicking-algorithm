@@ -89,4 +89,27 @@ public class DoublePointerHot {
     }
     return ans;
   }
+
+  /**
+   * 581. 最短无序连续子数组 <br>
+   * 左边升序区间的每一个值都小于该值右边的所有元素，右边升序区间的每一个值都大于该值左边的每一个元素。 <br>
+   * 从左遍历扫描每一个元素以确认右窗口的位置，从右遍历扫描每一个元素以确认左窗口的位置，<br>
+   * 只需遵守上面原则即可，窗口左右端的确认互不干扰，因此可以在同一个循环内同时处理。
+   */
+  public int findUnsortedSubarray(int[] nums) {
+    int n = nums.length, l = -1, r = -1, lMax = Integer.MIN_VALUE, rMin = Integer.MAX_VALUE;
+    for (int i = 0; i < nums.length; ++i) { // 同时处理左右窗口，[left,right]为结果区间。
+      if (nums[i] < lMax) { // 从左往右遍历的指针为i
+        r = i;
+      } else {
+        lMax = nums[i];
+      }
+      if (nums[n - 1 - i] > rMin) { // 从右往左遍历的指针为n - 1 - i
+        l = n - 1 - i;
+      } else {
+        rMin = nums[n - 1 - i];
+      }
+    }
+    return r == -1 ? 0 : r - l + 1;
+  }
 }

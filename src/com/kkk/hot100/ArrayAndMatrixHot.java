@@ -1,10 +1,14 @@
 package com.kkk.hot100;
 
 import com.kkk.supports.ArrayUtils;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Deque;
+import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 数组和矩阵 <br>
@@ -180,6 +184,92 @@ public class ArrayAndMatrixHot {
       }
     }
     return false;
+  }
+
+  /**
+   * 347. 前 K 个高频元素 <br>
+   * 可以使用优先队列，或者统计完数组内元素的频率后，基于快速排序按频率排序即可，转换为第215题的问题。<br>
+   */
+  class topKFrequentSolution {
+    public int[] topKFrequent(int[] nums, int k) {
+      Map<Integer, Integer> map = new HashMap<>();
+      for (int num : nums) {
+        map.compute(num, (key, i) -> i == null ? 1 : ++i);
+      }
+      int n = map.size();
+      List<int[]> pairs = new ArrayList<>(n);
+      map.forEach((key, i) -> pairs.add(new int[] {key, i}));
+      quickSelect(pairs, 0, n - 1, n - k); // 使用快速排序确定索引为n-k位置的元素
+      int[] ans = new int[k];
+      for (int i = n - k; i < n; ++i) {
+        ans[i - n + k] = pairs.get(i)[0];
+      }
+      return ans;
+    }
+
+    private void quickSelect(List<int[]> pairs, int lo, int hi, int index) { // 使用普通的三向切分快排
+      while (lo < hi) {
+        selectPivot(pairs, lo, hi);
+        int pivot = getF(pairs, lo);
+        int i = lo, l = lo + 1, j = hi; // (lo,i)为小于、 [i,l)等于 、[l,j]未排序、 (j,hi)大于
+        while (l <= j) {
+          int cmp = getF(pairs, l) - pivot;
+          if (cmp == 0) { // 等于：指针直接左移，即等于区间右增一格
+            l++;
+          } else if (cmp > 0) {
+            swap(pairs, l, j--); // 大于：从未排序区间最右边换一个元素过来，即未排序区间左缩一格
+          } else {
+            swap(pairs, l++, i++); // 小于：从等于区间交换一个等于元素过来 即等于区间整个左移
+          }
+        }
+        if (index >= i && index <= j) { // 一遍排序完成之后，[i,j]为等于区间，判断index是否在该区间内则结束。
+          return;
+        } else if (index < i) { // 在左边则排序左边区间
+          hi = i - 1;
+        } else { // 在右边则排序右边区间
+          lo = j + 1;
+        }
+      }
+    }
+
+    private void selectPivot(List<int[]> pairs, int lo, int hi) { // 三取样切分
+      int mid = (lo + hi) / 2, a = getF(pairs, lo), b = getF(pairs, mid), c = getF(pairs, hi);
+      if ((a - b) * (b - c) > 0) {
+        swap(pairs, lo, mid);
+      } else if ((a - c) * (c - b) > 0) {
+        swap(pairs, lo, hi);
+      }
+    }
+
+    private int getF(List<int[]> pairs, int index) {
+      return pairs.get(index)[1];
+    }
+
+    private void swap(List<int[]> pairs, int a, int b) {
+      if (a == b) {
+        return;
+      }
+      int[] temp = pairs.get(a);
+      pairs.set(a, pairs.get(b));
+      pairs.set(b, temp);
+    }
+  }
+
+  /**
+   * 581. 最短无序连续子数组 <br>
+   * 排序数组，并找出原数组和排序后数组的共同前缀和后缀即可，可以提前判断一次数组是否有序。
+   */
+  public int findUnsortedSubarray(int[] nums) {
+    int[] copy = Arrays.copyOf(nums, nums.length);
+    Arrays.sort(copy);
+    int ans = nums.length, i = 0;
+    for (; i < nums.length && nums[i] == copy[i]; ++i) { // 找共同左前缀
+      ans--;
+    }
+    for (int j = nums.length - 1; j > i && nums[j] == copy[j]; --j) { // 找共同右前缀
+      ans--;
+    }
+    return ans;
   }
 
   // ===============================================================================================
