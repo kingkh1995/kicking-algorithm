@@ -1,5 +1,8 @@
 package com.kkk.hot100;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * 递归和迭代 <br>
  *
@@ -85,6 +88,24 @@ public class RecursionAndIterationHot {
     while (index < nums.length) {
       nums[index++] = 0;
     }
+  }
+
+  /**
+   * 448. 找到所有数组中消失的数字 <br>
+   * 不使用额外空间，直接在原数组上修改。遍历并修改nums[nums[i]-1]，最终没有被修改的下标+1则是消失的数字。
+   */
+  public List<Integer> findDisappearedNumbers(int[] nums) {
+    int n = nums.length;
+    for (int i = 0; i < n; ++i) {
+      nums[nums[i] % (n + 1) - 1] += n + 1; // 数字在[1, n]范围内，故每次加上n+1，获取原值时使用%。
+    }
+    List<Integer> ans = new ArrayList<>(n);
+    for (int i = 0; i < n; ++i) {
+      if (nums[i] < n + 1) {
+        ans.add(i + 1);
+      }
+    }
+    return ans;
   }
 
   /**

@@ -1,5 +1,6 @@
 package com.kkk.hot100;
 
+import com.kkk.supports.TreeNode;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -9,7 +10,8 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * 哈希表 <br>
+ * 哈希表 【前缀和】<br>
+ * 【前缀和的思想是使用哈希表缓存以优化查找效率】
  *
  * @author KaiKoo
  */
@@ -125,6 +127,22 @@ public class HashTableHot {
     }
   }
 
+  /**
+   * 560. 和为 K 的子数组 <br>
+   * 【前缀和】，因为是找子数组，遍历数组以每个元素为子数组最后一个元素然后向前查找即可，记录前缀和优化查找效率。
+   */
+  public int subarraySum(int[] nums, int k) {
+    int count = 0;
+    HashMap<Integer, Integer> prefix = new HashMap<>(); // 统计前缀和的数量
+    prefix.put(0, 1);
+    for (int i = 0, sum = 0; i < nums.length; i++) {
+      sum += nums[i]; // 更新前缀和
+      count += prefix.getOrDefault(sum - k, 0); // 查找满足条件的前缀和
+      prefix.compute(sum, (key, value) -> value == null ? 1 : ++value);
+    }
+    return count;
+  }
+
   // ===============================================================================================
 
   /**
@@ -173,6 +191,34 @@ public class HashTableHot {
         }
       }
       return ans;
+    }
+  }
+
+  /**
+   * 437. 路径总和 III <br>
+   * 最佳解法：回溯法，并记录前缀和进行优化，【前缀和是从根节点出发到任一节点的路径和】。
+   */
+  class pathSumSolution {
+    private final Map<Long, Integer> prefix = new HashMap<>(); // 统计前缀和的数量
+
+    public int pathSum(TreeNode root, int targetSum) {
+      prefix.put(0L, 1); // 添加初始值
+      return backTrack(root, 0, targetSum);
+    }
+
+    private int backTrack(TreeNode root, long sum, int targetSum) { // sum为上一个前缀和
+      if (root == null) {
+        return 0;
+      }
+      sum += root.val; // 添加当前节点更新当前前缀和
+      // 先统计【以当前节点为最后一个节点的满足条件的路径】的数量，等于前缀和为【sum-targetSum】的数量。
+      // sum为从根节点出发到当前节点的路径和，而前缀和是路径前半段，满足条件的路径为后半段，故【prefix+targetSum=sum】。
+      int count = prefix.getOrDefault(sum - targetSum, 0);
+      prefix.compute(sum, (k, v) -> v == null ? 1 : ++v); // 前进，添加当前前缀和。
+      count += backTrack(root.left, sum, targetSum); // 统计左子树
+      count += backTrack(root.right, sum, targetSum); // 统计右子树
+      prefix.computeIfPresent(sum, (k, v) -> --v); // 回退，删除当前前缀和。
+      return count;
     }
   }
 }

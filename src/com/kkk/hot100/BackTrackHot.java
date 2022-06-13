@@ -12,7 +12,7 @@ import java.util.Map;
 
 /**
  * 回溯 <br>
- * 【回溯属于递归】
+ * 【回溯属于递归，回退时需要重置状态，而DFS不需要】
  *
  * @author KaiKoo
  */

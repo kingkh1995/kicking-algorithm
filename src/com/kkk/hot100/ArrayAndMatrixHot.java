@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 数组和矩阵 <br>
+ * 数组和矩阵 【排序 & 查找】<br>
  *
  * @author KaiKoo
  */
@@ -307,5 +307,19 @@ public class ArrayAndMatrixHot {
     slow = 0;
     while ((slow = nums[slow]) != (fast = nums[fast])) {}
     return slow;
+  }
+
+  /**
+   * 406. 根据身高重建队列 <br>
+   * 先按身高升序排序，如果身高相同，则将k小的排前面，之后按该排序重新插入排序即可，每个元素应该所处的位置是k。
+   */
+  public int[][] reconstructQueue(int[][] people) {
+    Arrays.sort(people, Comparator.<int[]>comparingInt(p -> -p[0]).thenComparingInt(p -> p[1]));
+    // 每个元素前面有k个元素比它大，那么应该插入的位置就是k，当前所在的位置是i，则左移的距离就是i-k。
+    List<int[]> ans = new ArrayList<>(people.length); // 可以直接使用list的add方法做插入排序
+    for (int[] person : people) {
+      ans.add(person[1], person);
+    }
+    return ans.toArray(new int[0][]);
   }
 }

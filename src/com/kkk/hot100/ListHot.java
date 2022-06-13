@@ -9,7 +9,7 @@ import java.util.List;
  *
  * @author KaiKoo
  */
-public class ListNodeHot {
+public class ListHot {
 
   /**
    * 2. 两数相加 <br>

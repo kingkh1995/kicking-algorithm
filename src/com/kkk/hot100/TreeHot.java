@@ -2,10 +2,12 @@ package com.kkk.hot100;
 
 import com.kkk.supports.TreeNode;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Deque;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
+import java.util.stream.Collectors;
 
 /**
  * 树 【二叉树 & 二叉搜索树】<br>
@@ -135,22 +137,20 @@ public class TreeHot {
    * 递归计算每个节点的最大贡献值，并在递归过程中更新最大路径和。
    */
   class maxPathSumSolution {
-    int ans;
+    int ans = Integer.MIN_VALUE;
 
     public int maxPathSum(TreeNode root) {
-      ans = Integer.MIN_VALUE;
       maxGain(root);
       return ans;
     }
 
-    private int maxGain(TreeNode node) {
-      if (node == null) {
+    private int maxGain(TreeNode root) {
+      if (root == null) {
         return 0;
       }
-      int lm = Math.max(0, maxGain(node.left));
-      int rm = Math.max(0, maxGain(node.right));
-      ans = Math.max(ans, node.val + lm + rm);
-      return node.val + Math.max(lm, rm); // 最大贡献值必须包含当前节点
+      int lm = Math.max(0, maxGain(root.left)), rm = Math.max(0, maxGain(root.right));
+      ans = Math.max(ans, root.val + lm + rm);
+      return root.val + Math.max(lm, rm); // 最大贡献值必须包含当前节点
     }
   }
 
@@ -188,8 +188,42 @@ public class TreeHot {
 
   /**
    * 297. 二叉树的序列化与反序列化 <br>
-   * todo... 【深度优先搜索】按先序遍历的方式遍历二叉树的所有节点，并标记空子树。 <br>
+   * 按先序遍历的方式遍历二叉树的所有节点，并标记空子树。 <br>
    */
+  public class Codec {
+    public String serialize(TreeNode root) {
+      StringBuilder sb = new StringBuilder();
+      serialize(root, sb);
+      return sb.toString();
+    }
+
+    private void serialize(TreeNode root, StringBuilder sb) {
+      if (root == null) {
+        sb.append("#,");
+        return;
+      }
+      sb.append(root.val).append(",");
+      serialize(root.left, sb);
+      serialize(root.right, sb);
+    }
+
+    public TreeNode deserialize(String data) {
+      Queue<String> queue =
+          Arrays.stream(data.split(",")).collect(Collectors.toCollection(LinkedList::new));
+      return deserialize(queue);
+    }
+
+    private TreeNode deserialize(Queue<String> queue) {
+      String poll = queue.poll();
+      if ("#".equals(poll)) { // 不用考虑其他终止条件，如果是合法的字符串，必然会自行终止。
+        return null;
+      }
+      TreeNode root = new TreeNode(Integer.parseInt(poll));
+      root.left = deserialize(queue);
+      root.right = deserialize(queue);
+      return root;
+    }
+  }
 
   /**
    * 337. 打家劫舍 III <br>
@@ -209,6 +243,28 @@ public class TreeHot {
       return new int[] {
         root.val + left[1] + right[1], Math.max(left[0], left[1]) + Math.max(right[0], right[1])
       };
+    }
+  }
+
+  /**
+   * 543. 二叉树的直径 <br>
+   * 与第124题相似，只是在dfs中求深度。
+   */
+  class diameterOfBinaryTreeSolution {
+    int ans = 0;
+
+    public int diameterOfBinaryTree(TreeNode root) {
+      depth(root);
+      return ans;
+    }
+
+    private int depth(TreeNode root) { // 求节点深度并更新结果
+      if (root == null) {
+        return 0;
+      }
+      int ld = depth(root.left), rd = depth(root.right);
+      ans = Math.max(ans, ld + rd); // 当前节点下最大直径为左右子树深度之和
+      return 1 + Math.max(ld, rd);
     }
   }
 
@@ -339,5 +395,46 @@ public class TreeHot {
     TreeNode right = lowestCommonAncestor(root.right, p, q);
     // left和right都非空则返回root，否则返回其中非空的那个。
     return null != left ? null != right ? root : left : right;
+  }
+
+  /**
+   * 437. 路径总和 III <br>
+   * 深度搜索统计结果。
+   */
+  class pathSumSolution {
+    public int pathSum(TreeNode root, int targetSum) {
+      if (root == null) {
+        return 0;
+      }
+      // 结果等于：【当前节点为第一个节点的路径数】加上【左子树的子问题答案】加上【右子树的子问题答案】
+      return dfs(root, targetSum) + pathSum(root.left, targetSum) + pathSum(root.right, targetSum);
+    }
+
+    private int dfs(TreeNode root, int targetSum) { // 以当前节点为第一个节点满足条件的路径数
+      if (root == null) {
+        return 0;
+      }
+      return ((targetSum -= root.val) == 0 ? 1 : 0) // 路径可以只包含当前节点一个
+          + dfs(root.left, targetSum) // 左节点为第一个节点的路径数
+          + dfs(root.right, targetSum); // 右节点为第一个节点的路径数
+    }
+  }
+
+  /**
+   * 538. 把二叉搜索树转换为累加树 <br>
+   * 解法一：按中序遍历输出后顺序累加上右边的节点。 <br>
+   * 解法二：反序中序遍历的过程中累加节点值并修改节点。
+   */
+  class convertBSTSolution {
+    int sum = 0;
+
+    public TreeNode convertBST(TreeNode root) {
+      if (root != null) {
+        convertBST(root.right);
+        root.val = sum += root.val;
+        convertBST(root.left);
+      }
+      return root;
+    }
   }
 }

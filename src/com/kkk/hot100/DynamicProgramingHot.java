@@ -348,4 +348,65 @@ public class DynamicProgramingHot {
     }
     return dp[0][n - 1]; // 返回(0,n-1)开区间的结果，即不填充左右两端新增的气球。
   }
+
+  /**
+   * 416. 分割等和子集 <br>
+   * 传统的【0 − 1背包问题】，使用自底向上的动态规划，由当前状态推导出后续状态。 <br>
+   * 使用dp[i][j]表示0-i范围内的数组是否存在一个子集的总和是j，因为只需要查看i-1的状态，故使用一维数组即可。<br>
+   * 从左遍历数组，每添加一个数字则显然dp[i][num]为true，向后推导可知dp[i][j+num]=dp[i-1][j]。<br>
+   * 【注意】需要从大到小更新状态，因为dp[j]未更新前表示dp[i-1][j]，一旦更新则表示dp[j]，需要在其被更新前更新后面的状态。
+   */
+  public boolean canPartition(int[] nums) {
+    int n = nums.length;
+    if (n < 2) { // 数组长度小于2不可能
+      return false;
+    }
+    int sum = 0, max = 0;
+    for (int num : nums) {
+      sum += num;
+      max = Math.max(max, num);
+    }
+    if ((sum & 1) == 1) { // 数字总和非偶数不可能
+      return false;
+    }
+    int target = sum / 2;
+    if (max > target) { // 最大数超过总和一半不可能
+      return false;
+    }
+    boolean[] dp = new boolean[target + 1];
+    dp[0] = true; // 子集可以为空则dp[0][0]默认true
+    for (int i = 0; i < n; i++) {
+      int num = nums[i];
+      for (int j = target; j >= num; --j) { // 需要从右往左更新，因为是由左边的状态推导出右边的状态。
+        dp[j] |= dp[j - num]; // 使用|运算保证状态一旦为true则永远为true
+      }
+    }
+    return dp[target];
+  }
+
+  /**
+   * 494. 目标和 <br>
+   * 【与416题思路类似】，转为求子集和为(sum-target)/2的种数，使用dp[i][j]表示0-i位置有多少个子集的和为j。 <br>
+   * 证明：所有元素和为sum，选择一个子集将符号设置-，该子集的元素和为sub，则数组内剩余元素和为sum-sub，<br>
+   * 要满足要求，则(sum-sub)-sub=target，即子集和为(sum-target)/2。
+   */
+  public int findTargetSumWays(int[] nums, int target) {
+    int n = nums.length, sum = 0;
+    for (int num : nums) {
+      sum += num;
+    }
+    if ((target = sum - target) < 0 || (target & 1) == 1) { // 因为数组内全为正整数，则子集和肯定为非负的偶数。
+      return 0;
+    }
+    target >>= 1;
+    int[] dp = new int[target + 1];
+    dp[0] = 1; // 处理边界问题
+    for (int i = 0; i < n; ++i) {
+      int num = nums[i];
+      for (int j = target; j >= num; --j) {
+        dp[j] += dp[j - num];
+      }
+    }
+    return dp[sum];
+  }
 }

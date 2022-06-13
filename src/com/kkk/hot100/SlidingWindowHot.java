@@ -1,5 +1,8 @@
 package com.kkk.hot100;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * 滑动窗口 <br>
  * 【滑动窗口属于动态规】
@@ -24,6 +27,40 @@ public class SlidingWindowHot {
     return ans;
   }
 
+  /** 438. 找到字符串中所有字母异位词 <br> */
+  public List<Integer> findAnagrams(String s, String p) {
+    List<Integer> ans = new ArrayList<>();
+    int sl = s.length(), pl = p.length();
+    if (pl < 1 || pl > sl) {
+      return ans;
+    }
+    int diff = 0; // 在p和窗口内的数量不同的字符的数量
+    int[] aux = new int[26]; // 统计p内的字符
+    for (char c : p.toCharArray()) {
+      if (aux[c - 'a']++ == 0) {
+        ++diff;
+      }
+    }
+    int[] count = new int[26]; // 统计窗口内的字符
+    for (int l = -1, r = 0, index; r < sl; ++r) {
+      if (r >= pl) { // 窗口初始化成功后才移动左端
+        if (count[index = s.charAt(++l) - 'a']-- == aux[index]) { // 当前数量相同，则diff加一，因为减去字符后肯定不相同了。
+          ++diff;
+        } else if (count[index] == aux[index]) { // 减去字符之后相同，则diff减一。
+          --diff;
+        }
+      }
+      if (count[index = s.charAt(r) - 'a']++ == aux[index]) { // 当前数量相同，则diff加一，因加上字符后肯定不相同了。
+        ++diff;
+      } else if (count[index] == aux[index]) { // 加上字符之后相同，则diff减一。
+        --diff;
+      }
+      if (diff == 0) { // 判断为字母异位词
+        ans.add(l + 1);
+      }
+    }
+    return ans;
+  }
 
   // ===============================================================================================
 

@@ -37,6 +37,11 @@ public class BitOperationAndNumberHot {
     return dp;
   }
 
+  /** 461. 汉明距离 <br> */
+  public int hammingDistance(int x, int y) {
+    return Integer.bitCount(x ^ y); // 直接异或并统计1的个数即可
+  }
+
   // ===============================================================================================
 
   /**
