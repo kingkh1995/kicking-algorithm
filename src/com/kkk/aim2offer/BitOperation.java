@@ -71,23 +71,6 @@ public class BitOperation {
     return new int[] {temp1, temp2};
   }
 
-  /*
-  使用位运算实现加法，加法就是 位相加和进位再相加 的结果，直到不需要进位就是最终的结果。
-   */
-  public int addByBitOperation(int a, int b) {
-    int ans, inc;
-    do {
-      // 异或运算得到位相加的结果
-      ans = a ^ b;
-      // 与运算之后在左移一位得到进位的结果
-      inc = (a & b) << 1;
-      a = ans;
-      b = inc;
-      // 如果需要进位，则把两者相加，重复步骤
-    } while (inc != 0);
-    return ans;
-  }
-
   // 测试用例
 
   public static void numberOf1InBinary1Test() {
@@ -106,9 +89,5 @@ public class BitOperation {
   public static void findTwoNumbersAppearOnceTest() {
     int[] two = BIT_OPERATION.findTwoNumbersAppearOnce(new int[] {1, 1, 2, 5, 3, 4, 6, 4, 5, 6});
     System.out.println(two[0] + " " + two[1]);
-  }
-
-  public static void addByBitOperation() {
-    System.out.println(BIT_OPERATION.addByBitOperation(10, 22));
   }
 }

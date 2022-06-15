@@ -9,30 +9,48 @@ package com.kkk.leetcode;
 public class GreedyExx {
 
   // ===============================================================================================
-  /** 基础题 */
 
-  // 判断这个数组中是否存在长度为 3 的递增子序列
+  /**
+   * 134. 加油站 <br>
+   * 只需要一次遍历即可，统计出每站之间的实际油耗，遍历累加值不能小于0，【注意指针只需要前进不用后退】。
+   */
+  public int canCompleteCircuit(int[] gas, int[] cost) {
+    int n = gas.length;
+    for (int i = 0; i < n; ++i) {
+      gas[i] -= cost[i];
+    }
+    for (int i = 0; i < n; ++i) {
+      int t = i;
+      for (int sum = 0; i < t + n; ++i) {
+        if ((sum += gas[i % n]) < 0) {
+          break;
+        }
+      }
+      if (i == t + n) {
+        return t;
+      }
+    }
+    return -1;
+  }
+
+  /**
+   * 334. 递增的三元子序列 <br>
+   * 【维护前两个数】，尝试一直将first和second变小，一旦遇到大于second的数则表示存在。<br>
+   */
   public boolean increasingTriplet(int[] nums) {
     if (nums.length < 3) {
       return false;
     }
-    // 贪心算法，维护前两个数。
     int first = nums[0], second = Integer.MAX_VALUE;
-    // 如果遍历过程中遇到小于first 的元素，则会用该元素更新first，虽然更新后的first出现在second的后面，
-    // 但是在second的前面一定存在一个元素first小于second，因此当遇到大于second的元素时，即存在递增的三元子序列。
-    for (int i = 1; i < nums.length; ++i) {
-      int n = nums[i];
-      if (n > second) {
+    for (int i = 1, n; i < nums.length; ++i) {
+      if ((n = nums[i]) > second) {
         return true;
-      } else if (n > first) {
+      } else if (n > first) { // 更新second结论依旧成立，因为之前肯定是存在一个比它小的数，不然它就会是first了。
         second = n;
-      } else {
+      } else { // 更新first仍然成立，因为second没变，按second的证明故结论成立。
         first = n;
       }
     }
     return false;
   }
 }
-
-// ===============================================================================================
-/** 拔高题 */
