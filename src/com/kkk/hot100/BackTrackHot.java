@@ -5,10 +5,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Deque;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 回溯 <br>
@@ -20,7 +18,17 @@ public class BackTrackHot {
 
   /** 17. 电话号码的字母组合 <br> */
   class letterCombinationsSolution {
-    Map<Character, char[]> MAP = new HashMap<>(); // 字符集
+    char[][] dict =
+        new char[][] {
+          {'a', 'b', 'c'},
+          {'d', 'e', 'f'},
+          {'g', 'h', 'i'},
+          {'j', 'k', 'l'},
+          {'m', 'n', 'o'},
+          {'p', 'q', 'r', 's'},
+          {'t', 'u', 'v'},
+          {'w', 'x', 'y', 'z'}
+        };
     String digits;
     StringBuilder sb;
     List<String> ans;
@@ -41,7 +49,7 @@ public class BackTrackHot {
         ans.add(sb.toString());
         return;
       }
-      for (char c : MAP.get(digits.charAt(i))) {
+      for (char c : dict[digits.charAt(i) - '2']) {
         sb.append(c);
         backTrack(i + 1);
         sb.deleteCharAt(i);
