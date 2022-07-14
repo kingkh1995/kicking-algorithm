@@ -150,15 +150,15 @@ public class Sorting {
       if (hi <= lo) {
         return;
       }
-      int pivot = arr[lo], i = hi + 1; // [i,hi]区间为大于等于pivot的区间
-      for (int j = hi; j > lo; j--) { // 从右边开始找到大于等于pivot的元素则交换到区间最右边
-        if (arr[j] >= pivot) {
-          ArrayUtils.swap(arr, j, --i);
+      int pivot = arr[lo], ge = hi + 1; // [ge,hi]区间为大于等于pivot的区间
+      for (int i = hi; i > lo; i--) { // 从右边开始找到大于等于pivot的元素则交换到区间最右边
+        if (arr[i] >= pivot) {
+          ArrayUtils.swap(arr, i, --ge);
         }
       }
-      ArrayUtils.swap(arr, lo, --i); // 最后把pivot放到[i,hi]区间的左边
-      sort1(arr, lo, i - 1);
-      sort1(arr, i + 1, hi);
+      ArrayUtils.swap(arr, lo, --ge); // 最后把pivot放到[ge,hi]区间的左边
+      sort1(arr, lo, ge - 1);
+      sort1(arr, ge + 1, hi);
     }
 
     public void sort2(int[] arr) {
