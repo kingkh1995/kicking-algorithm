@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * 数组和矩阵<br>
+ * 数组和矩阵 <br>
  * 324、498
  *
  * @author KaiKoo
@@ -14,53 +14,6 @@ public class ArrayAndMatrixExx {
 
   // ===============================================================================================
   /** 基础题 */
-
-  // 给定一个有序的数组 删除重复的元素，将不重复的元素全部移到数组前端
-  public int removeDuplicates(int[] nums) {
-    if (nums.length <= 1) {
-      return nums.length;
-    }
-    // 从第二个元素开始，如果不等于前一个元素则移到前端 相同则跳过元素
-    int index = 1;
-    for (int i = 1; i < nums.length; i++) {
-      if (nums[i] != nums[index - 1]) {
-        nums[index++] = nums[i];
-      }
-    }
-    return index;
-  }
-
-  // 给定一个有序的数组 删除重复的元素，使每个元素最多出现两次 将不重复的元素全部移到数组前端
-  public int removeDuplicates2(int[] nums) {
-    if (nums.length <= 2) {
-      return nums.length;
-    }
-    // 从第三个元素开始 直接和前面第二个元素对比即可
-    int index = 2;
-    for (int i = 2; i < nums.length; i++) {
-      if (nums[i] != nums[index - 2]) {
-        nums[index++] = nums[i];
-      }
-    }
-    return index;
-  }
-
-  // 找到数组的中心下标，左边元素之和等于右边元素之和。
-  public int pivotIndex(int[] nums) {
-    int total = 0;
-    for (int n : nums) {
-      total += n;
-    }
-    for (int i = 0, sum = 0; i < nums.length; i++) {
-      // 左边元素之和加上右边元素之和加上中间元素等于数组总和
-      if (2 * sum + nums[i] == total) {
-        return i;
-      }
-      // sum为左边元素之和
-      sum += nums[i];
-    }
-    return -1;
-  }
 
   // 计算右侧小于当前元素的个数
   static class countSmallerSolution {

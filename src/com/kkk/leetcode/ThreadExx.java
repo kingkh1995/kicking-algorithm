@@ -10,17 +10,14 @@ import java.util.function.IntConsumer;
 
 /**
  * 多线程 <br>
+ * 三种方式：<br>
+ * 1、无锁化，自旋 + volatile；<br>
+ * 2、锁，等待/通知模式。<br>
+ * 3、通信工具类
  *
  * @author KaiKoo
  */
 public class ThreadExx {
-
-  /**
-   * 三种方式：<br>
-   * 1、自旋 + volatile；<br>
-   * 2、锁，等待/通知模式。<br>
-   * 3、通信工具类
-   */
 
   /** 1114. 按序打印 <br> */
   class Foo {

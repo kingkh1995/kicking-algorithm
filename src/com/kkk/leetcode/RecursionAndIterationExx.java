@@ -37,4 +37,36 @@ public class RecursionAndIterationExx {
       return ans;
     }
   }
+
+  /**
+   * 724. 寻找数组的中心下标 <br>
+   * 【前缀和】，遍历即可，过程中统计左边区间的总和。
+   */
+  public int pivotIndex(int[] nums) {
+    int total = 0;
+    for (int n : nums) {
+      total += n;
+    }
+    for (int sum = 0, i = 0; i < nums.length; ++i) {
+      if (sum + sum + nums[i] == total) {
+        return i;
+      }
+      sum += nums[i];
+    }
+    return -1;
+  }
+
+  // ===============================================================================================
+
+  /**
+   * 172. 阶乘后的零 <br>
+   * 即 N! 有多少个质因数 5
+   */
+  public int trailingZeroes(int n) {
+    if (n < 5) {
+      return 0;
+    }
+    // n/5到n之间数的乘积，可能导致后面出现0的个数等于n/5。
+    return n / 5 + trailingZeroes(n / 5);
+  }
 }

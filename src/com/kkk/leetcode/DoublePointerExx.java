@@ -9,20 +9,40 @@ import java.util.Arrays;
  */
 public class DoublePointerExx {
 
-  // ===============================================================================================
-  /** 基础题 */
-
-  // 字符串中的第一个唯一字符
-  public int firstUniqChar(String s) {
-    for (int i = 0; i < s.length(); i++) {
-      // 双指针从前后查找当前字符，如果最终位置相同则表示唯一。
-      char c = s.charAt(i);
-      if (s.indexOf(c) == s.lastIndexOf(c)) {
-        return i;
+  /**
+   * 26. 删除有序数组中的重复项 <br>
+   * 80. 删除有序数组中的重复项 II <br>
+   * 双指针法解答即可，需要注意比较选择的元素。
+   */
+  class removeDuplicatesSolution {
+    public int removeDuplicates1(int[] nums) {
+      if (nums.length <= 1) {
+        return nums.length;
       }
+      int ans = 1;
+      for (int i = 1; i < nums.length; ++i) {
+        if (nums[i] != nums[ans - 1]) {
+          nums[ans++] = nums[i];
+        }
+      }
+      return ans;
     }
-    return -1;
+
+    public int removeDuplicates2(int[] nums) {
+      if (nums.length <= 2) {
+        return nums.length;
+      }
+      int ans = 2;
+      for (int i = 2; i < nums.length; ++i) {
+        if (nums[i] != nums[ans - 2]) {
+          nums[ans++] = nums[i];
+        }
+      }
+      return ans;
+    }
   }
+
+  // ===============================================================================================
 
   // ===============================================================================================
   /** 拔高题 */

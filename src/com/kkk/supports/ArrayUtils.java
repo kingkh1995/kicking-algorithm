@@ -86,6 +86,7 @@ public class ArrayUtils {
   }
 
   public static int rank(int[] sorted, int key, int lo, int hi) {
+    // 使用模板一，将大于等于的元素逐步移出，并记录边界。
     int index = hi + 1;
     while (lo <= hi) {
       int mid = lo + ((hi - lo) >> 1);
