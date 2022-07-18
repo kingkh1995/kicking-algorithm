@@ -1,9 +1,11 @@
 package com.kkk.leetcode;
 
 import com.kkk.algs4.Queue;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.Deque;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,8 +19,57 @@ import java.util.stream.IntStream;
  */
 public class StackAndQueueAndHeapExx {
 
+  /**
+   * 496. 下一个更大元素 I <br>
+   * 使用递减的单调栈计算出nums2中每个元素的下一个更大元素，然后使用哈希表在nums2中快速查找nums1的元素。
+   */
+  public int[] nextGreaterElement(int[] nums1, int[] nums2) {
+    int n1 = nums1.length, n2 = nums2.length;
+    Deque<Integer> stack = new ArrayDeque<>(n2);
+    Map<Integer, Integer> map = new HashMap<>(n2);
+    for (int i = 0; i < n2; ++i) {
+      int n = nums2[i];
+      while (!stack.isEmpty() && n > nums2[stack.peek()]) {
+        map.put(nums2[stack.pop()], n); // 保存nums2中元素与其下一个更大元素的关系
+      }
+      stack.push(i); // 维护递减的单调栈
+    }
+    int[] ans = new int[n1];
+    for (int i = 0; i < n1; ++i) {
+      ans[i] = map.getOrDefault(nums1[i], -1);
+    }
+    return ans;
+  }
+
   // ===============================================================================================
-  /** 基础题 */
+
+  /**
+   * 456. 132 模式 <br>
+   * 单调栈，从右往左维护一个单调递减栈，其作为2元素的候选，并找出2元素的最大值。
+   */
+  public boolean find132pattern(int[] nums) {
+    if (nums.length < 3) {
+      return false;
+    }
+    int max2 = Integer.MIN_VALUE;
+    Deque<Integer> stack = new ArrayDeque<>(nums.length);
+    stack.push(nums[nums.length - 1]);
+    for (int i = nums.length - 2; i >= 0; --i) {
+      // 首先判断每一个元素是否可以作为1元素
+      if (nums[i] < max2) {
+        return true;
+      }
+      // 然后判断是否可作为3元素并更新2元素的最大值，占到单调栈内小于其的最大值，更新max2。
+      while (!stack.isEmpty() && nums[i] > stack.peek()) {
+        max2 = stack.pop();
+      }
+      // 最后如果大于max2则也作为2元素的候选
+      if (nums[i] > max2) {
+        stack.push(nums[i]);
+      }
+    }
+    return false;
+  }
 
   // ===============================================================================================
   /** 拔高题 */

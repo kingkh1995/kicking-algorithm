@@ -1,5 +1,7 @@
 package com.kkk.leetcode;
 
+import com.kkk.supports.TreeNode;
+
 /**
  * 动态规划 <br>
  * 三个模板： <br>
@@ -11,7 +13,75 @@ package com.kkk.leetcode;
  */
 public class DynamicProgramingExx {
 
+  /**
+   * 70. 爬楼梯 <br>
+   * 就是求斐波那契数列，使用隐式动态规划。
+   */
+  public int climbStairs(int n) {
+    int p, q = 0, r = 1;
+    for (int i = 1; i <= n; ++i) {
+      p = q;
+      q = r;
+      r = p + q;
+    }
+    return r;
+  }
+
   // ===============================================================================================
+
+  /**
+   * 97. 交错字符串 <br>
+   * 动态规划，dp[i][j]表示s1的前i个字符和s2的前j个字符可以组成s3的前i+j个字符。<br>
+   * 由于只需要查看dp[i - 1][j]和dp[i][j - 1]，故可以使用【滚动数组】优化空间复杂度。
+   */
+  public boolean isInterleave(String s1, String s2, String s3) {
+    int n1 = s1.length(), n2 = s2.length(), n3 = s3.length();
+    if (n1 + n2 != n3) {
+      return false;
+    }
+    boolean[] dp = new boolean[n2 + 1];
+    dp[0] = true;
+    for (int i = 0; i <= n1; ++i) {
+      for (int j = 0; j <= n2; ++j) {
+        int p = i + j - 1;
+        if (i > 0) {
+          // dp[i][j] = dp[i - 1][j] && s1.charAt(i - 1) == s3.charAt(p);
+          // dp[j]未更新前记录着外层循环上一轮的结果，即dp[i-1][j]。
+          dp[j] = dp[j] && s1.charAt(i - 1) == s3.charAt(p);
+        }
+        if (j > 0 && !dp[j]) { // 上一情况不匹配则再次计算
+          // dp[i][j] = dp[i][j - 1] && s2.charAt(j - 1) == s3.charAt(p);
+          // 此时dp[j-1]已在内层循环上一轮被更新为dp[i][j - 1]了。
+          dp[j] = dp[j - 1] && s2.charAt(j - 1) == s3.charAt(p);
+        }
+      }
+    }
+    return dp[n2];
+  }
+
+  /**
+   * 968. 监控二叉树 <br>
+   * 分为两种情况，根节点放置摄像头和不放置摄像头。<br>
+   * 根节点放置摄像头，则只需要保证left和right的两棵子树被覆盖即可；<br>
+   * 若根节点不放置摄像头，需要保证root的两棵子树被覆盖，且left和right某一个需要放置摄像头；<br>
+   * 分为三种情况：1.被覆盖且根节点必须放摄像头；2.被覆盖但根节点不一定放摄像头；3.覆盖两颗子树。
+   */
+  class minCameraCoverSolution {
+    public int minCameraCover(TreeNode root) {
+      return dfs(root)[1]; // 显然状态2为结果
+    }
+
+    private int[] dfs(TreeNode root) { // 深度优先搜索并返回3中状态的值
+      if (root == null) {
+        return new int[] {Integer.MAX_VALUE >> 1, 0, 0};
+      }
+      int[] left = dfs(root.left), right = dfs(root.right);
+      int s1 = 1 + left[2] + right[2]; // root若放置，则left和right均已被覆盖，只需要再覆盖它们的子树即可。
+      int s2 = Math.min(s1, Math.min(left[0] + right[1], left[1] + right[0])); // 状态1时状态2也成立
+      int s3 = Math.min(s1, left[1] + right[1]); // 状态1时状态3也成立
+      return new int[] {s1, s2, s3};
+    }
+  }
 
   // ===============================================================================================
   /** 拔高题 */

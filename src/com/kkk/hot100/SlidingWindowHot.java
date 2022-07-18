@@ -5,7 +5,7 @@ import java.util.List;
 
 /**
  * 滑动窗口 <br>
- * 【滑动窗口属于动态规】
+ * 【滑动窗口属于动态规划】
  *
  * @author KaiKoo
  */

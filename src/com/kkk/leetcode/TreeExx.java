@@ -152,6 +152,26 @@ public class TreeExx {
     }
   }
 
+  /**
+   * 230. 二叉搜索树中第K小的元素 <br>
+   * 按中序遍历顺序找到第K个元素。
+   */
+  public int kthSmallest(TreeNode root, int k) {
+    Deque<TreeNode> stack = new LinkedList<>();
+    while (root != null || !stack.isEmpty()) {
+      while (root != null) {
+        stack.push(root);
+        root = root.left;
+      }
+      TreeNode pop = stack.pop(); // pop出元素
+      if (--k == 0) {
+        return pop.val;
+      }
+      root = pop.right;
+    }
+    return 0; // 永远不可达
+  }
+
   // ===============================================================================================
 
   // ===============================================================================================

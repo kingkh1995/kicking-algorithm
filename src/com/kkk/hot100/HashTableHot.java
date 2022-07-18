@@ -19,9 +19,9 @@ public class HashTableHot {
 
   /**
    * 1. 两数之和 <br>
-   * 最优解法：哈希，顺序遍历，首先查询是否存在匹配元素，否则将元素添加到哈希表。 <br>
-   * 思路一：如果元素值范围区间较小，则可以使用数组实现哈希表。 <br>
-   * 思路二：如果是排序数组，则使用二分查找或双指针查找。<br>
+   * 【哈希】，遍历，首先查询是否存在匹配元素，否则将元素添加到哈希表。 <br>
+   * 如果元素值范围区间较小，则可以使用数组实现哈希表。 <br>
+   * 如果是有序数组可以使用二分查找（O(NlogN)）或双指针（O(N)） <br>
    */
   public int[] twoSum(int[] nums, int target) {
     HashMap<Integer, Integer> map = new HashMap<>();

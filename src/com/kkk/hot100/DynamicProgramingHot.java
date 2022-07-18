@@ -166,10 +166,11 @@ public class DynamicProgramingHot {
   public int numSquares(int n) {
     int[] dp = new int[n + 1];
     for (int i = 1; i <= n; ++i) {
-      dp[i] = dp[i - 1] + 1; // 默认值
-      for (int j = 2; j * j <= i; ++j) {
-        dp[i] = Math.min(dp[i], dp[i - j * j] + 1);
+      int count = Integer.MAX_VALUE;
+      for (int j = 1; j * j <= i; ++j) {
+        count = Math.min(count, dp[i - j * j]);
       }
+      dp[i] = count + 1;
     }
     return dp[n];
   }
@@ -375,7 +376,7 @@ public class DynamicProgramingHot {
     }
     boolean[] dp = new boolean[target + 1];
     dp[0] = true; // 子集可以为空则dp[0][0]默认true
-    for (int i = 0; i < n; i++) {
+    for (int i = 0; i < n; ++i) {
       int num = nums[i];
       for (int j = target; j >= num; --j) { // 需要从右往左更新，因为是由左边的状态推导出右边的状态。
         dp[j] |= dp[j - num]; // 使用|运算保证状态一旦为true则永远为true

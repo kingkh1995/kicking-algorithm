@@ -30,12 +30,12 @@ public class DoublePointerHot {
 
   /**
    * 15. 三数之和 <br>
-   * 排序后，单重循环，使用双指针查找。 <br>
+   * 解法：排序后，单重循环，再使用两数之和的解法查找。 <br>
    */
   public List<List<Integer>> threeSum(int[] nums) {
     List<List<Integer>> ans = new ArrayList<>();
     Arrays.sort(nums);
-    for (int i = 0; i < nums.length - 2; ++i) {
+    for (int i = 0; i < nums.length - 2 && nums[i] <= 0; ++i) { // nums[i]>0时可直接终止
       // 不能重复
       if (i > 0 && nums[i] == nums[i - 1]) {
         continue;
