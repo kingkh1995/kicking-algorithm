@@ -56,6 +56,27 @@ public class RecursionAndIterationExx {
     return -1;
   }
 
+  /**
+   * 807. 保持城市天际线 <br>
+   * 暴力解法，先遍历统计出每行和每列的最大高度，再遍历计算即可。
+   */
+  public int maxIncreaseKeepingSkyline(int[][] grid) {
+    int m = grid.length, n = grid[0].length, ans = 0;
+    int[] rowMax = new int[m], columnMax = new int[n];
+    for (int i = 0; i < m; ++i) {
+      for (int j = 0; j < n; ++j) {
+        rowMax[i] = Math.max(rowMax[i], grid[i][j]);
+        columnMax[j] = Math.max(columnMax[j], grid[i][j]);
+      }
+    }
+    for (int i = 0; i < m; ++i) {
+      for (int j = 0; j < n; ++j) {
+        ans += Math.min(rowMax[i], columnMax[j]) - grid[i][j];
+      }
+    }
+    return ans;
+  }
+
   // ===============================================================================================
 
   /**

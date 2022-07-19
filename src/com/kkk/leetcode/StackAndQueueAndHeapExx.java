@@ -44,6 +44,41 @@ public class StackAndQueueAndHeapExx {
   // ===============================================================================================
 
   /**
+   * 218. 天际线问题 <br>
+   * 使用垂直扫描线从左往右扫描大楼，只需要处理大楼的左右边界就可构造出天际线。
+   */
+  public static List<List<Integer>> getSkyline(int[][] buildings) {
+    List<List<Integer>> ans = new ArrayList<>();
+    // 构建基于大楼高度的最大堆，以此快速找出最大高度。
+    PriorityQueue<int[]> pq = new PriorityQueue<>(Comparator.comparingInt(arr -> -arr[2]));
+    // 收集大楼左右边界并去重排序，之后使用该顺序确定轮廓。
+    int[] boundaries =
+        Arrays.stream(buildings)
+            .flatMapToInt(building -> IntStream.of(building[0], building[1]))
+            .distinct()
+            .sorted()
+            .toArray();
+    int height, lastHeight = 0; // 记录本次和上次确定的高度
+    int i = 0; // 大楼指针，按左边界顺序往最大堆内加入大楼，buildings本来就是左边界有序的。
+    for (int boundary : boundaries) {
+      while (i < buildings.length && buildings[i][0] == boundary) { // 按左边界将当前扫描到的大楼入堆
+        pq.add(buildings[i++]);
+      }
+      while (!pq.isEmpty() && pq.peek()[1] <= boundary) { // 按右边界将当前扫过的大楼出堆
+        pq.poll();
+      }
+      if (pq.isEmpty()) { // 当前扫描线经过的大楼为空，则直接确定轮廓高度为0。
+        ans.add(List.of(boundary, 0));
+        lastHeight = 0;
+      } else if ((height = pq.peek()[2]) != lastHeight) { // 使用最大堆确定到最高的大楼，并判断是否需要记录。
+        ans.add(List.of(boundary, height));
+        lastHeight = height;
+      }
+    }
+    return ans;
+  }
+
+  /**
    * 456. 132 模式 <br>
    * 单调栈，从右往左维护一个单调递减栈，其作为2元素的候选，并找出2元素的最大值。
    */
@@ -154,52 +189,6 @@ public class StackAndQueueAndHeapExx {
     return res;
   }
 
-  // 矩阵中的最长递增路径
-  static class longestIncreasingPathPathSolution {
-    static final int[][] dirs = new int[][] {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
-    int[][] matrix;
-    int rows;
-    int columns;
-    int[][] cache; // 缓存结果，从当前位置出发的最长递增路径长度。
-    int ans;
-
-    public int longestIncreasingPath(int[][] matrix) {
-      if (matrix == null || matrix.length == 0 || matrix[0].length == 0) {
-        return 0;
-      }
-      this.matrix = matrix;
-      this.rows = matrix.length;
-      this.columns = matrix[0].length;
-      this.cache = new int[rows][columns];
-      // dfs
-      for (int i = 0; i < rows; ++i) {
-        for (int j = 0; j < columns; ++j) {
-          ans = Math.max(ans, dfs(i, j));
-        }
-      }
-      return ans;
-    }
-
-    private int dfs(int i, int j) {
-      if (cache[i][j] != 0) {
-        return cache[i][j];
-      }
-      cache[i][j] = 1;
-      for (int[] dir : dirs) {
-        int row = i + dir[0];
-        int colum = j + dir[1];
-        if (row >= 0
-            && row < rows
-            && colum >= 0
-            && colum < columns
-            && matrix[row][colum] > matrix[i][j]) {
-          cache[i][j] = Math.max(cache[i][j], 1 + dfs(row, colum));
-        }
-      }
-      return cache[i][j];
-    }
-  }
-
   // 课程表，返回学习顺序，即求有向图的拓扑排序。
   static class findOrderSolution {
     List<Integer>[] adj; // 有向图邻接表
@@ -253,49 +242,6 @@ public class StackAndQueueAndHeapExx {
 
   // ===============================================================================================
   /** 困难题 */
-
-  // 天际线问题
-  public static List<List<Integer>> getSkyline(int[][] buildings) {
-    List<List<Integer>> ans = new ArrayList<>();
-    // 垂直扫描线从左往右扫描，只需要处理大楼的左右边界就可构造出天际线。
-    // 收集大楼左右边界并去重排序之后遍历以确定轮廓
-    int[] boundaries =
-        Arrays.stream(buildings)
-            .flatMapToInt(building -> IntStream.of(building[0], building[1]))
-            .distinct()
-            .sorted()
-            .toArray();
-    // 构建基于大楼高度的最大堆
-    PriorityQueue<int[]> pq = new PriorityQueue<>(Comparator.comparingInt(arr -> -arr[2]));
-    // ph用于记录上次确定的高度
-    int ph = 0;
-    // 按左边界顺序加入大楼，buildings本来就是左边界有序的。
-    int i = 0;
-    for (int line : boundaries) {
-      // 大楼入堆
-      while (i < buildings.length && buildings[i][0] == line) {
-        pq.add(buildings[i++]);
-      }
-      // 处理已扫过大楼
-      while (!pq.isEmpty() && pq.peek()[1] <= line) {
-        pq.poll();
-      }
-      // 为空直接确定
-      if (pq.isEmpty()) {
-        ans.add(List.of(line, 0));
-        ph = 0;
-        continue;
-      }
-      int high = pq.peek()[2];
-      // 确定最高的大楼，判断是否需要记录，退出内层循环进入外层循环。
-      if (high != ph) {
-        ans.add(List.of(line, high));
-        ph = high;
-      }
-    }
-    return ans;
-  }
-
   static class ladderLengthSolution {
 
     int id = 0; // id生成

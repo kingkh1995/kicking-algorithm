@@ -153,10 +153,9 @@ public class StackAndQueueHot {
         if (stack.isEmpty()) { // 栈为空了，则不存在左挡板，无法接雨水。
           break;
         }
-        int left = stack.peek();
-        int curWidth = i - left - 1; // 木桶宽度
-        int curHeight = Math.min(height[left], height[i]) - height[pop]; // 木桶高度为左右挡板矮的一方减去底的高度
-        ans += curWidth * curHeight;
+        int left = stack.peek(); // 左挡板
+        // 桶宽度为左右挡板间的距离，桶高度为左右挡板中矮的一方减去底的高度
+        ans += (i - left - 1) * (Math.min(height[left], height[i]) - height[pop]);
       }
       stack.push(i); // 最终都要入栈
     }
@@ -244,5 +243,4 @@ public class StackAndQueueHot {
     }
     return pq.size(); // 遍历完成，即所有会议都开始了，此时堆的大小即是总共开启的会议室的个数。
   }
-
 }

@@ -27,6 +27,21 @@ public class DynamicProgramingExx {
     return r;
   }
 
+  /**
+   * 122. 买卖股票的最佳时机 II <br>
+   * 相比与121题可以多次操作，相比与309题不存在冷冻期。<br>
+   * 则每天分为两种状态，持有股票和不持有股票，因为只需要查看前一天的状态，则使用隐式动态规划。
+   */
+  public int maxProfit(int[] prices) {
+    int n = prices.length, m1 = -prices[0], m2 = 0;
+    for (int i = 1; i < n; ++i) {
+      int temp = Math.max(m1, m2 - prices[i]); // 昨天持有今天不操作，昨天未持有今天买入。
+      m2 = Math.max(m1 + prices[i], m2); // 昨天持有今天卖出，昨天未持有今天继续未持有。
+      m1 = temp;
+    }
+    return m2;
+  }
+
   // ===============================================================================================
 
   /**

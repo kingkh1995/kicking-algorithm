@@ -8,6 +8,18 @@ package com.kkk.leetcode;
  */
 public class GreedyExx {
 
+  /**
+   * 122. 买卖股票的最佳时机 II <br>
+   * 因为每天都可以买入和卖出，则可以使用贪心算法，每天都尝试操作。
+   */
+  public int maxProfit(int[] prices) {
+    int n = prices.length, ans = 0;
+    for (int i = 1; i < n; ++i) {
+      ans += Math.max(0, prices[i] - prices[i - 1]); // 只要获得正收益则操作
+    }
+    return ans;
+  }
+
   // ===============================================================================================
 
   /**
