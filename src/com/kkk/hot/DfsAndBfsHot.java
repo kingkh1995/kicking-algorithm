@@ -1,4 +1,4 @@
-package com.kkk.hot100;
+package com.kkk.hot;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -14,13 +14,13 @@ import java.util.Set;
  * @author KaiKoo
  */
 public class DfsAndBfsHot {
+  static final int[][] dirs = new int[][] {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
 
   /**
    * 200. 岛屿数量 <br>
    * DFS & BFS都可以，并将给定数组作为标记数组。
    */
   class numIslandsSolution {
-    static final int[][] dirs = new int[][] {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
 
     public int numIslands(char[][] grid) {
       int count = 0;
@@ -203,6 +203,35 @@ public class DfsAndBfsHot {
       }
       dfs(i + 1, sum + nums[i]);
       dfs(i + 1, sum - nums[i]);
+    }
+  }
+
+  /** 733. 图像渲染 <br> */
+  class floodFillSolution {
+    int[][] image;
+    int m, n, oldColor, newColor;
+
+    public int[][] floodFill(int[][] image, int sr, int sc, int color) {
+      this.image = image;
+      m = image.length;
+      n = image[0].length;
+      oldColor = image[sr][sc];
+      newColor = color;
+      dfs(sr, sc);
+      return image;
+    }
+
+    private void dfs(int row, int column) {
+      if (image[row][column] == newColor) {
+        return;
+      }
+      image[row][column] = newColor;
+      for (int[] dir : dirs) {
+        int nr = row + dir[0], nc = column + dir[1];
+        if (nr >= 0 && nr < m && nc >= 0 && nc < n && image[nr][nc] == oldColor) {
+          dfs(nr, nc);
+        }
+      }
     }
   }
 

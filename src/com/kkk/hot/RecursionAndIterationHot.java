@@ -1,4 +1,4 @@
-package com.kkk.hot100;
+package com.kkk.hot;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -90,6 +90,22 @@ public class RecursionAndIterationHot {
     }
   }
 
+  /** 409. 最长回文串 <br> */
+  public int longestPalindrome(String s) {
+    int[] count = new int[128];
+    for (char c : s.toCharArray()) {
+      count[c]++;
+    }
+    int ans = 0;
+    for (int n : count) {
+      ans += (n >> 1 << 1);
+      if ((ans & 1) == 0 && (n & 1) == 1) { // 存在任意一个奇数时可以使得长度加1
+        ++ans;
+      }
+    }
+    return ans;
+  }
+
   /**
    * 448. 找到所有数组中消失的数字 <br>
    * 不使用额外空间，直接在原数组上修改。遍历并修改nums[nums[i]-1]，最终没有被修改的下标+1则是消失的数字。
@@ -110,7 +126,7 @@ public class RecursionAndIterationHot {
 
   /**
    * 647. 回文子串 <br>
-   * 与第5题相同使用中心扩散法判断回文子串。
+   * 与【5题】相同使用中心扩散法判断回文子串。
    */
   class countSubstringsSolution {
     char[] charAt;

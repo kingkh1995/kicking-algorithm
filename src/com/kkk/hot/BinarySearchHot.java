@@ -1,4 +1,4 @@
-package com.kkk.hot100;
+package com.kkk.hot;
 
 import com.kkk.supports.ArrayUtils;
 import java.util.ArrayList;

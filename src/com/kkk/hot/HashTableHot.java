@@ -1,4 +1,4 @@
-package com.kkk.hot100;
+package com.kkk.hot;
 
 import com.kkk.supports.TreeNode;
 import java.util.ArrayList;
@@ -125,6 +125,32 @@ public class HashTableHot {
       removeNode(last);
       return last;
     }
+  }
+
+  /**
+   * 205. 同构字符串 <br>
+   * 【哈希表】，实现数组实现哈希表。
+   */
+  public boolean isIsomorphic(String s, String t) {
+    int n = s.length();
+    if (n != t.length()) {
+      return false;
+    }
+    int[] s2t = new int[128]; // 哈希表记录字符映射
+    boolean[] t2s = new boolean[128]; // 不保存映射关系只做标记
+    for (int i = 0; i < n; ++i) {
+      char sc = s.charAt(i), tc = t.charAt(i);
+      if (s2t[sc] == 0) {
+        if (t2s[tc]) { // 只允许一对一关系
+          return false;
+        }
+        s2t[sc] = tc + 1; // 用于处理0
+        t2s[tc] = true;
+      } else if (s2t[sc] != tc + 1) {
+        return false;
+      }
+    }
+    return true;
   }
 
   /**

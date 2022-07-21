@@ -29,7 +29,7 @@ public class DynamicProgramingExx {
 
   /**
    * 122. 买卖股票的最佳时机 II <br>
-   * 相比与121题可以多次操作，相比与309题不存在冷冻期。<br>
+   * 相比【121题】可以多次操作，相比【309题】不存在冷冻期。<br>
    * 则每天分为两种状态，持有股票和不持有股票，因为只需要查看前一天的状态，则使用隐式动态规划。
    */
   public int maxProfit(int[] prices) {
@@ -66,7 +66,7 @@ public class DynamicProgramingExx {
         }
         if (j > 0 && !dp[j]) { // 上一情况不匹配则再次计算
           // dp[i][j] = dp[i][j - 1] && s2.charAt(j - 1) == s3.charAt(p);
-          // 此时dp[j-1]已在内层循环上一轮被更新为dp[i][j - 1]了。
+          // 此时dp[j - 1]已在内层循环上一轮被更新为dp[i][j - 1]了。
           dp[j] = dp[j - 1] && s2.charAt(j - 1) == s3.charAt(p);
         }
       }

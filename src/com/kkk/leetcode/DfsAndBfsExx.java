@@ -7,12 +7,13 @@ package com.kkk.leetcode;
  */
 public class DfsAndBfsExx {
 
+  static final int[][] dirs = new int[][] {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
+
   /**
    * 329. 矩阵中的最长递增路径 <br>
    * 【DFS记忆化搜索】
    */
   class longestIncreasingPathSolution {
-    static final int[][] dirs = new int[][] {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
     int[][] matrix;
     int rows;
     int columns;

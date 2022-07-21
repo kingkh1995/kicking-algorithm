@@ -1,4 +1,4 @@
-package com.kkk.hot100;
+package com.kkk.hot;
 
 import com.kkk.supports.TreeNode;
 import java.util.ArrayList;
@@ -107,7 +107,7 @@ public class TreeHot {
 
   /**
    * 104. 二叉树的最大深度 <br>
-   * 使用迭代而不是递归，在102题基础上修改即可。
+   * 使用迭代而不是递归，在【102题】基础上修改即可。
    */
   public int maxDepth(TreeNode root) {
     int count = 0;
@@ -187,6 +187,41 @@ public class TreeHot {
   }
 
   /**
+   * 235. 二叉搜索树的最近公共祖先<br>
+   * 因为是二叉搜索树，则只要找到第一个位于两个值中间的值即可。<br>
+   * 236. 二叉树的最近公共祖先 <br>
+   * 找到从根节点到两个节点的路径并进行比对路径找出最近公共祖先，使用递归。<br>
+   * 分别从左右子树查找节点，如果两个节点都被找到，则当前节点为最近公共祖先，向上返回即可，否则返回找到的节点。<br>
+   */
+  class lowestCommonAncestorSolution {
+    public TreeNode lowestCommonAncestor235(TreeNode root, TreeNode p, TreeNode q) {
+      if (p.val > q.val) {
+        return lowestCommonAncestor235(root, q, p);
+      }
+      while (root != null) {
+        if (root.val < p.val) {
+          root = root.right;
+        } else if (root.val > q.val) {
+          root = root.left;
+        } else {
+          return root;
+        }
+      }
+      return null;
+    }
+
+    public TreeNode lowestCommonAncestor236(TreeNode root, TreeNode p, TreeNode q) {
+      if (root == null || root == p || root == q) { // 找到任一节点则返回该节点
+        return root;
+      }
+      TreeNode left = lowestCommonAncestor236(root.left, p, q);
+      TreeNode right = lowestCommonAncestor236(root.right, p, q);
+      // left和right都非空则返回root，否则返回其中非空的那个。
+      return null != left ? null != right ? root : left : right;
+    }
+  }
+
+  /**
    * 297. 二叉树的序列化与反序列化 <br>
    * 按先序遍历的方式遍历二叉树的所有节点，并标记空子树。 <br>
    */
@@ -248,7 +283,7 @@ public class TreeHot {
 
   /**
    * 543. 二叉树的直径 <br>
-   * 与第124题相似，只是在dfs中求深度。
+   * 与【124题】相似，只是在dfs中求深度。
    */
   class diameterOfBinaryTreeSolution {
     int ans = 0;
@@ -266,6 +301,29 @@ public class TreeHot {
       ans = Math.max(ans, ld + rd); // 当前节点下最大直径为左右子树深度之和
       return 1 + Math.max(ld, rd);
     }
+  }
+
+  /** 589. N 叉树的前序遍历 <br> */
+  public List<Integer> preorder(Node root) {
+    List<Integer> ans = new ArrayList<>();
+    if (root == null) {
+      return ans;
+    }
+    Deque<Node> stack = new LinkedList<>();
+    stack.push(root);
+    while (!stack.isEmpty()) {
+      Node pop = stack.pop();
+      ans.add(pop.val);
+      for (int i = pop.children.size() - 1; i >= 0; --i) { // 等同于二叉树反向将子结点入栈即可
+        stack.push(pop.children.get(i));
+      }
+    }
+    return ans;
+  }
+
+  static class Node {
+    public int val;
+    public List<Node> children;
   }
 
   /** 617. 合并二叉树 <br> */
@@ -379,22 +437,6 @@ public class TreeHot {
         prev = pop;
       }
     }
-  }
-
-  /**
-   * 236. 二叉树的最近公共祖先 <br>
-   * 找到从根节点到两个节点的路径并进行比对路径找出最近公共祖先，使用递归。<br>
-   * 分别从左右子树查找节点，如果两个节点都被找到，则当前节点为最近公共祖先，向上返回即可，否则返回找到的节点。<br>
-   * 拓展：如果是二叉搜索树，只要找到第一个位于两个值中间的值即可。<br>
-   */
-  public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
-    if (root == null || root == p || root == q) { // 找到任一节点则返回该节点
-      return root;
-    }
-    TreeNode left = lowestCommonAncestor(root.left, p, q);
-    TreeNode right = lowestCommonAncestor(root.right, p, q);
-    // left和right都非空则返回root，否则返回其中非空的那个。
-    return null != left ? null != right ? root : left : right;
   }
 
   /**

@@ -1,4 +1,4 @@
-package com.kkk.hot100;
+package com.kkk.hot;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -15,6 +15,8 @@ import java.util.List;
  * @author KaiKoo
  */
 public class BackTrackHot {
+
+  static final int[][] dirs = new int[][] {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
 
   /** 17. 电话号码的字母组合 <br> */
   class letterCombinationsSolution {
@@ -186,7 +188,6 @@ public class BackTrackHot {
 
   /** 79. 单词搜索 <br> */
   class existSolution {
-    static final int[][] dirs = new int[][] {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
     char[][] board;
     boolean[][] marked;
     char[] charAt;

@@ -1,4 +1,4 @@
-package com.kkk.hot100;
+package com.kkk.hot;
 
 import com.kkk.supports.ListNode;
 import java.util.ArrayList;
@@ -53,11 +53,6 @@ public class ListHot {
    * 使用迭代解决。
    */
   public ListNode mergeTwoLists(ListNode list1, ListNode list2) {
-    if (list1 == null) {
-      return list2;
-    } else if (list2 == null) {
-      return list1;
-    }
     ListNode head = new ListNode(), cur = head;
     while (list1 != null && list2 != null) {
       if (list1.val < list2.val) {
@@ -163,13 +158,13 @@ public class ListHot {
       if (head == null || head.next == null) {
         return head;
       }
-      ListNode ans = reverseList(head.next); // 下一个节点是待反转链表的头节点，同时也是反转后链表的尾节点
+      ListNode reverse = reverseList(head.next); // head的next结点在反转后是head的前置结点
       head.next.next = head;
       head.next = null;
-      return ans;
+      return reverse;
     }
 
-    public ListNode reverseList0(ListNode head) {
+    public ListNode reverseList1(ListNode head) {
       ListNode reverse = null, node = head;
       while (node != null) {
         ListNode next = node.next;
@@ -179,6 +174,19 @@ public class ListHot {
       }
       return reverse;
     }
+  }
+
+  /**
+   * 876. 链表的中间结点 <br>
+   * 快慢指针法
+   */
+  public ListNode middleNode(ListNode head) {
+    ListNode slow = head, fast = head;
+    while (fast != null && fast.next != null) {
+      slow = slow.next;
+      fast = fast.next.next;
+    }
+    return slow;
   }
 
   // ===============================================================================================

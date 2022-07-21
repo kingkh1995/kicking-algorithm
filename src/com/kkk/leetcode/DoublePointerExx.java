@@ -47,23 +47,22 @@ public class DoublePointerExx {
 
   /**
    * 524. 通过删除字母匹配到字典里最长单词 <br>
-   * 先排序，然后使用双指针判断即可，因为字符全为小写字母则可以预处理字符串加快匹配过程。
+   * 子问题为【392题】，对字典单词排序，然后找到第一个匹配的单词即是结果。
    */
   public String findLongestWord(String s, List<String> dictionary) {
-    int n = s.length();
-    // 使用动态规划预处理字符串，dp[i][j]表示从i位置开始字符出现的下一个位置。
-    int[][] dp = new int[n + 1][26];
-    Arrays.fill(dp[n], n); // 最后一列用于边界处理，设置初始值。
-    for (int i = n - 1; i >= 0; --i) { // 从右往左计算
-      for (int j = 0; j < 26; ++j) {
-        dp[i][j] = s.charAt(i) == 'a' + j ? i : dp[i + 1][j];
-      }
-    }
     dictionary.sort(
         (s1, s2) -> {
           int cmp = s2.length() - s1.length();
           return cmp == 0 ? s1.compareTo(s2) : cmp;
         });
+    int n = s.length();
+    int[][] dp = new int[n + 1][26]; // 处理同【392题】
+    Arrays.fill(dp[n], n);
+    for (int i = n - 1; i >= 0; --i) {
+      for (int j = 0, c = s.charAt(i) - 'a'; j < 26; ++j) {
+        dp[i][j] = j == c ? i : dp[i + 1][j];
+      }
+    }
     for (String word : dictionary) {
       for (int i = 0, j = 0; (i = dp[i][word.charAt(j) - 'a']) < n; ++i) {
         if (++j == word.length()) {

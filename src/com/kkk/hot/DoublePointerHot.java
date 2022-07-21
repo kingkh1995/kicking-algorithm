@@ -1,4 +1,4 @@
-package com.kkk.hot100;
+package com.kkk.hot;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -63,6 +63,40 @@ public class DoublePointerHot {
       }
     }
     return ans;
+  }
+
+  /**
+   * 392. 判断子序列 <br>
+   * 【双指针解法】，在双指针的基础上可以预处理字符串t以加快判断过程。
+   */
+  class isSubsequenceSolution {
+    public boolean isSubsequence1(String s, String t) {
+      int m = s.length(), n = t.length(), i = 0;
+      for (int j = 0; i < m && j < n; ++j) {
+        if (s.charAt(i) == t.charAt(j)) {
+          ++i;
+        }
+      }
+      return i == m;
+    }
+
+    public boolean isSubsequence2(String s, String t) {
+      int m = s.length(), n = t.length();
+      int[][] dp = new int[n + 1][26]; // 使用dp[i][j]记录字符在i位置之后出现的第一个位置
+      Arrays.fill(dp[n], n); // 最后一列用于在dp过程中处理边界问题
+      for (int i = n - 1; i >= 0; --i) {
+        for (int j = 0, c = t.charAt(i) - 'a'; j < 26; ++j) {
+          dp[i][j] = j == c ? i : dp[i + 1][j];
+        }
+      }
+      for (int i = 0, j = 0; i < m; ++i) {
+        if ((j = dp[j][s.charAt(i) - 'a']) == n) { // 在以j位置开头的子串中找到字符的位置
+          return false; // 找不到字符则表示不匹配
+        }
+        ++j; // 如果找到了匹配的字符，则j子串右移一位。
+      }
+      return true;
+    }
   }
 
   // ===============================================================================================
