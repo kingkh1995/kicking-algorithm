@@ -1,6 +1,8 @@
 package com.kkk.leetcode;
 
 import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.Phaser;
@@ -18,6 +20,58 @@ import java.util.function.IntConsumer;
  * @author KaiKoo
  */
 public class ThreadExx {
+
+  /** 实现生产者-消费者模型 */
+  static class Solution {
+    private Queue<Integer> queue = new LinkedList<>();
+
+    public void run() {
+      Thread p = new Thread(new Producer()), c = new Thread(new Consumer());
+      p.start();
+      c.start();
+    }
+
+    private class Producer implements Runnable {
+
+      @Override
+      public void run() {
+        for (int i = 0; i < 100; ++i) {
+          synchronized (queue) {
+            while (queue.size() >= 5) {
+              try {
+                queue.wait();
+              } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+              }
+            }
+            queue.add(i);
+            System.out.println("produce: " + i);
+            queue.notifyAll();
+          }
+        }
+      }
+    }
+
+    private class Consumer implements Runnable {
+
+      @Override
+      public void run() {
+        for (int i = 0; i < 100; ++i) {
+          synchronized (queue) {
+            while (queue.isEmpty()) {
+              try {
+                queue.wait();
+              } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+              }
+            }
+            System.out.println("consume: " + queue.poll());
+            queue.notifyAll();
+          }
+        }
+      }
+    }
+  }
 
   /** 1114. 按序打印 <br> */
   class Foo {

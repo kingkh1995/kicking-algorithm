@@ -30,10 +30,6 @@ public class SlidingWindowHot {
   /** 438. 找到字符串中所有字母异位词 <br> */
   public List<Integer> findAnagrams(String s, String p) {
     List<Integer> ans = new ArrayList<>();
-    int sl = s.length(), pl = p.length();
-    if (pl < 1 || pl > sl) {
-      return ans;
-    }
     int diff = 0; // 在p和窗口内的数量不同的字符的数量
     int[] aux = new int[26]; // 统计p内的字符
     for (char c : p.toCharArray()) {
@@ -42,17 +38,18 @@ public class SlidingWindowHot {
       }
     }
     int[] count = new int[26]; // 统计窗口内的字符
-    for (int l = -1, r = 0, index; r < sl; ++r) {
+    int sl = s.length(), pl = p.length(), l = 0, r = 0, index;
+    while (r < sl) {
       if (r >= pl) { // 窗口初始化成功后才移动左端
-        if (count[index = s.charAt(++l) - 'a']-- == aux[index]) { // 当前数量相同，则diff加一，因为减去字符后肯定不相同了。
+        if (count[index = s.charAt(l++) - 'a']-- == aux[index]) { // 字符当前数量相同则diff加一
           ++diff;
-        } else if (count[index] == aux[index]) { // 减去字符之后相同，则diff减一。
+        } else if (count[index] == aux[index]) { // 减去字符之后相同则diff减一
           --diff;
         }
       }
-      if (count[index = s.charAt(r) - 'a']++ == aux[index]) { // 当前数量相同，则diff加一，因加上字符后肯定不相同了。
+      if (count[index = s.charAt(r++) - 'a']++ == aux[index]) { // 字符当前数量相同则diff加一
         ++diff;
-      } else if (count[index] == aux[index]) { // 加上字符之后相同，则diff减一。
+      } else if (count[index] == aux[index]) { // 加上字符之后相同则diff减一
         --diff;
       }
       if (diff == 0) { // 判断为字母异位词
@@ -95,5 +92,21 @@ public class SlidingWindowHot {
       ans = ans.length() == 0 || r - l + 1 < ans.length() ? s.substring(l, r + 1) : ans;
     }
     return ans;
+  }
+
+  /**
+   * 424. 替换后的最长重复字符 <br/>
+   * 一直尝试增加滑动窗口的长度，因为只有这样才能更新结果，遍历完成后的窗口长度就是最终结果。 <br/>
+   */
+  public int characterReplacement(String s, int k) {
+    int[] freq = new int[26];
+    int n = s.length(), maxF = 0, l = 0, r = 0;
+    while (r < n) { // 每次窗口右端都右移一格尝试增加窗口，如果不满足条件，则左端也右移一格以维持区间的长度。
+      maxF = Math.max(maxF, ++freq[s.charAt(r++) - 'A']);
+      if (r - l - maxF > k) {
+        --freq[s.charAt(l++) - 'A'];
+      }
+    }
+    return r - l;
   }
 }

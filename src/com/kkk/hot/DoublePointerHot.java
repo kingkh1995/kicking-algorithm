@@ -99,6 +99,46 @@ public class DoublePointerHot {
     }
   }
 
+  /**
+   * 844. 比较含退格的字符串 <br/>
+   * 最优解法，双指针，从右往左遍历比较，逻辑处理比较复杂。 <br/>
+   */
+  public boolean backspaceCompare(String s, String t) {
+    int i = s.length() - 1, j = t.length() - 1, skip;
+    while (i >= 0 || j >= 0) { // 注意：只要有一个字符串非空就要处理
+      skip = 0;
+      while (i >= 0){
+        if (s.charAt(i) == '#') {
+          ++skip;
+          --i;
+        } else if (skip > 0){
+          --skip;
+          --i;
+        } else {
+          break;
+        }
+      }
+      skip = 0;
+      while (j >= 0){
+        if (t.charAt(j) == '#') {
+          ++skip;
+          --j;
+        } else if (skip > 0){
+          --skip;
+          --j;
+        } else {
+          break;
+        }
+      }
+      if(i < 0 || j < 0){
+        break;
+      }else if(s.charAt(i--) != t.charAt(j--)){ // 此时必然非'#'一旦不同则表示不匹配
+        return false;
+      }
+    }
+    return i == j; // i&j必须都为-1
+  }
+
   // ===============================================================================================
 
   /**

@@ -1,12 +1,19 @@
 package com.kkk.hot;
 
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Deque;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Objects;
 import java.util.PriorityQueue;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * 栈 & 队列 & 优先队列 <br>
@@ -59,25 +66,21 @@ public class StackAndQueueHot {
   class decodeStringSolution {
     public String decodeString(String s) {
       Deque<String> stack = new LinkedList<>();
-      for (int i = 0; i < s.length(); i++) {
-        char c = s.charAt(i);
+      for (int i = 0, j, n = s.length(); i < n;) {
+        char c = s.charAt(i++);
         if (Character.isLetter(c)) { // 找出一个字符串
-          int j = i + 1;
-          for (; j < s.length() && Character.isLetter(s.charAt(j)); j++) {}
-          pushString(stack, s.substring(i, j));
-          i = j - 1;
+          for (j = i; j < n && Character.isLetter(s.charAt(j)); ++j) {}
+          pushString(stack, s.substring(i - 1, i = j));
         } else if (Character.isDigit(c)) { // 找出一个数字
-          int j = i + 1;
-          for (; j < s.length() && Character.isDigit(s.charAt(j)); j++) {}
-          stack.push(s.substring(i, j));
-          i = j - 1;
+          for (j = i; j < n && Character.isDigit(s.charAt(j)); ++j) {}
+          stack.push(s.substring(i - 1, i = j));
         } else if (c == '[') {
           stack.push("[");
         } else { // == ']'
-          String lastString = stack.pop(); // pop一个字符串
+          String string = stack.pop(); // pop一个字符串
           stack.pop(); // pop一个[
           int count = Integer.parseInt(stack.pop()); // pop一个数字
-          pushString(stack, lastString.repeat(count)); // 构建字符串并入栈
+          pushString(stack, string.repeat(count)); // 构建字符串并入栈
         }
       }
       return stack.pop(); // 最终栈内只有一个字符串为结果
@@ -90,6 +93,31 @@ public class StackAndQueueHot {
         stack.push(s);
       }
     }
+  }
+
+  /**
+   * 692. 前K个高频单词 <br/>
+   * 最优解法，先使用哈希表统计频次，然后使用【最小堆】收集即可。
+   */
+  public List<String> topKFrequent(String[] words, int k) {
+    PriorityQueue<Entry<String, Long>> pq = new PriorityQueue<>(
+            Entry.<String, Long>comparingByValue()
+                    .thenComparing(Entry.comparingByKey(Comparator.reverseOrder())));
+    Arrays.stream(words).collect(
+            Collectors.groupingBy(Function.identity(), Collectors.counting()))
+            .entrySet()
+            .forEach(e -> {
+              pq.offer(e);
+              if (pq.size() > k) {
+                pq.poll();
+              }
+            });
+    List<String> ans = new ArrayList<>(k);
+    while (!pq.isEmpty()) {
+      ans.add(pq.poll().getKey());
+    }
+    Collections.reverse(ans);
+    return ans;
   }
 
   /**
@@ -107,6 +135,37 @@ public class StackAndQueueHot {
       stack.push(i);
     }
     return ans;
+  }
+
+  /**
+   * 844. 比较含退格的字符串 <br/>
+   * 最简单解法，使用栈重构字符串，然后比较即可，时间复杂度会高于双指针解法。
+   */
+  public boolean backspaceCompare(String s, String t) {
+      Deque<Character> stackS = new ArrayDeque<>(s.length()), stackT = new ArrayDeque<>(t.length());
+      for (char c : s.toCharArray()) {
+        if (c != '#') {
+          stackS.push(c);
+        } else if (!stackS.isEmpty()) {
+          stackS.pop();
+        }
+      }
+    for (char c : t.toCharArray()) {
+      if (c != '#') {
+        stackT.push(c);
+      } else if (!stackT.isEmpty()) {
+        stackT.pop();
+      }
+    }
+    if (stackS.size() != stackT.size()) {
+      return false;
+    }
+    while (!stackS.isEmpty()) {
+      if (!Objects.equals(stackS.pop(), stackT.pop())) {
+        return false;
+      }
+    }
+    return true;
   }
 
   // ===============================================================================================

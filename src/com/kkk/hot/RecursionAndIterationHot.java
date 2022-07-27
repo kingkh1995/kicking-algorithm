@@ -90,6 +90,28 @@ public class RecursionAndIterationHot {
     }
   }
 
+  /**
+   * 299. 猜数字游戏 <br/>
+   * 遍历求解即可
+   */
+  public String getHint(String secret, String guess) {
+    int l = secret.length(), bulls = 0, cows = 0;
+    int[] freqS = new int[10], freqG = new int[10];
+    char[] charAtS = secret.toCharArray(), charAtG = guess.toCharArray();
+    for (int i = 0; i < l; ++i) {
+      if (charAtS[i] == charAtG[i]) {
+        ++bulls;
+      } else {
+        ++freqS[charAtS[i] - '0'];
+        ++freqG[charAtG[i] - '0'];
+      }
+    }
+    for (int i = 0; i < 10; ++i) {
+      cows += Math.min(freqS[i], freqG[i]);
+    }
+    return bulls + "A" + cows + "B";
+  }
+
   /** 409. 最长回文串 <br> */
   public int longestPalindrome(String s) {
     int[] count = new int[128];
