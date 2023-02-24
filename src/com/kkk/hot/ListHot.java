@@ -165,12 +165,12 @@ public class ListHot {
     }
 
     public ListNode reverseList1(ListNode head) {
-      ListNode reverse = null, node = head;
-      while (node != null) {
-        ListNode next = node.next;
-        node.next = reverse;
-        reverse = node;
-        node = next;
+      ListNode reverse = null, next;
+      while (head != null) {
+        next = head.next;
+        head.next = reverse;
+        reverse = head;
+        head = next;
       }
       return reverse;
     }

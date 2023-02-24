@@ -66,7 +66,7 @@ public class StackAndQueueHot {
   class decodeStringSolution {
     public String decodeString(String s) {
       Deque<String> stack = new LinkedList<>();
-      for (int i = 0, j, n = s.length(); i < n;) {
+      for (int i = 0, j, n = s.length(); i < n; ) {
         char c = s.charAt(i++);
         if (Character.isLetter(c)) { // 找出一个字符串
           for (j = i; j < n && Character.isLetter(s.charAt(j)); ++j) {}
@@ -96,17 +96,19 @@ public class StackAndQueueHot {
   }
 
   /**
-   * 692. 前K个高频单词 <br/>
+   * 692. 前K个高频单词 <br>
    * 最优解法，先使用哈希表统计频次，然后使用【最小堆】收集即可。
    */
   public List<String> topKFrequent(String[] words, int k) {
-    PriorityQueue<Entry<String, Long>> pq = new PriorityQueue<>(
+    PriorityQueue<Entry<String, Long>> pq =
+        new PriorityQueue<>(
             Entry.<String, Long>comparingByValue()
-                    .thenComparing(Entry.comparingByKey(Comparator.reverseOrder())));
-    Arrays.stream(words).collect(
-            Collectors.groupingBy(Function.identity(), Collectors.counting()))
-            .entrySet()
-            .forEach(e -> {
+                .thenComparing(Entry.comparingByKey(Comparator.reverseOrder())));
+    Arrays.stream(words)
+        .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))
+        .entrySet()
+        .forEach(
+            e -> { // 优先队列大小不超过k
               pq.offer(e);
               if (pq.size() > k) {
                 pq.poll();
@@ -138,18 +140,18 @@ public class StackAndQueueHot {
   }
 
   /**
-   * 844. 比较含退格的字符串 <br/>
+   * 844. 比较含退格的字符串 <br>
    * 最简单解法，使用栈重构字符串，然后比较即可，时间复杂度会高于双指针解法。
    */
   public boolean backspaceCompare(String s, String t) {
-      Deque<Character> stackS = new ArrayDeque<>(s.length()), stackT = new ArrayDeque<>(t.length());
-      for (char c : s.toCharArray()) {
-        if (c != '#') {
-          stackS.push(c);
-        } else if (!stackS.isEmpty()) {
-          stackS.pop();
-        }
+    Deque<Character> stackS = new ArrayDeque<>(s.length()), stackT = new ArrayDeque<>(t.length());
+    for (char c : s.toCharArray()) {
+      if (c != '#') {
+        stackS.push(c);
+      } else if (!stackS.isEmpty()) {
+        stackS.pop();
       }
+    }
     for (char c : t.toCharArray()) {
       if (c != '#') {
         stackT.push(c);

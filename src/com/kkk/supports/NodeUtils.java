@@ -1,6 +1,8 @@
 package com.kkk.supports;
 
-/** @author KaiKoo */
+/**
+ * @author KaiKoo
+ */
 public class NodeUtils {
 
   public static ListNode randomSortedLinkedList(int n, int origin, int bound) {

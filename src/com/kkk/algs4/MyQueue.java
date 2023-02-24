@@ -22,12 +22,16 @@ public class MyQueue<Item> implements Iterable<Item> {
     queue.offer(item);
   }
 
-  /** @return null or element */
+  /**
+   * @return null or element
+   */
   public Item poll() {
     return queue.poll();
   }
 
-  /** @return null or element */
+  /**
+   * @return null or element
+   */
   public Item peek() {
     return queue.peek();
   }

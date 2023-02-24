@@ -2,7 +2,9 @@ package com.kkk.algs4;
 
 import com.kkk.supports.ListNode;
 
-/** @author KaiKoo */
+/**
+ * @author KaiKoo
+ */
 public class Queue {
 
   private int count = 0;

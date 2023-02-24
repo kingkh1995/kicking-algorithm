@@ -41,6 +41,21 @@ public class StackAndQueueAndHeapExx {
     return ans;
   }
 
+  /** 1046. 最后一块石头的重量 <br> */
+  public int lastStoneWeight(int[] stones) {
+    PriorityQueue<Integer> pq = new PriorityQueue<>(Comparator.reverseOrder());
+    for (int n : stones) {
+      pq.offer(n);
+    }
+    while (pq.size() > 1) {
+      int n = pq.poll() - pq.poll();
+      if (n > 0) {
+        pq.offer(n);
+      }
+    }
+    return pq.isEmpty() ? 0 : pq.poll();
+  }
+
   // ===============================================================================================
 
   /**

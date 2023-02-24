@@ -22,12 +22,16 @@ public class MyStack<Item> implements Iterable<Item> {
     stack.offerFirst(item);
   }
 
-  /** @return null or element */
+  /**
+   * @return null or element
+   */
   public Item pop() {
     return stack.pollFirst();
   }
 
-  /** @return null or element */
+  /**
+   * @return null or element
+   */
   public Item top() {
     return stack.peekFirst();
   }

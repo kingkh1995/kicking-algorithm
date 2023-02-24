@@ -14,20 +14,6 @@ import com.kkk.supports.TreeNode;
 public class DynamicProgramingExx {
 
   /**
-   * 70. 爬楼梯 <br>
-   * 就是求斐波那契数列，使用隐式动态规划。
-   */
-  public int climbStairs(int n) {
-    int p, q = 0, r = 1;
-    for (int i = 1; i <= n; ++i) {
-      p = q;
-      q = r;
-      r = p + q;
-    }
-    return r;
-  }
-
-  /**
    * 122. 买卖股票的最佳时机 II <br>
    * 相比【121题】可以多次操作，相比【309题】不存在冷冻期。<br>
    * 则每天分为两种状态，持有股票和不持有股票，因为只需要查看前一天的状态，则使用隐式动态规划。

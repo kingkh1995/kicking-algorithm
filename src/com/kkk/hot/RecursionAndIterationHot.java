@@ -91,7 +91,7 @@ public class RecursionAndIterationHot {
   }
 
   /**
-   * 299. 猜数字游戏 <br/>
+   * 299. 猜数字游戏 <br>
    * 遍历求解即可
    */
   public String getHint(String secret, String guess) {
@@ -120,12 +120,9 @@ public class RecursionAndIterationHot {
     }
     int ans = 0;
     for (int n : count) {
-      ans += (n >> 1 << 1);
-      if ((ans & 1) == 0 && (n & 1) == 1) { // 存在任意一个奇数时可以使得长度加1
-        ++ans;
-      }
+      ans += (n >> 1 << 1); // 或 n & ~1
     }
-    return ans;
+    return Math.min(ans + 1, s.length()); // 任意单个字符都可以使长度加1，只要不超出s的长度即可。
   }
 
   /**

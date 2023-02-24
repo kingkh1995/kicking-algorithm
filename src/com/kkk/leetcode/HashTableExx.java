@@ -14,6 +14,29 @@ import java.util.Random;
  */
 public class HashTableExx {
 
+  /**
+   * 205. 同构字符串 <br>
+   * 数组实现哈希表
+   */
+  public boolean isIsomorphic(String s, String t) {
+    int n = s.length();
+    if (n != t.length()) {
+      return false;
+    }
+    int[] s2t = new int[128]; // 哈希表记录字符映射
+    boolean[] t2s = new boolean[128]; // 不保存映射关系只做标记
+    for (int i = 0; i < n; ++i) {
+      char sc = s.charAt(i), tc = t.charAt(i);
+      if (s2t[sc] == 0 && !t2s[tc]) {
+        s2t[sc] = tc + 1;
+        t2s[tc] = true;
+      } else if (s2t[sc] == 0 || !t2s[tc] || s2t[sc] != tc + 1) {
+        return false;
+      }
+    }
+    return true;
+  }
+
   /** 219. 存在重复元素 II <br> */
   public boolean containsNearbyDuplicate(int[] nums, int k) {
     HashMap<Integer, Integer> map = new HashMap<>();

@@ -45,10 +45,11 @@ public class TreeHot {
     private boolean isValidBST(TreeNode root, long lower, long upper) {
       if (root == null) {
         return true;
-      } else if (root.val <= lower || root.val >= upper) {
-        return false;
       }
-      return isValidBST(root.left, lower, root.val) && isValidBST(root.right, root.val, upper);
+      return root.val > lower
+          && root.val < upper
+          && isValidBST(root.left, lower, root.val)
+          && isValidBST(root.right, root.val, upper);
     }
   }
 
@@ -198,16 +199,16 @@ public class TreeHot {
       if (p.val > q.val) {
         return lowestCommonAncestor235(root, q, p);
       }
-      while (root != null) {
+      while (true) {
         if (root.val < p.val) {
           root = root.right;
         } else if (root.val > q.val) {
           root = root.left;
-        } else {
-          return root;
+        } else { // 找到第一个中间值
+          break;
         }
       }
-      return null;
+      return root;
     }
 
     public TreeNode lowestCommonAncestor236(TreeNode root, TreeNode p, TreeNode q) {
@@ -314,7 +315,7 @@ public class TreeHot {
     while (!stack.isEmpty()) {
       Node pop = stack.pop();
       ans.add(pop.val);
-      for (int i = pop.children.size() - 1; i >= 0; --i) { // 等同于二叉树反向将子结点入栈即可
+      for (int i = pop.children.size() - 1; i >= 0; --i) { // 反向将N叉树的子结点入栈即可
         stack.push(pop.children.get(i));
       }
     }

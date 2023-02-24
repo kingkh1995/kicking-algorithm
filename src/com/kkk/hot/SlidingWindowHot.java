@@ -95,18 +95,18 @@ public class SlidingWindowHot {
   }
 
   /**
-   * 424. 替换后的最长重复字符 <br/>
-   * 一直尝试增加滑动窗口的长度，因为只有这样才能更新结果，遍历完成后的窗口长度就是最终结果。 <br/>
+   * 424. 替换后的最长重复字符 <br>
+   * 一直尝试增加滑动窗口的长度，因为只有这样才能更新结果，遍历完成后的窗口长度就是最大长度。 <br>
    */
   public int characterReplacement(String s, int k) {
     int[] freq = new int[26];
     int n = s.length(), maxF = 0, l = 0, r = 0;
     while (r < n) { // 每次窗口右端都右移一格尝试增加窗口，如果不满足条件，则左端也右移一格以维持区间的长度。
-      maxF = Math.max(maxF, ++freq[s.charAt(r++) - 'A']);
-      if (r - l - maxF > k) {
+      maxF = Math.max(maxF, ++freq[s.charAt(r++) - 'A']); // 更新频次最高的字母
+      if (r - l - maxF > k) { // 判断当前区间是否仍然满足条件，是则左端不左移即表示最大长度加一。
         --freq[s.charAt(l++) - 'A'];
       }
     }
-    return r - l;
+    return r - l; // 含头不含尾
   }
 }

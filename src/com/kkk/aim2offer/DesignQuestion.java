@@ -108,5 +108,4 @@ public class DesignQuestion {
     System.out.print(myStack.pop());
     System.out.print(myStack.pop());
   }
-
 }
