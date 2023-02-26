@@ -16,7 +16,7 @@ import java.util.List;
  */
 public class BackTrackHot {
 
-  static final int[][] dirs = new int[][] {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
+  static final int[][] dirs = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
 
   /** 17. 电话号码的字母组合 <br> */
   class letterCombinationsSolution {

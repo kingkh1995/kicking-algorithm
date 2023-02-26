@@ -171,7 +171,7 @@ public class StackAndQueueAndHeapExx {
     int m = matrix.length, n = matrix[0].length;
     int[][] res = new int[m][n];
     boolean[][] visited = new boolean[m][n];
-    int[][] dirs = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
+    int[][] dirs = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
     Queue queue = new Queue();
     // 从任意一个0出发BFS整个数组可以计算出所有的1到这个0的距离，那么为了取到最小值，需要从所有的0出发BFS一遍
     // 可以把所有的0全部加入数组，当作一个超级0，做BFS即可，1被访问到的最小次数则是最小距离

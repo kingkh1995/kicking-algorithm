@@ -1,6 +1,7 @@
 package com.kkk.leetcode;
 
 import com.kkk.supports.ArrayUtils;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -11,6 +12,39 @@ import java.util.List;
  * @author KaiKoo
  */
 public class ArrayAndMatrixExx {
+
+  /** 54. 螺旋矩阵 <br> */
+  public List<Integer> spiralOrder(int[][] matrix) {
+    int m = matrix.length, n = matrix[0].length;
+    List<Integer> ans = new ArrayList<>(m * n);
+    int[][] dirs = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}}; // 顺时针
+    for (int i = 0, j = 0, ni, nj, dir = 0; ans.size() < m * n; ) { // 收集完成后结束
+      ans.add(matrix[i][j]);
+      matrix[i][j] = Integer.MAX_VALUE; // 使用原数组作为标记数组
+      if ((ni = i + dirs[dir][0]) < 0
+          || ni >= m
+          || (nj = j + dirs[dir][1]) < 0
+          || nj >= n
+          || matrix[ni][nj] == Integer.MAX_VALUE) { // 沿着顺时针切换方向
+        dir = (dir + 1) % 4;
+      }
+      i += dirs[dir][0];
+      j += dirs[dir][1];
+    }
+    return ans;
+  }
+
+  /** 415. 字符串相加 <br> */
+  public String addStrings(String num1, String num2) {
+    int i = num1.length() - 1, j = num2.length() - 1, add = 0;
+    StringBuffer ans = new StringBuffer();
+    while (i >= 0 || j >= 0 || add != 0) {
+      int n = (i >= 0 ? num1.charAt(i--) - '0' : 0) + (j >= 0 ? num2.charAt(j--) - '0' : 0) + add;
+      add = n / 10;
+      ans.append(n % 10);
+    }
+    return ans.reverse().toString();
+  }
 
   // ===============================================================================================
 
@@ -46,6 +80,25 @@ public class ArrayAndMatrixExx {
       }
     }
     return j == n ? i - j : -1; // 模式扫描完成表示匹配成功
+  }
+
+  /** 1706. 球会落何处 <br> */
+  public int[] findBall(int[][] grid) {
+    int n = grid[0].length;
+    int[] ans = new int[n];
+    for (int j = 0; j < n; ++j) {
+      int col = j; // 当前列
+      for (int[] row : grid) { // 逐行判断模拟下落
+        int dir = row[col]; // 移动方向
+        col += dir;
+        if (col < 0 || col == n || row[col] != dir) {
+          col = -1;
+          break;
+        }
+      }
+      ans[j] = col;
+    }
+    return ans;
   }
 
   // ===============================================================================================

@@ -1,4 +1,4 @@
-package com.kkk.leetcode;
+package com.kkk.hot;
 
 import com.kkk.supports.ArrayUtils;
 

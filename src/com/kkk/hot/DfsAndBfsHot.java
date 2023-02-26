@@ -14,7 +14,7 @@ import java.util.Set;
  * @author KaiKoo
  */
 public class DfsAndBfsHot {
-  static final int[][] dirs = new int[][] {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
+  static final int[][] dirs = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
 
   /**
    * 200. 岛屿数量 <br>

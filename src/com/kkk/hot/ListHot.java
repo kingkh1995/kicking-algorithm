@@ -119,24 +119,6 @@ public class ListHot {
   }
 
   /**
-   * 148. 排序链表 <br>
-   * 将链表拆分为k个升序链表，然后使用归并排序的方式合并即可。
-   */
-  public ListNode sortList(ListNode head) {
-    List<ListNode> list = new ArrayList<>();
-    while (head != null) {
-      list.add(head); // 添加结果
-      ListNode node = head;
-      while (node.next != null && node.val <= node.next.val) {
-        node = node.next;
-      }
-      head = node.next; // 跳到下一段链表的起点
-      node.next = null; // 拆分链表
-    }
-    return mergeKLists(list.toArray(new ListNode[0]));
-  }
-
-  /**
    * 160. 相交链表 <br>
    * 双指针分别从不同的链表出发，遍历完一个再遍历另一个，两个节点一定会相遇在交点。
    */
@@ -192,6 +174,24 @@ public class ListHot {
   // ===============================================================================================
 
   /**
+   * 148. 排序链表 <br>
+   * 将链表拆分为k个升序链表，然后使用归并排序的方式合并即可。
+   */
+  public ListNode sortList(ListNode head) {
+    List<ListNode> list = new ArrayList<>();
+    while (head != null) {
+      list.add(head); // 添加结果
+      ListNode node = head;
+      while (node.next != null && node.val <= node.next.val) {
+        node = node.next;
+      }
+      head = node.next; // 跳到下一段链表的起点
+      node.next = null; // 拆分链表
+    }
+    return mergeKLists(list.toArray(new ListNode[0]));
+  }
+
+  /**
    * 234. 回文链表 <br>
    * 快慢指针法，反转前半部分链表，之后与后半段链表对比即可，只需要遍历一遍，时间复杂度o(n) 空间复杂度o(1)。
    */
@@ -206,7 +206,7 @@ public class ListHot {
     }
     slow = fast == null ? slow : slow.next; // fast非空表示链表长度为奇数，慢指针还需要走一步
     while (slow != null) { // 遍历比对反转的前半部分链表和未反转后半部分链表
-      if (reverse == null || slow.val != reverse.val) {
+      if (slow.val != reverse.val) {
         return false;
       }
       slow = slow.next;

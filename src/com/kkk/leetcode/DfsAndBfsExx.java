@@ -7,7 +7,7 @@ package com.kkk.leetcode;
  */
 public class DfsAndBfsExx {
 
-  static final int[][] dirs = new int[][] {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
+  static final int[][] dirs = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
 
   /**
    * 329. 矩阵中的最长递增路径 <br>
