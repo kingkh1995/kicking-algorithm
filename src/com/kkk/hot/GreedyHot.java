@@ -67,7 +67,7 @@ public class GreedyHot {
     for (char c : tasks) {
       maxTimes = Math.max(maxTimes, ++aux[c - 'A']);
     }
-    int maxCount = 0; // 具有最多执行次数的任务种类数量
+    int maxCount = 0; // 执行次数的最多的任务的种类数量
     for (int i : aux) {
       if (i == maxTimes) {
         ++maxCount;

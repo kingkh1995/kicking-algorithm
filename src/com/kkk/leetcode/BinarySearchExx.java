@@ -40,6 +40,26 @@ public class BinarySearchExx {
   }
 
   /**
+   * 74. 搜索二维矩阵 <br>
+   * 一次二分查找，将矩阵视作升序的一维数组，index = i * n + j;
+   */
+  public boolean searchMatrix(int[][] matrix, int target) {
+    int m = matrix.length, n = matrix[0].length, lo = 0, hi = m * n - 1;
+    while (lo <= hi) {
+      int mid = lo + (hi - lo) / 2;
+      int cmp = target - matrix[mid / n][mid % n];
+      if (cmp == 0) {
+        return true;
+      } else if (cmp > 0) {
+        lo = mid + 1;
+      } else {
+        hi = mid - 1;
+      }
+    }
+    return false;
+  }
+
+  /**
    * 162. 寻找峰值 <br>
    * 模板二解法，将大值保留在区间内，不断的缩小区间，直到退出循环。
    */
@@ -100,31 +120,7 @@ public class BinarySearchExx {
     }
   }
 
-  /**
-   * 658. 找到 K 个最接近的元素 <br>
-   * 模板二变种解法，确定出区间的最左端，判断mid是否位于目标区间内，并不断缩进。
-   */
-  public List<Integer> findClosestElements(int[] arr, int k, int x) {
-    int lo = 0, hi = arr.length - k;
-    while (lo < hi) {
-      int mid = lo + ((hi - lo) >> 1);
-      if (x - arr[mid] > arr[mid + k] - x) { // 目标区间左端肯定小于x，右端肯定大于x。
-        lo = mid + 1;
-      } else {
-        hi = mid;
-      }
-    }
-    List<Integer> ans = new ArrayList<>(k);
-    for (int i = 0; i < k; i++) {
-      ans.add(arr[i + lo]);
-    }
-    return ans;
-  }
-
-  // ===============================================================================================
-  /** 基础题 */
-
-  // 计算右侧小于当前元素的个数
+  /** 315. 计算右侧小于当前元素的个数 <br> */
   public int[] countSmaller(int[] nums) {
     int n = nums.length;
     int[] ans = new int[n];
@@ -144,15 +140,11 @@ public class BinarySearchExx {
     return ans;
   }
 
-  // ===============================================================================================
-  /** 拔高题 */
-
-  // 两个数组的交集，元素不去重， 在nums1大小远小于num2情况下，使用二分查找
-  public static int[] intersection2(int[] nums1, int[] nums2) {
-    if (nums1.length == 0 || nums2.length == 0) {
-      return new int[0];
-    }
-    // 先排序
+  /**
+   * 350. 两个数组的交集 II <br>
+   * 在nums1大小远小于num2情况下，使用二分查找
+   */
+  public int[] intersection(int[] nums1, int[] nums2) {
     Arrays.sort(nums1);
     Arrays.sort(nums2);
     int[] arr = new int[nums1.length];
@@ -160,14 +152,12 @@ public class BinarySearchExx {
     for (int i = 0; i < nums1.length; ) {
       int count = 1;
       int n = nums1[i];
-      // 统计相同元素个数
-      for (; ++i < nums1.length; count++) {
+      for (; ++i < nums1.length; count++) { // 统计相同元素个数
         if (nums1[i] != n) {
           break;
         }
       }
-      // 找到小于key值的元素个数 并顺序查找个数
-      for (int j = ArrayUtils.rank(nums2, n);
+      for (int j = ArrayUtils.rank(nums2, n); // 找到小于key值的元素个数 并顺序查找个数
           j < nums2.length && nums2[j++] == n && count > 0;
           count--) {
         arr[index++] = n;
@@ -176,11 +166,8 @@ public class BinarySearchExx {
     return Arrays.copyOfRange(arr, 0, index);
   }
 
-  // ===============================================================================================
-  /** 困难题 */
-
-  // 有序矩阵中第K小的元素，其中每行和每列元素均按升序排序，即左上角为最小值，右下角为最大值。
-  public static int kthSmallest(int[][] matrix, int k) {
+  /** 378. 有序矩阵中第 K 小的元素 <br> */
+  public int kthSmallest(int[][] matrix, int k) {
     // 沿着一段锯齿线，可以保证锯齿线左上角的所有值均小于锯齿线上的值。
     // 对最小值和最大值，使用二分查找，不断确定中间值，统计出小于该值的总数。
     int n = matrix.length;
@@ -210,5 +197,26 @@ public class BinarySearchExx {
       }
     }
     return left;
+  }
+
+  /**
+   * 658. 找到 K 个最接近的元素 <br>
+   * 模板二变种解法，确定出区间的最左端，判断mid是否位于目标区间内，并不断缩进。
+   */
+  public List<Integer> findClosestElements(int[] arr, int k, int x) {
+    int lo = 0, hi = arr.length - k;
+    while (lo < hi) {
+      int mid = lo + ((hi - lo) >> 1);
+      if (x - arr[mid] > arr[mid + k] - x) { // 目标区间左端肯定小于x，右端肯定大于x。
+        lo = mid + 1;
+      } else {
+        hi = mid;
+      }
+    }
+    List<Integer> ans = new ArrayList<>(k);
+    for (int i = 0; i < k; i++) {
+      ans.add(arr[i + lo]);
+    }
+    return ans;
   }
 }

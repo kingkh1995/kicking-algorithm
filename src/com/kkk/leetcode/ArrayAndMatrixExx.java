@@ -82,30 +82,11 @@ public class ArrayAndMatrixExx {
     return j == n ? i - j : -1; // 模式扫描完成表示匹配成功
   }
 
-  /** 1706. 球会落何处 <br> */
-  public int[] findBall(int[][] grid) {
-    int n = grid[0].length;
-    int[] ans = new int[n];
-    for (int j = 0; j < n; ++j) {
-      int col = j; // 当前列
-      for (int[] row : grid) { // 逐行判断模拟下落
-        int dir = row[col]; // 移动方向
-        col += dir;
-        if (col < 0 || col == n || row[col] != dir) {
-          col = -1;
-          break;
-        }
-      }
-      ans[j] = col;
-    }
-    return ans;
-  }
-
-  // ===============================================================================================
-  /** 基础题 */
-
-  // 计算右侧小于当前元素的个数
-  static class countSmallerSolution {
+  /**
+   * 315. 计算右侧小于当前元素的个数 <br>
+   * 归并排序，过程中统计。
+   */
+  class countSmallerSolution {
 
     private int[] index; // 索引数组
     private int[] temp; // 归并排序辅助数组
@@ -173,6 +154,25 @@ public class ArrayAndMatrixExx {
         a[k] = temp[k];
       }
     }
+  }
+
+  /** 1706. 球会落何处 <br> */
+  public int[] findBall(int[][] grid) {
+    int n = grid[0].length;
+    int[] ans = new int[n];
+    for (int j = 0; j < n; ++j) {
+      int col = j; // 当前列
+      for (int[] row : grid) { // 逐行判断模拟下落
+        int dir = row[col]; // 移动方向
+        col += dir;
+        if (col < 0 || col == n || row[col] != dir) {
+          col = -1;
+          break;
+        }
+      }
+      ans[j] = col;
+    }
+    return ans;
   }
 
   // ===============================================================================================

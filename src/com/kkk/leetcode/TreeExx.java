@@ -110,7 +110,7 @@ public class TreeExx {
       while (!stack.isEmpty()) {
         TreeNode pop = stack.pop();
         res.add(pop.val);
-        if (pop.right != null) {
+        if (pop.right != null) { // 先右后左
           stack.push(pop.right);
         }
         if (pop.left != null) {
@@ -158,8 +158,8 @@ public class TreeExx {
    */
   public int kthSmallest(TreeNode root, int k) {
     Deque<TreeNode> stack = new LinkedList<>();
-    while (root != null || !stack.isEmpty()) {
-      while (root != null) {
+    while (true) {
+      while (root != null) { // 左子树一直入栈
         stack.push(root);
         root = root.left;
       }
@@ -167,9 +167,8 @@ public class TreeExx {
       if (--k == 0) {
         return pop.val;
       }
-      root = pop.right;
+      root = pop.right; // 转到右子树
     }
-    return 0; // 永远不可达
   }
 
   // ===============================================================================================

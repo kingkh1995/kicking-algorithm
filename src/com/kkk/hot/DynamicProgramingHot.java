@@ -121,13 +121,14 @@ public class DynamicProgramingHot {
 
   /**
    * 152. 乘积最大子数组 <br>
-   * 隐式动态规划，记录乘积最大值和最小值。nums[i]、nums[i]*max[i-1]、nums[i]*min[i-1]三者最大为max[i]最小为min[i]。
+   * 隐式动态规划，记录遍历过程中包含尾端元素的乘积最大值和最小值。 <br>
+   * nums[i]、nums[i]*max[i-1]、nums[i]*min[i-1]三者最大为max[i]最小为min[i]。
    */
   public int maxProduct(int[] nums) {
-    int ans = nums[0], max = ans, min = ans, maxN, minN;
-    for (int i = 1; i < nums.length; ++i) { // 注意从索引1位置开始
-      max = Math.max(nums[i], Math.max(maxN = max * nums[i], minN = min * nums[i]));
-      min = Math.min(nums[i], Math.min(maxN, minN));
+    int ans = Integer.MIN_VALUE, max = 1, min = 1, maxN, minN;
+    for (int n : nums) {
+      max = Math.max(n, Math.max(maxN = max * n, minN = min * n));
+      min = Math.min(n, Math.min(maxN, minN));
       ans = Math.max(ans, max);
     }
     return ans;

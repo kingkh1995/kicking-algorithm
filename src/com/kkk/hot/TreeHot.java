@@ -445,7 +445,7 @@ public class TreeHot {
    * 深度搜索统计结果。
    */
   class pathSumSolution {
-    public int pathSum(TreeNode root, int targetSum) {
+    public int pathSum(TreeNode root, long targetSum) {
       if (root == null) {
         return 0;
       }
@@ -453,7 +453,7 @@ public class TreeHot {
       return dfs(root, targetSum) + pathSum(root.left, targetSum) + pathSum(root.right, targetSum);
     }
 
-    private int dfs(TreeNode root, int targetSum) { // 以当前节点为第一个节点满足条件的路径数
+    private int dfs(TreeNode root, long targetSum) { // 以当前节点为第一个节点满足条件的路径数
       if (root == null) {
         return 0;
       }

@@ -17,12 +17,12 @@ public class SlidingWindowHot {
    */
   public int lengthOfLongestSubstring(String s) {
     int ans = 0;
-    int[] aux = new int[128]; // 字符为ASCII字符
-    for (int l = 0, r = 0; r < s.length(); ++r) {
-      char c = s.charAt(r);
+    int[] aux = new int[128]; // 字符为ASCII字符，记录字符最后出现的index+1，即是窗口左侧应该跳转的位置。
+    for (int l = 0, r = 0; r < s.length(); ) {
+      char c = s.charAt(r++); // 右移含头不含尾
       l = Math.max(l, aux[c]); // 移动窗口左侧
-      ans = Math.max(ans, r - l + 1); // 更新结果
-      aux[c] = r + 1; // 记录字符最后出现的位置+1，即是窗口左侧应该跳转的位置。
+      ans = Math.max(ans, r - l); // 更新结果
+      aux[c] = r; // 记录位置
     }
     return ans;
   }

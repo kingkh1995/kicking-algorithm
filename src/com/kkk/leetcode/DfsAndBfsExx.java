@@ -1,5 +1,8 @@
 package com.kkk.leetcode;
 
+import java.util.LinkedList;
+import java.util.Queue;
+
 /**
  * DFS & BFS <br>
  *
@@ -52,5 +55,41 @@ public class DfsAndBfsExx {
     }
   }
 
+  /**
+   * 994. 腐烂的橘子 <br>
+   * 【BFS】
+   */
+  public int orangesRotting(int[][] grid) {
+    Queue<Integer> queue = new LinkedList<>();
+    int m = grid.length, n = grid[0].length, fresh = 0, count = 0;
+    for (int i = 0; i < m; ++i) { // 统计新鲜橘子数量，将烂橘子加入队列中。
+      for (int j = 0; j < n; ++j) {
+        if (grid[i][j] == 1) {
+          fresh++;
+        } else if (grid[i][j] == 2) {
+          queue.offer(i * n + j);
+        }
+      }
+    }
+    while (!queue.isEmpty() && fresh > 0) { // fresh大于0判断很关键
+      count++;
+      int size = queue.size();
+      while (size-- > 0) {
+        int poll = queue.poll();
+        for (int[] dir : dirs) {
+          int i = poll / n + dir[0], j = poll % n + dir[1];
+          if (i >= 0 && i < m && j >= 0 && j < n && grid[i][j] == 1) {
+            fresh--;
+            grid[i][j] = 2;
+            queue.offer(i * n + j);
+          }
+        }
+      }
+    }
+    return fresh == 0 ? count : -1;
+  }
+
   // ===============================================================================================
+
+  /** 815. 公交路线 <br> */
 }
