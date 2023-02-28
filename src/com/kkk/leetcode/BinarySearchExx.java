@@ -166,31 +166,25 @@ public class BinarySearchExx {
     return Arrays.copyOfRange(arr, 0, index);
   }
 
-  /** 378. 有序矩阵中第 K 小的元素 <br> */
+  /**
+   * 378. 有序矩阵中第 K 小的元素 <br>
+   * 沿着一段矩阵内锯齿线，可以保证锯齿线左上方的所有值均小于锯齿线对应的值。 <br>
+   * 数组最小值为左上角，最大值为右下角，使用二分查找，不断确定中间值，统计出小于该值的总数直到满足条件。<br>
+   */
   public int kthSmallest(int[][] matrix, int k) {
-    // 沿着一段锯齿线，可以保证锯齿线左上角的所有值均小于锯齿线上的值。
-    // 对最小值和最大值，使用二分查找，不断确定中间值，统计出小于该值的总数。
-    int n = matrix.length;
-    int left = matrix[0][0];
-    int right = matrix[n - 1][n - 1];
+    int n = matrix.length, left = matrix[0][0], right = matrix[n - 1][n - 1];
     while (left < right) {
-      int mid = left + ((right - left) >> 1);
-      // 从左下角出发，向右和向下确定出锯齿线，并统计左上角元素总数是否大于等于k
-      int i = n - 1;
-      int j = 0;
-      int num = 0;
-      while (i >= 0 && j < n) {
-        if (matrix[i][j] <= mid) {
-          // 小于等于则当前元素及其上方的所有元素均小于等于mid
-          num += i + 1;
-          // 移动到下一列，继续计算。
+      int mid = left + ((right - left) >> 1); // 确定中间值
+      int i = n - 1, j = 0, count = 0;
+      while (i >= 0 && j < n) { // 从左下角出发，向右（增大）和向上（减小）确定出锯齿线，并统计左上角元素总数是否大于等于k
+        if (matrix[i][j] <= mid) { // 小于等于则右移，大于则上移。
           j++;
+          count += i + 1; // 增加统计值
         } else {
-          // 大于则向上移动一行
           i--;
         }
       }
-      if (num >= k) {
+      if (count >= k) { // 判断以缩小数据范围
         right = mid;
       } else {
         left = mid + 1;

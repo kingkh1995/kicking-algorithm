@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Deque;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Queue;
 
 /**
  * 二叉树 & 二叉搜索树 <br>
@@ -14,46 +13,6 @@ import java.util.Queue;
  * @author KaiKoo
  */
 public class TreeExx {
-
-  /**
-   * 101. 对称二叉树 <br>
-   * 递归和迭代解法
-   */
-  class isSymmetricSolution {
-    public boolean isSymmetric1(TreeNode root) {
-      return isTwoSymmetric(root.left, root.right);
-    }
-
-    private boolean isTwoSymmetric(TreeNode left, TreeNode right) { // 给定两个节点是否对称
-      if (left == null && right == null) {
-        return true;
-      }
-      if (left == null || right == null || left.val != right.val) {
-        return false;
-      }
-      return isTwoSymmetric(left.left, right.right) && isTwoSymmetric(left.right, right.left);
-    }
-
-    public boolean isSymmetric2(TreeNode root) {
-      Queue<TreeNode> queue = new LinkedList<>();
-      queue.offer(root.left);
-      queue.offer(root.right);
-      while (!queue.isEmpty()) {
-        TreeNode poll1 = queue.poll();
-        TreeNode poll2 = queue.poll();
-        if (poll1 == null && poll2 == null) {
-          continue;
-        } else if (poll1 == null || poll2 == null || poll1.val != poll2.val) {
-          return false;
-        }
-        queue.offer(poll1.left);
-        queue.offer(poll2.right);
-        queue.offer(poll1.right);
-        queue.offer(poll2.left);
-      }
-      return true;
-    }
-  }
 
   /**
    * 110. 平衡二叉树 <br>
@@ -173,23 +132,24 @@ public class TreeExx {
 
   // ===============================================================================================
 
-  // ===============================================================================================
-  /** 拔高题 */
-
-  // 填充节点的next指针
+  /**
+   * 116. 填充每个节点的下一个右侧节点指针 <br>
+   * 117. 填充每个节点的下一个右侧节点指针 II <br>
+   * 最简单解法，借助队列使用BFS即可。 <br>
+   * 在此基础上，使用循环方式构造链表，只需要借助几个变量即可，空间复杂度为O(1)。
+   */
   public TreeNode connect(TreeNode root) {
     if (root == null) {
       return null;
     }
-    TreeNode lead = root;
-    // 从根节点开始，更新下一层的next指针。
-    while (lead != null) {
-      TreeNode nextLead = null; // 下层开始节点
+    TreeNode curHead = root; // 当前层链表头节点，根节点作为第一层链表。
+    while (curHead != null) {
+      TreeNode nextHead = null; // 下层链表头节点
       TreeNode prev = null; // 未更新next指针的上一节点
-      for (TreeNode p = lead; p != null; p = p.next) {
+      for (TreeNode p = curHead; p != null; p = p.next) { // 遍历当前层链表，构建下层的链表。
         if (p.left != null) {
-          if (nextLead == null) {
-            nextLead = p.left;
+          if (nextHead == null) {
+            nextHead = p.left;
           }
           if (prev != null) {
             prev.next = p.left;
@@ -197,8 +157,8 @@ public class TreeExx {
           prev = p.left;
         }
         if (p.right != null) {
-          if (nextLead == null) {
-            nextLead = p.right;
+          if (nextHead == null) {
+            nextHead = p.right;
           }
           if (prev != null) {
             prev.next = p.right;
@@ -206,29 +166,8 @@ public class TreeExx {
           prev = p.right;
         }
       }
-      lead = nextLead;
+      curHead = nextHead; // 进入下一层
     }
-    return root;
-  }
-
-  // 从前序与中序遍历序列构造二叉树，递归解法
-  public TreeNode buildTree(int[] preorder, int[] inorder) {
-    return buildTree(preorder, 0, preorder.length - 1, inorder, 0, inorder.length - 1);
-  }
-
-  private TreeNode buildTree(int[] preorder, int pl, int pr, int[] inorder, int il, int ir) {
-    if (pl > pr) {
-      return null;
-    }
-    TreeNode root = new TreeNode(preorder[pl]); // 前序遍历第一位为根节点
-    int i = il; // 中序遍历中根节点的位置，则左子树区间长度为 i-il
-    for (; i <= ir; i++) { // 在中序遍历中找到根节点
-      if (inorder[i] == preorder[pl]) {
-        break;
-      }
-    }
-    root.left = buildTree(preorder, pl + 1, pl + i - il, inorder, il, i - 1);
-    root.right = buildTree(preorder, pl + i - il + 1, pr, inorder, i + 1, ir);
     return root;
   }
 }

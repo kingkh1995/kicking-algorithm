@@ -46,10 +46,10 @@ public class ArrayAndMatrixHot {
    * 按区间左端点排序数组之后合并区间
    */
   public int[][] merge(int[][] intervals) {
-    Arrays.sort(intervals, Comparator.comparingInt(i -> i[0]));
+    Arrays.sort(intervals, Comparator.comparingInt(i -> i[0])); // 按左端将数组排序
     Deque<int[]> ans = new LinkedList<>();
     int[] last;
-    for (int[] i : intervals) {
+    for (int[] i : intervals) { // 遍历，拓展最后一个区间，或插入新区间。
       if (!ans.isEmpty() && (last = ans.peekLast())[1] >= i[0]) {
         last[1] = Math.max(last[1], i[1]);
       } else {

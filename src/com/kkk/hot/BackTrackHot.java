@@ -95,29 +95,26 @@ public class BackTrackHot {
    * 要求不能重复，因为candidate各不相同，故排序后，按顺序添加，则可以避免重复。
    */
   class combinationSumSolution {
-    LinkedList<Integer> deque;
+    int[] candidates;
+    Deque<Integer> deque;
     List<List<Integer>> ans;
 
     public List<List<Integer>> combinationSum(int[] candidates, int target) {
       Arrays.sort(candidates);
-      deque = new LinkedList<>();
-      ans = new ArrayList<>();
-      backTrack(candidates, target);
-      return ans;
+      this.candidates = candidates;
+      this.deque = new ArrayDeque<>();
+      this.ans = new ArrayList<>();
+      backTrack(0, target);
+      return this.ans;
     }
 
-    private void backTrack(int[] candidates, int target) {
+    private void backTrack(int index, int target) { // index作为candidate的起点，这样能避免重复添加。
       if (target == 0) {
         ans.add(new ArrayList<>(deque));
       }
-      for (int n : candidates) {
-        if (n > target) {
-          break; // 元素均大于0，超过了target则可以直接退出循环。
-        } else if (!deque.isEmpty() && n < deque.peek()) {
-          continue; // 按大小顺序添加，不添加比当前元素小的元素。
-        }
+      for (int i = index, n; i < candidates.length && (n = candidates[i]) <= target; ++i) {
         deque.push(n);
-        backTrack(candidates, target - n);
+        backTrack(i, target - n);
         deque.pop();
       }
     }
@@ -128,31 +125,33 @@ public class BackTrackHot {
    * 与求字符串中字符的所有排列组合相同，使用哈希表或者数组标记已被选中的数字。
    */
   class permuteSolution {
+    int[] nums;
     List<List<Integer>> ans;
-    List<Integer> list;
+    Deque<Integer> deque;
     boolean[] marked; // 标记数字是否可用，数字不重复且范围为-10到10，则使用长度21的boolean数组。
 
     public List<List<Integer>> permute(int[] nums) {
-      ans = new ArrayList<>();
-      list = new ArrayList<>(nums.length); // list最大容量固定
-      marked = new boolean[21];
+      this.nums = nums;
+      this.ans = new ArrayList<>();
+      this.deque = new ArrayDeque<>(nums.length); // list最大容量固定
+      this.marked = new boolean[21];
       for (int n : nums) {
-        marked[n + 10] = true;
+        this.marked[n + 10] = true;
       }
-      backTrack(nums, 0);
-      return ans;
+      backTrack(0);
+      return this.ans;
     }
 
-    private void backTrack(int[] nums, int i) {
+    private void backTrack(int i) {
       if (i == nums.length) {
-        ans.add(new ArrayList<>(list));
+        ans.add(new ArrayList<>(deque));
       }
       for (int n : nums) {
         if (marked[n + 10]) { // 要求数字可用
           marked[n + 10] = false; // 标记为不可用
-          list.add(i, n);
-          backTrack(nums, i + 1);
-          list.remove(i);
+          deque.push(n);
+          backTrack(i + 1);
+          deque.pop();
           marked[n + 10] = true; // 重新标记为不可用
         }
       }

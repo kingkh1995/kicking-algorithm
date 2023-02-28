@@ -55,29 +55,40 @@ public class TreeHot {
 
   /**
    * 101. 对称二叉树 <br>
-   * 迭代解法，需要使用队列。
+   * 递归和迭代解法
    */
-  public boolean isSymmetric(TreeNode root) {
-    Queue<TreeNode> queue = new LinkedList<>(); // 支持null
-    // 处理根节点
-    queue.offer(root.left);
-    queue.offer(root.right);
-    while (!queue.isEmpty()) {
-      // poll出两个节点，分别属于根节点的左右子树
-      TreeNode left = queue.poll();
-      TreeNode right = queue.poll();
+  class isSymmetricSolution {
+    public boolean isSymmetric1(TreeNode root) {
+      return isTwoSymmetric(root.left, root.right);
+    }
+
+    private boolean isTwoSymmetric(TreeNode left, TreeNode right) { // 给定两个节点是否对称
       if (left == null && right == null) {
-        continue;
+        return true;
       } else if (left == null || right == null || left.val != right.val) {
         return false;
       }
-      // 从两边分别选择左或右一起入队
-      queue.offer(left.left);
-      queue.offer(right.right);
-      queue.offer(left.right);
-      queue.offer(right.left);
+      return isTwoSymmetric(left.left, right.right) && isTwoSymmetric(left.right, right.left);
     }
-    return true;
+
+    public boolean isSymmetric2(TreeNode root) {
+      Queue<TreeNode> queue = new LinkedList<>();
+      queue.offer(root.left);
+      queue.offer(root.right);
+      while (!queue.isEmpty()) {
+        TreeNode poll1 = queue.poll(), poll2 = queue.poll();
+        if (poll1 == null && poll2 == null) {
+          continue;
+        } else if (poll1 == null || poll2 == null || poll1.val != poll2.val) {
+          return false;
+        }
+        queue.offer(poll1.left);
+        queue.offer(poll2.right);
+        queue.offer(poll1.right);
+        queue.offer(poll2.left);
+      }
+      return true;
+    }
   }
 
   /** 102. 二叉树的层序遍历 <br> */
@@ -357,40 +368,59 @@ public class TreeHot {
     return dp[n];
   }
 
-  /**
-   * 105. 从前序与中序遍历序列构造二叉树 <br>
-   * 迭代解法，用一个栈来维护【当前节点的所有还没有考虑过右儿子的祖先节点】。
-   */
-  public TreeNode buildTree(int[] preorder, int[] inorder) {
-    if (preorder == null || preorder.length == 0) {
-      return null;
-    }
-    TreeNode root = new TreeNode(preorder[0]); // 前序遍历第一个节点即为根节点
-    Deque<TreeNode> stack = new LinkedList<>();
-    stack.push(root);
-    // 前序遍历的某个节点如果是左儿子，则必然只能是上一个节点的左儿子。
-    // 对于前序遍历中的每个节点，我们依次判断它是栈顶节点的左儿子，还是栈中某个节点的右儿子
-    int inorderIndex = 0;
-    for (int i = 1; i < preorder.length; i++) {
-      int preorderVal = preorder[i];
-      TreeNode node = stack.peek();
-      // 栈顶节点依次与中序遍历对比，如果相同表示前序遍历中下一个节点为右儿子，反之为栈顶节点的左儿子。
-      if (node.val != inorder[inorderIndex]) {
-        node.left = new TreeNode(preorderVal);
-        stack.push(node.left);
-      } else {
-        // 因为栈中每一个节点的右儿子都还没有被遍历过，那么这些节点的顺序和它们在中序遍历中出现的顺序一定是相反的
-        while (!stack.isEmpty() && stack.peek().val == inorder[inorderIndex]) {
-          node = stack.pop();
-          inorderIndex++;
-        }
-        // 直到中序遍历中找到一个不存在于栈内的节点，表示只有栈顶节点存在右儿子，则是当前右儿子的父亲。
-        node.right = new TreeNode(preorderVal);
-        // 右儿子也入栈，因为右儿子的右儿子也还没考虑。
-        stack.push(node.right);
+  /** 105. 从前序与中序遍历序列构造二叉树 <br> */
+  class buildTreeSolution {
+
+    // 迭代解法，用一个栈来维护【当前节点的所有还没有考虑过右儿子的祖先节点】。
+    public TreeNode buildTree0(int[] preorder, int[] inorder) {
+      if (preorder == null || preorder.length == 0) {
+        return null;
       }
+      TreeNode root = new TreeNode(preorder[0]); // 前序遍历第一个节点即为根节点
+      Deque<TreeNode> stack = new LinkedList<>();
+      stack.push(root);
+      // 前序遍历的某个节点如果是左儿子，则必然只能是上一个节点的左儿子。
+      // 对于前序遍历中的每个节点，我们依次判断它是栈顶节点的左儿子，还是栈中某个节点的右儿子
+      int inorderIndex = 0;
+      for (int i = 1; i < preorder.length; i++) {
+        int preorderVal = preorder[i];
+        TreeNode node = stack.peek();
+        // 栈顶节点依次与中序遍历对比，如果相同表示前序遍历中下一个节点为右儿子，反之为栈顶节点的左儿子。
+        if (node.val != inorder[inorderIndex]) {
+          node.left = new TreeNode(preorderVal);
+          stack.push(node.left);
+        } else {
+          // 因为栈中每一个节点的右儿子都还没有被遍历过，那么这些节点的顺序和它们在中序遍历中出现的顺序一定是相反的
+          while (!stack.isEmpty() && stack.peek().val == inorder[inorderIndex]) {
+            node = stack.pop();
+            inorderIndex++;
+          }
+          // 直到中序遍历中找到一个不存在于栈内的节点，表示只有栈顶节点存在右儿子，则是当前右儿子的父亲。
+          node.right = new TreeNode(preorderVal);
+          // 右儿子也入栈，因为右儿子的右儿子也还没考虑。
+          stack.push(node.right);
+        }
+      }
+      return root;
     }
-    return root;
+
+    // 递归解法
+    public TreeNode buildTree(int[] preorder, int[] inorder) {
+      return buildTree(preorder, 0, preorder.length - 1, inorder, 0, inorder.length - 1);
+    }
+
+    private TreeNode buildTree(int[] preorder, int pl, int pr, int[] inorder, int il, int ir) {
+      if (pl > pr) {
+        return null;
+      }
+      TreeNode root = new TreeNode(preorder[pl]); // 前序遍历第一位为根节点
+      int i = il; // 中序遍历中根节点的位置，则左子树区间长度为 i-il
+      for (; i <= ir && inorder[i] != preorder[pl]; i++) // 在中序遍历中找到根节点
+        ;
+      root.left = buildTree(preorder, pl + 1, pl + i - il, inorder, il, i - 1);
+      root.right = buildTree(preorder, pl + i - il + 1, pr, inorder, i + 1, ir);
+      return root;
+    }
   }
 
   /**

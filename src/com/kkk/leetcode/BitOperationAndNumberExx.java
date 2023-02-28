@@ -1,7 +1,5 @@
 package com.kkk.leetcode;
 
-import java.util.Arrays;
-
 /**
  * 位运算 <br>
  * &：与，两个位都为1才为1；|：或，两个位都为0才为0；^：异或，两个位不同才为1；~：所有位取反。<br>
@@ -53,29 +51,5 @@ public class BitOperationAndNumberExx {
     n = n >>> 4 & 0x0f0f0f0f | (n & 0x0f0f0f0f) << 4; // 0000 1111 0000 1111 0000 1111 0000 1111
     n = n >>> 8 & 0x00ff00ff | (n & 0x00ff00ff) << 8; // 0000 0000 1111 1111 0000 0000 1111 1111
     return n >>> 16 | n << 16;
-  }
-
-  // ===============================================================================================
-  /** 拔高题 */
-
-  // 返回小于n的质数的数量
-  public int countPrimes(int n) {
-    // 标记数组，初始化为默认质数。
-    boolean[] isPrime = new boolean[n];
-    Arrays.fill(isPrime, true);
-    int ans = 0;
-    for (int i = 2; i < n; ++i) {
-      if (isPrime[i]) {
-        ans += 1;
-        // 如果当前是质数，则将该质数所有的倍数均标记为非质数
-        // 直接从i*i开始，因为2i、3i至i*i在前面的循环中肯定已经被标记过了
-        if ((long) i * i < n) { // 需要注意数字溢出的问题
-          for (int j = i * i; j < n; j += i) {
-            isPrime[j] = false;
-          }
-        }
-      }
-    }
-    return ans;
   }
 }

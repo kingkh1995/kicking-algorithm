@@ -41,6 +41,30 @@ public class StackAndQueueAndHeapExx {
     return ans;
   }
 
+  /** 735. 行星碰撞 <br> */
+  public int[] asteroidCollision(int[] asteroids) {
+    Deque<Integer> stack = new ArrayDeque<>(asteroids.length);
+    for (int i : asteroids) {
+      boolean alive = true;
+      int peek;
+      // 当前行星向左移动，且栈顶行星向右移动，才会发生碰撞。
+      while (alive && i < 0 && !stack.isEmpty() && (peek = stack.peek()) > 0) {
+        alive = peek + i < 0; // 判断是否继续存活
+        if (peek + i <= 0) { // 判断栈顶行星是否爆炸
+          stack.pop();
+        }
+      }
+      if (alive) {
+        stack.push(i);
+      }
+    }
+    int[] ans = new int[stack.size()];
+    for (int i = ans.length - 1; i >= 0; --i) {
+      ans[i] = stack.pop();
+    }
+    return ans;
+  }
+
   /** 1046. 最后一块石头的重量 <br> */
   public int lastStoneWeight(int[] stones) {
     PriorityQueue<Integer> pq = new PriorityQueue<>(Comparator.reverseOrder());

@@ -34,6 +34,33 @@ public class ArrayAndMatrixExx {
     return ans;
   }
 
+  /**
+   * 57. 插入区间 <br>
+   * 直接将插入区间加入区间数组，即可转为【56题】的解法，但是复杂度较高。<br>
+   */
+  public int[][] insert(int[][] intervals, int[] newInterval) {
+    List<int[]> ans = new ArrayList<>(intervals.length + 1);
+    boolean flag = false; // 标记区间是否已经插入
+    for (int[] arr : intervals) { // 已经排序，直接遍历即可。
+      if (arr[1] < newInterval[0]) { // 插入区间位于当前区间右边
+        ans.add(arr);
+      } else if (arr[0] > newInterval[1]) { // 插入区间位于当前区间左边
+        if (!flag) { // 将插入区间插入
+          ans.add(newInterval);
+          flag = true;
+        }
+        ans.add(arr);
+      } else { // 其他情况，将当前区间与插入区间合并
+        newInterval[0] = Math.min(newInterval[0], arr[0]);
+        newInterval[1] = Math.max(newInterval[1], arr[1]);
+      }
+    }
+    if (!flag) { // 将区间插入
+      ans.add(newInterval);
+    }
+    return ans.toArray(new int[0][0]);
+  }
+
   /** 415. 字符串相加 <br> */
   public String addStrings(String num1, String num2) {
     int i = num1.length() - 1, j = num2.length() - 1, add = 0;

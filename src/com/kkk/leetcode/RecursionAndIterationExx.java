@@ -1,5 +1,7 @@
 package com.kkk.leetcode;
 
+import java.util.Arrays;
+
 /**
  * 递归和迭代 <br>
  *
@@ -36,6 +38,26 @@ public class RecursionAndIterationExx {
       }
       return ans;
     }
+  }
+
+  /** 204. 计数质数 <br> */
+  public int countPrimes(int n) {
+    // 标记数组，初始化为默认质数。
+    boolean[] isPrime = new boolean[n];
+    Arrays.fill(isPrime, true);
+    int ans = 0;
+    for (int i = 2; i < n; ++i) {
+      if (isPrime[i]) { // 如果当前是质数，则将该质数所有的倍数均标记为非质数
+        ans += 1; // 计数增加
+        // 直接从i*i开始，因为2i、3i至i*i在前面的循环中肯定已经被标记过了
+        if ((long) i * i < n) { // 需要注意数字溢出的问题
+          for (int j = i * i; j < n; j += i) {
+            isPrime[j] = false;
+          }
+        }
+      }
+    }
+    return ans;
   }
 
   /**
