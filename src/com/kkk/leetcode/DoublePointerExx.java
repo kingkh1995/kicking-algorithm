@@ -1,6 +1,7 @@
 package com.kkk.leetcode;
 
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -117,22 +118,22 @@ public class DoublePointerExx {
    * 子问题为【392题】，对字典单词排序，然后找到第一个匹配的单词即是结果。
    */
   public String findLongestWord(String s, List<String> dictionary) {
-    dictionary.sort(
-        (s1, s2) -> {
-          int cmp = s2.length() - s1.length();
-          return cmp == 0 ? s1.compareTo(s2) : cmp;
-        });
+    dictionary.sort( // 先按长度倒序，之后按字母序排序。
+        Comparator.comparingInt(String::length)
+            .reversed()
+            .thenComparing(Comparator.naturalOrder()));
     int n = s.length();
-    int[][] dp = new int[n + 1][26]; // 处理同【392题】
-    Arrays.fill(dp[n], n);
-    for (int i = n - 1; i >= 0; --i) {
+    int[][] dp = new int[n + 1][26]; // 使用dp[i][j]记录字符在i位置之后出现的第一个位置
+    Arrays.fill(dp[n], n); // 最后一列用于在dp过程中处理边界问题
+    for (int i = n - 1; i >= 0; --i) { // 从右往左推导
       for (int j = 0, c = s.charAt(i) - 'a'; j < 26; ++j) {
         dp[i][j] = j == c ? i : dp[i + 1][j];
       }
     }
     for (String word : dictionary) {
+      // 在以i位置开头的子串中找到下一个字符的位置，如果为n则表示不存在即不匹配。
       for (int i = 0, j = 0; (i = dp[i][word.charAt(j) - 'a']) < n; ++i) {
-        if (++j == word.length()) {
+        if (++j == word.length()) { // j指针走完则匹配
           return word;
         }
       }

@@ -13,7 +13,7 @@ public class DoublePointerHot {
 
   /**
    * 11. 盛最多水的容器 <br>
-   * 双指针从两端往中心逼近计算即可，为了使容积变大，每次需要移动短的一边。
+   * 双指针从两端往中心逼近计算即可，只有移动较短的一边才有可能使得容积增大。
    */
   public int maxArea(int[] height) {
     int ans = 0, l = 0, r = height.length - 1;
@@ -67,36 +67,16 @@ public class DoublePointerHot {
 
   /**
    * 392. 判断子序列 <br>
-   * 【双指针解法】，如果存在大量输入，预处理字符串t后，可加快判断过程。
+   * 【双指针解法】，如果存在大量输入（【524题】），则预处理字符串t后，可加快判断过程。
    */
-  class isSubsequenceSolution {
-    public boolean isSubsequence1(String s, String t) {
-      int m = s.length(), n = t.length(), i = 0;
-      for (int j = 0; i < m && j < n; ++j) {
-        if (s.charAt(i) == t.charAt(j)) {
-          ++i;
-        }
+  public boolean isSubsequence(String s, String t) {
+    int m = s.length(), n = t.length(), i = 0;
+    for (int j = 0; i < m && j < n; ++j) {
+      if (s.charAt(i) == t.charAt(j)) {
+        ++i;
       }
-      return i == m;
     }
-
-    public boolean isSubsequence2(String s, String t) {
-      int m = s.length(), n = t.length();
-      int[][] dp = new int[n + 1][26]; // 使用dp[i][j]记录字符在i位置之后出现的第一个位置
-      Arrays.fill(dp[n], n); // 最后一列用于在dp过程中处理边界问题
-      for (int i = n - 1; i >= 0; --i) {
-        for (int j = 0, c = t.charAt(i) - 'a'; j < 26; ++j) {
-          dp[i][j] = j == c ? i : dp[i + 1][j];
-        }
-      }
-      for (int i = 0, j = 0; i < m; ++i) {
-        if ((j = dp[j][s.charAt(i) - 'a']) == n) { // 在以j位置开头的子串中找到字符的位置
-          return false; // 找不到字符则表示不匹配
-        }
-        ++j; // 如果找到了匹配的字符，则j子串右移一位。
-      }
-      return true;
-    }
+    return i == m;
   }
 
   /**
@@ -146,15 +126,15 @@ public class DoublePointerHot {
    * 双指针解法，只需遍历一遍，无需辅助空间。<br>
    * 【判断某个位置能否接雨水要看它两侧是不是都有高度大于等于它的高点存在】，故两个指针更高的一方可以作为另外一方的一侧高点，<br>
    * 遍历过程中，分别记录了两侧的最高高度，那么同一侧的最大高度就是另一侧高点，因此两个指针中矮的一方可以接雨水，<br>
-   * 每个位置能接到的雨水也由同一侧的最大高度决定，因为另一侧一定存在不低于其的高度，可知每次都只移动矮的那一侧指针， <br>
-   * 那么当任一指针移动到最大高度位置后就再也不会移动了，因为接雨水时最大高度总是在指针另一侧。
+   * 每个位置能接到的雨水也由同一侧的最大高度即可决定，因为接雨水时最大高度总是在指针另一侧，即另一侧一定存在不低于其的高度。 <br>
+   * 可知每次都只移动矮的那一侧指针，即扫描过程中一到遇到了当前的最大高度则该侧的指针就不会再移动了，直到另一侧出现更高的高度。
    */
   public int trap(int[] height) {
     int ans = 0, l = 0, r = height.length - 1, lm = 0, rm = 0;
     while (l < r) {
-      lm = Math.max(lm, height[l]);
-      rm = Math.max(rm, height[r]);
-      if (height[l] < height[r]) {
+      lm = Math.max(lm, height[l]); // 左侧最大高点（包含左指针）
+      rm = Math.max(rm, height[r]); // 右侧最大高点（包含右指针）
+      if (height[l] < height[r]) { // 较低的一段可以接雨水
         ans += lm - height[l];
         l++;
       } else {

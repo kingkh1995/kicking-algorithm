@@ -76,40 +76,6 @@ public class ArrayAndMatrixExx {
   // ===============================================================================================
 
   /**
-   * 28. 实现 strStr() <br>
-   * 即indexOf操作，使用KMP算法实现。
-   */
-  public int strStr(String haystack, String needle) {
-    int m = haystack.length(), n = needle.length();
-    if (n == 0) {
-      return 0;
-    }
-    int[] aux = new int[n];
-    aux[0] = -1;
-    for (int i = 1; i < n; ++i) {
-      int k = aux[i - 1];
-      while (k != -1) {
-        if (needle.charAt(i - 1) == needle.charAt(k)) {
-          aux[i] = k + 1;
-          break;
-        } else {
-          k = aux[k];
-        }
-      }
-    }
-    int i = 0, j = 0;
-    while (i < m && j < n) {
-      if (j == -1 || haystack.charAt(i) == needle.charAt(j)) {
-        i++;
-        j++;
-      } else {
-        j = aux[j];
-      }
-    }
-    return j == n ? i - j : -1; // 模式扫描完成表示匹配成功
-  }
-
-  /**
    * 315. 计算右侧小于当前元素的个数 <br>
    * 归并排序，过程中统计。
    */
@@ -181,6 +147,26 @@ public class ArrayAndMatrixExx {
         a[k] = temp[k];
       }
     }
+  }
+
+  /**
+   * 1392. 最长快乐前缀 <br>
+   * 使用KMP算法计算出辅助数组aux，结果即为aux[n-1]+1。
+   */
+  public String longestPrefix(String s) {
+    int n = s.length();
+    int[] aux = new int[n];
+    Arrays.fill(aux, -1);
+    for (int i = 1; i < n; ++i) {
+      int j = aux[i - 1];
+      while (j != -1 && s.charAt(j + 1) != s.charAt(i)) {
+        j = aux[j];
+      }
+      if (s.charAt(j + 1) == s.charAt(i)) {
+        aux[i] = j + 1;
+      }
+    }
+    return s.substring(0, aux[n - 1] + 1);
   }
 
   /** 1706. 球会落何处 <br> */

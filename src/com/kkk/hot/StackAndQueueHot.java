@@ -26,10 +26,10 @@ public class StackAndQueueHot {
   public boolean isValid(String s) {
     Map<Character, Character> map = Map.of(')', '(', '}', '{', ']', '[');
     Deque<Character> stack = new ArrayDeque<>(s.length());
-    for (char c : s.toCharArray()) {
+    for (char c : s.toCharArray()) { // 左括号入栈，右括号则对应左括号出栈。
       if (!map.containsKey(c)) {
         stack.push(c);
-      } else if (stack.isEmpty() || stack.pop() != map.get(c)) { // ASCII字符可以直接使用==比对
+      } else if (stack.isEmpty() || !Objects.equals(stack.pop(), map.get(c))) {
         return false;
       }
     }
@@ -200,8 +200,8 @@ public class StackAndQueueHot {
 
   /**
    * 42. 接雨水 <br>
-   * 【单调栈】，保证栈内元素的高度是单调递减的，如果非递减了则计算雨水。 <br>
-   * 根据木桶效应，左边高度递减仍然是在桶内，一旦非递减了就可以确定出一个左右端高度最高的木桶，可以接雨水。
+   * 【单调栈】，从左到右维护一个高度是单调递减的栈，如果非递减了则可以计算雨水。 <br>
+   * 根据木桶效应，左边高度递减仍然是在桶内，一旦非递减了就可以确定出一个存在左右端的木桶，就可以接雨水。
    */
   public int trap(int[] height) {
     int ans = 0;
@@ -209,7 +209,7 @@ public class StackAndQueueHot {
     for (int i = 0; i < height.length; ++i) {
       // 一旦高度高于栈顶了则可以计算雨水，边pop边计算。
       while (!stack.isEmpty() && height[stack.peek()] < height[i]) {
-        // 需要确定出一个木桶，pop为当前木桶的底，栈顶为左挡板，i位置为右挡板。
+        // 需要确定出一个木桶，pop为当前木桶的底，栈顶为左挡板，当前位置i为右挡板。
         int pop = stack.pop();
         if (stack.isEmpty()) { // 栈为空了，则不存在左挡板，无法接雨水。
           break;

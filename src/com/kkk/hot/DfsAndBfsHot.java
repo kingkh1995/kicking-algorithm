@@ -164,12 +164,9 @@ public class DfsAndBfsHot {
       int size = queue.size(); // 本层节点数量
       while (size-- > 0) {
         int curr = queue.poll(); // 为当前节点寻找下层节点，加上任一平方数即可。
-        for (int i = 1; i <= n; ++i) {
-          int next = curr + i * i;
+        for (int i = 1, next; (next = curr + i * i) <= n; ++i) {
           if (next == n) { // 找到结果直接返回
             return count;
-          } else if (next > n) { // 超出范围则退出寻找
-            break;
           } else if (!marked[next]) { // 节点加入下一层
             marked[next] = true; // 标记
             queue.offer(next);

@@ -214,7 +214,6 @@ public class BackTrackHot {
         return true;
       }
       marked[i][j] = true;
-      boolean result = false;
       for (int[] dir : dirs) {
         int ni = i + dir[0], nj = j + dir[1];
         if (ni >= 0
@@ -223,12 +222,11 @@ public class BackTrackHot {
             && nj < board[0].length
             && !marked[ni][nj]
             && backTrack(ni, nj, index + 1)) {
-          result = true;
-          break;
+          return true;
         }
       }
       marked[i][j] = false; // 回退过程中会重置marked数组
-      return result;
+      return false;
     }
   }
 

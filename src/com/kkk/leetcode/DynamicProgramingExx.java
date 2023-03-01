@@ -1,6 +1,8 @@
 package com.kkk.leetcode;
 
 import com.kkk.supports.TreeNode;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * 动态规划 <br>
@@ -12,6 +14,21 @@ import com.kkk.supports.TreeNode;
  * @author KaiKoo
  */
 public class DynamicProgramingExx {
+
+  /** 119. 杨辉三角 II <br> */
+  public List<Integer> getRow(int rowIndex) {
+    Integer[] ans = new Integer[rowIndex + 1];
+    for (int i = 0; i <= rowIndex; ++i) {
+      for (int j = i; j >= 0; --j) { // 从右往左开始计算，只需要一个数组即可。
+        if (j == 0 || j == i) { // 首尾默认是1
+          ans[j] = 1;
+        } else {
+          ans[j] = ans[j - 1] + ans[j];
+        }
+      }
+    }
+    return Arrays.asList(ans);
+  }
 
   /**
    * 122. 买卖股票的最佳时机 II <br>
@@ -61,26 +78,50 @@ public class DynamicProgramingExx {
   }
 
   /**
+   * 787. K 站中转内最便宜的航班 <br>
+   * 动态规划，dp[i][j]：搭乘i次航班到达j花费的最小价格，结果为dp[1][dst]-dp[k+1][dst]中间的最小值。 <br>
+   * 因为只需要通过上一轮的结果推导当前轮的结果，则只需要两个一维数组即可。
+   */
+  public int findCheapestPrice(int n, int[][] flights, int src, int dst, int k) {
+    final int INF = 10000 * 101 + 1; // 不能设置为Integer.MAX_VALUE，加法运算会溢出。
+    int[] f = new int[n], g = new int[n];
+    Arrays.fill(f, INF);
+    f[src] = 0; // 初始值
+    int ans = INF;
+    for (int i = 1; i <= k + 1; ++i) { // 中转k次即可搭载k+1
+      Arrays.fill(g, INF); // 初始值
+      for (int[] flight : flights) {
+        g[flight[1]] = Math.min(g[flight[1]], f[flight[0]] + flight[2]);
+      }
+      int[] tmp = f; // 切换辅助数组
+      f = g;
+      g = tmp;
+      ans = Math.min(ans, f[dst]); // 更新结果
+    }
+    return ans == INF ? -1 : ans;
+  }
+
+  /**
    * 968. 监控二叉树 <br>
    * 分为两种情况，根节点放置摄像头和不放置摄像头。<br>
    * 根节点放置摄像头，则只需要保证left和right的两棵子树被覆盖即可；<br>
    * 若根节点不放置摄像头，需要保证root的两棵子树被覆盖，且left和right某一个需要放置摄像头；<br>
-   * 分为三种情况：1.被覆盖且根节点必须放摄像头；2.被覆盖但根节点不一定放摄像头；3.覆盖两颗子树。
+   * 分为三种情况：0.被覆盖且根节点必须放摄像头；1.被覆盖但根节点不一定放摄像头；2.两颗子树被覆盖。
    */
   class minCameraCoverSolution {
     public int minCameraCover(TreeNode root) {
-      return dfs(root)[1]; // 显然状态2为结果
+      return dfs(root)[1]; // 显然状态1为结果
     }
 
-    private int[] dfs(TreeNode root) { // 深度优先搜索并返回3中状态的值
+    private int[] dfs(TreeNode root) { // 深度优先搜索并返回三种状态的结果
       if (root == null) {
         return new int[] {Integer.MAX_VALUE >> 1, 0, 0};
       }
       int[] left = dfs(root.left), right = dfs(root.right);
-      int s1 = 1 + left[2] + right[2]; // root若放置，则left和right均已被覆盖，只需要再覆盖它们的子树即可。
-      int s2 = Math.min(s1, Math.min(left[0] + right[1], left[1] + right[0])); // 状态1时状态2也成立
-      int s3 = Math.min(s1, left[1] + right[1]); // 状态1时状态3也成立
-      return new int[] {s1, s2, s3};
+      int s0 = 1 + left[2] + right[2]; // root若放置则left和right均已被覆盖，只需要再覆盖left和right的子树即可。
+      int s1 = Math.min(s0, Math.min(left[0] + right[1], left[1] + right[0])); // 状态0时状态1也成立
+      int s2 = Math.min(s0, left[1] + right[1]); // 状态0时状态2也成立
+      return new int[] {s0, s1, s2};
     }
   }
 

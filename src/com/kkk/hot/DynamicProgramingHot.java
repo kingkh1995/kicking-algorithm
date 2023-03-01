@@ -166,12 +166,12 @@ public class DynamicProgramingHot {
   /** 279. 完全平方数 <br> */
   public int numSquares(int n) {
     int[] dp = new int[n + 1];
-    for (int i = 1; i <= n; ++i) {
-      int count = Integer.MAX_VALUE;
-      for (int j = 1; j * j <= i; ++j) {
-        count = Math.min(count, dp[i - j * j]);
+    for (int i = 1; i <= n; ++i) { // 由前面的结果推导出后面的结果
+      int min = Integer.MAX_VALUE; // 初始值
+      for (int j = 1; j * j <= i; ++j) { // 由i减去一个平方数后的最小结果
+        min = Math.min(min, dp[i - j * j]);
       }
-      dp[i] = count + 1;
+      dp[i] = min + 1;
     }
     return dp[n];
   }
@@ -340,7 +340,7 @@ public class DynamicProgramingHot {
 
   /**
    * 309. 最佳买卖股票时机含冷冻期 <br>
-   * 每一天结束对应三种状态：1、持有股票；2、不持有股票处于冷冻期；3、不持有股票不处于冷冻期。<br>
+   * 每一天结束对应三种状态：1、持有股票（不处于冷冻期）；2、不持有股票处于冷冻期；3、不持有股票不处于冷冻期。<br>
    * 买入视作负收益，卖出视作正收益，记录下三种状态下每天的最大收益，因为只会查看前一天的状态，故使用变量保存。
    */
   public int maxProfit(int[] prices) {

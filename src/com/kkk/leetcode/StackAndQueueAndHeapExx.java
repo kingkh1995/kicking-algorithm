@@ -125,20 +125,16 @@ public class StackAndQueueAndHeapExx {
     if (nums.length < 3) {
       return false;
     }
-    int max2 = Integer.MIN_VALUE;
-    Deque<Integer> stack = new ArrayDeque<>(nums.length);
-    stack.push(nums[nums.length - 1]);
-    for (int i = nums.length - 2; i >= 0; --i) {
-      // 首先判断每一个元素是否可以作为1元素
-      if (nums[i] < max2) {
+    int n = nums.length, max2 = Integer.MIN_VALUE;
+    Deque<Integer> stack = new ArrayDeque<>(n);
+    for (int i = n - 1; i >= 0; --i) {
+      if (nums[i] < max2) { // 当前元素是否可以作为1元素
         return true;
       }
-      // 然后判断是否可作为3元素并更新2元素的最大值，占到单调栈内小于其的最大值，更新max2。
-      while (!stack.isEmpty() && nums[i] > stack.peek()) {
+      while (!stack.isEmpty() && nums[i] > stack.peek()) { // 尝试更新max2
         max2 = stack.pop();
       }
-      // 最后如果大于max2则也作为2元素的候选
-      if (nums[i] > max2) {
+      if (nums[i] > max2) { // 最后如果大于max2则也作为2元素的候选
         stack.push(nums[i]);
       }
     }
