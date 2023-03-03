@@ -163,25 +163,27 @@ public class BackTrackHot {
    * 每个元素有两种情况，被选择或不被选择。
    */
   class subsetsSolution {
+    int[] nums;
     List<List<Integer>> ans;
     Deque<Integer> stack;
 
     public List<List<Integer>> subsets(int[] nums) {
+      this.nums = nums;
       ans = new ArrayList<>();
       stack = new ArrayDeque<>(nums.length);
-      backTrack(nums, 0);
+      backTrack(0);
       return ans;
     }
 
-    private void backTrack(int[] nums, int i) {
+    private void backTrack(int i) {
       if (i == nums.length) {
         ans.add(new ArrayList<>(stack));
         return;
       }
       stack.push(nums[i]);
-      backTrack(nums, i + 1);
+      backTrack(i + 1); // 选择当前
       stack.pop();
-      backTrack(nums, i + 1);
+      backTrack(i + 1); // 不选择当前
     }
   }
 

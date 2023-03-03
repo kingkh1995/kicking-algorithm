@@ -11,69 +11,18 @@ import java.util.List;
  */
 public class DoublePointerExx {
 
-  /**
-   * 16. 最接近的三数之和 <br>
-   * 类似三数之和，排序后使用双指针求解，注意过滤重复组合。
-   */
-  public int threeSumClosest(int[] nums, int target) {
-    int n = nums.length, ans = 1000000;
-    Arrays.sort(nums);
-    for (int i = 0; i < n - 2; ++i) {
-      if (i > 0 && nums[i] == nums[i - 1]) { // 去重
-        continue;
-      }
-      int lo = i + 1, hi = n - 1;
-      while (lo < hi) {
-        int sum = nums[lo] + nums[hi] + nums[i];
-        if (sum == target) {
-          return target;
-        }
-        if (Math.abs(sum - target) < Math.abs(ans - target)) { // 更新结果
-          ans = sum;
-        }
-        if (sum > target) {
-          while (--hi > lo && nums[hi] == nums[hi + 1])
-            ;
-        } else {
-          while (++lo < hi && nums[lo] == nums[lo - 1])
-            ;
-        }
+  /** 80. 删除有序数组中的重复项 II <br> */
+  public int removeDuplicates(int[] nums) {
+    if (nums.length <= 2) {
+      return nums.length;
+    }
+    int ans = 2;
+    for (int i = 2; i < nums.length; ++i) {
+      if (nums[i] != nums[ans - 2]) {
+        nums[ans++] = nums[i];
       }
     }
     return ans;
-  }
-
-  /**
-   * 26. 删除有序数组中的重复项 <br>
-   * 80. 删除有序数组中的重复项 II <br>
-   * 双指针法解答即可，需要注意比较选择的元素。
-   */
-  class removeDuplicatesSolution {
-    public int removeDuplicates1(int[] nums) {
-      if (nums.length <= 1) {
-        return nums.length;
-      }
-      int ans = 1;
-      for (int i = 1; i < nums.length; ++i) {
-        if (nums[i] != nums[ans - 1]) {
-          nums[ans++] = nums[i];
-        }
-      }
-      return ans;
-    }
-
-    public int removeDuplicates2(int[] nums) {
-      if (nums.length <= 2) {
-        return nums.length;
-      }
-      int ans = 2;
-      for (int i = 2; i < nums.length; ++i) {
-        if (nums[i] != nums[ans - 2]) {
-          nums[ans++] = nums[i];
-        }
-      }
-      return ans;
-    }
   }
 
   /**

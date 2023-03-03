@@ -17,14 +17,24 @@ public class ListHot {
    */
   public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
     ListNode head = new ListNode(), cur = head;
-    int carry = 0; // 进位
+    int carry = 0, a, b, c; // 进位
     while (l1 != null || l2 != null || carry != 0) {
-      int val = (l1 != null ? l1.val : 0) + (l2 != null ? l2.val : 0) + carry;
-      cur.next = new ListNode(val % 10);
-      carry = val / 10;
+      if (l1 == null) {
+        a = 0;
+      } else {
+        a = l1.val;
+        l1 = l1.next;
+      }
+      if (l2 == null) {
+        b = 0;
+      } else {
+        b = l2.val;
+        l2 = l2.next;
+      }
+      c = a + b + carry;
+      carry = c / 10;
+      cur.next = new ListNode(c % 10);
       cur = cur.next;
-      l1 = l1 != null ? l1.next : l1;
-      l2 = l2 != null ? l2.next : l2;
     }
     return head.next;
   }
@@ -53,7 +63,7 @@ public class ListHot {
    * 使用迭代解决。
    */
   public ListNode mergeTwoLists(ListNode list1, ListNode list2) {
-    ListNode head = new ListNode(), cur = head;
+    ListNode head = new ListNode(), cur = head, tmp;
     while (list1 != null && list2 != null) {
       if (list1.val < list2.val) {
         cur.next = list1;
@@ -86,6 +96,32 @@ public class ListHot {
       }
     }
     return lists[0];
+  }
+
+  /**
+   * 61. 旋转链表 <br>
+   * 构建环，并在指定位置断开。
+   */
+  public ListNode rotateRight(ListNode head, int k) {
+    if (head == null || head.next == null) {
+      return head;
+    }
+    ListNode node = head;
+    int n = 1;
+    while (node.next != null) {
+      ++n;
+      node = node.next;
+    }
+    if ((k = k % n) == 0) {
+      return head;
+    }
+    node.next = head; // 头尾相连
+    while (k++ < n) { // 从尾开始遍历
+      node = node.next;
+    }
+    head = node.next;
+    node.next = null; // 断开环
+    return head;
   }
 
   /** 141. 环形链表 <br> */

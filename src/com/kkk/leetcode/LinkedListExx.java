@@ -11,33 +11,6 @@ import com.kkk.supports.ListNode;
 public class LinkedListExx {
 
   /**
-   * 61. 旋转链表 <br>
-   * 构建环，并在指定位置断开。
-   */
-  public ListNode rotateRight(ListNode head, int k) {
-    if (head == null || head.next == null) {
-      return head;
-    }
-    ListNode node = head;
-    int n = 1;
-    while (node.next != null) {
-      ++n;
-      node = node.next;
-    }
-    k = k % n;
-    if (k == 0) {
-      return head;
-    }
-    node.next = head;
-    while (k++ < n) { // 为了断开环，从最后一个节点开始遍历。
-      node = node.next;
-    }
-    head = node.next;
-    node.next = null; // 断开环
-    return head;
-  }
-
-  /**
    * 202. 快乐数 <br>
    * 如果不是快乐数，一直计算下去最终一定会出现重复的数字。<br>
    * 解法一：【哈希表】，保存计算过程中的所有数字即可。<br>

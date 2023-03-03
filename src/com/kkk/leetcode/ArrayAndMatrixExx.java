@@ -13,27 +13,6 @@ import java.util.List;
  */
 public class ArrayAndMatrixExx {
 
-  /** 54. 螺旋矩阵 <br> */
-  public List<Integer> spiralOrder(int[][] matrix) {
-    int m = matrix.length, n = matrix[0].length;
-    List<Integer> ans = new ArrayList<>(m * n);
-    int[][] dirs = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}}; // 顺时针
-    for (int i = 0, j = 0, ni, nj, dir = 0; ans.size() < m * n; ) { // 收集完成后结束
-      ans.add(matrix[i][j]);
-      matrix[i][j] = Integer.MAX_VALUE; // 使用原数组作为标记数组
-      if ((ni = i + dirs[dir][0]) < 0
-          || ni >= m
-          || (nj = j + dirs[dir][1]) < 0
-          || nj >= n
-          || matrix[ni][nj] == Integer.MAX_VALUE) { // 沿着顺时针切换方向
-        dir = (dir + 1) % 4;
-      }
-      i += dirs[dir][0];
-      j += dirs[dir][1];
-    }
-    return ans;
-  }
-
   /**
    * 57. 插入区间 <br>
    * 直接将插入区间加入区间数组，即可转为【56题】的解法，但是复杂度较高。<br>

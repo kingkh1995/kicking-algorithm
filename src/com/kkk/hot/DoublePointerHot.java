@@ -66,6 +66,64 @@ public class DoublePointerHot {
   }
 
   /**
+   * 16. 最接近的三数之和 <br>
+   * 类似三数之和，排序后使用双指针求解，注意过滤重复组合。
+   */
+  public int threeSumClosest(int[] nums, int target) {
+    int n = nums.length, ans = 1000000;
+    Arrays.sort(nums);
+    for (int i = 0; i < n - 2; ++i) {
+      if (i > 0 && nums[i] == nums[i - 1]) { // 去重
+        continue;
+      }
+      int lo = i + 1, hi = n - 1;
+      while (lo < hi) {
+        int sum = nums[lo] + nums[hi] + nums[i];
+        if (sum == target) {
+          return target;
+        }
+        if (Math.abs(sum - target) < Math.abs(ans - target)) { // 更新结果
+          ans = sum;
+        }
+        if (sum > target) {
+          while (--hi > lo && nums[hi] == nums[hi + 1])
+            ;
+        } else {
+          while (++lo < hi && nums[lo] == nums[lo - 1]) // 根据算法原理，可以只判断一边即可。
+            ;
+        }
+      }
+    }
+    return ans;
+  }
+
+  /** 26. 删除有序数组中的重复项 <br> */
+  public int removeDuplicates(int[] nums) {
+    int ans = 1; // 双指针，原地修改。
+    for (int i = 1; i < nums.length; ++i) {
+      if (nums[i] != nums[ans - 1]) {
+        nums[ans++] = nums[i];
+      }
+    }
+    return ans;
+  }
+
+  /**
+   * 88. 合并两个有序数组 <br>
+   * 双指针归并，为了不覆盖原数组，从右往左归并。
+   */
+  public void merge(int[] nums1, int m, int[] nums2, int n) {
+    int p1 = m - 1, p2 = n - 1;
+    for (int p = nums1.length - 1; p2 >= 0; p--) { // 终止条件p2为0即可
+      if (p1 >= 0 && nums1[p1] > nums2[p2]) {
+        nums1[p] = nums1[p1--];
+      } else {
+        nums1[p] = nums2[p2--];
+      }
+    }
+  }
+
+  /**
    * 392. 判断子序列 <br>
    * 【双指针解法】，如果存在大量输入（【524题】），则预处理字符串t后，可加快判断过程。
    */
