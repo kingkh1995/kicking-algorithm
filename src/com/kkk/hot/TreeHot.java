@@ -156,7 +156,7 @@ public class TreeHot {
       return ans;
     }
 
-    private int maxGain(TreeNode root) {
+    private int maxGain(TreeNode root) { // 返回当前节点的最大贡献值
       if (root == null) {
         return 0;
       }

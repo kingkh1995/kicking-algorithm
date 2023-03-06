@@ -17,6 +17,14 @@ public class BitOperationAndNumberHot {
   }
 
   /**
+   * 231. 2 的幂 <br>
+   * 即二进制表示只有一位是1，可以直接使用Integer.bitCount()。
+   */
+  public boolean isPowerOfTwo(int n) {
+    return n > 0 && ((n - 1) ^ n) == 0;
+  }
+
+  /**
    * 338. 比特位计数 <br>
    * 计算每一个数二进制表示中1的个数有两种方式：不断使用(n - 1) & n运算将最低位的1变为0、使用掩码判断每一位上的1。<br>
    * 因为需要求1-n所有数字的比特位计数，故可以使用动态规划优化，关键是如何将小的数的状态推导到大的数。 <br>

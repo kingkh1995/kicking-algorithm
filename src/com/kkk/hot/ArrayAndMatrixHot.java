@@ -199,14 +199,14 @@ public class ArrayAndMatrixHot {
       } else if ((a - c) * (c - b) > 0) {
         ArrayUtils.swap(nums, lo, hi);
       }
-      int pivot = nums[lo], i = hi + 1; // [i,hi]区间为大于等于pivot的区间
-      for (int j = hi; j > lo; --j) {
-        if (nums[j] >= pivot) { // 从右边开始找到大于等于pivot的元素则交换到区间最右边
-          ArrayUtils.swap(nums, --i, j);
+      int pivot = nums[lo], ge = hi + 1; // [ge,hi]区间为大于等于pivot的区间
+      for (int i = hi; i > lo; --i) {
+        if (nums[i] >= pivot) { // 从右边开始找到大于等于pivot的元素则交换到区间最右边
+          ArrayUtils.swap(nums, --ge, i);
         }
       }
-      ArrayUtils.swap(nums, --i, lo); // 最后把pivot放到[i,hi]区间的左边
-      return i;
+      ArrayUtils.swap(nums, --ge, lo); // 最后把pivot放到[ge,hi]区间的左边
+      return ge;
     }
   }
 
