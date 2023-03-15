@@ -309,11 +309,11 @@ public class StackAndQueueHot {
         deque.pollLast();
       }
       deque.offer(i); // 元素入单调队列
-      while (!deque.isEmpty() && deque.peek() + k <= i) { // 清除队首过期元素（索引小于i-k+1）
-        deque.poll();
+      while (deque.peekFirst() + k <= i) { // 清除队首过期元素（索引小于i-k+1）
+        deque.pollFirst();
       }
       if (++i >= k) { // 取最大值
-        ans[i - k] = nums[deque.peek()];
+        ans[i - k] = nums[deque.peekFirst()];
       }
     }
     return ans;
