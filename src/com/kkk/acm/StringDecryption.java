@@ -24,7 +24,7 @@ public class StringDecryption {
     Map<String, Integer> map = new HashMap<>();
     int target = 0;
     for (String s : split) {
-      if("".equals(s)){
+      if ("".equals(s)) {
         continue;
       }
       int t = diff(s);

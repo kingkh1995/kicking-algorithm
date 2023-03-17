@@ -12,18 +12,18 @@ import java.util.Scanner;
 public class DumpFiles {
 
   /*
-文件转储系统
-输入：
-1000
-100 300 500 400 400 150 100
-输出：
-950
-输入：
-1000
-100 500 400 150 500 100
-输出：
-1000
-  */
+  文件转储系统
+  输入：
+  1000
+  100 300 500 400 400 150 100
+  输出：
+  950
+  输入：
+  1000
+  100 500 400 150 500 100
+  输出：
+  1000
+    */
 
   public static void main(String[] args) {
     Scanner in = new Scanner(System.in);
