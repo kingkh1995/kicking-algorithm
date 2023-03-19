@@ -11,6 +11,7 @@ import java.util.Scanner;
 public class Fertilize {
 
   /*
+  农场施肥、不爱施肥的小布
   输入：
   6 7
   1 2 2 2 2 6

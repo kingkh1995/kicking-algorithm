@@ -69,13 +69,13 @@ public class RoadToCompany {
       return dfs(0, sr, sc) || dfs(1, sr, sc) || dfs(2, sr, sc) || dfs(3, sr, sc);
     }
 
-    public static int[][] dirs = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}}; // 0上1下2左3右
+    public static int[][] dirs = {{-1, 0}, {0, -1}, {1, 0}, {0, 1}}; // 上左下右
 
     private boolean dfs(int dir, int row, int col) {
       if (row == tr && col == tc) { // 判断是否到达
         return true;
       }
-      if (arr[sr][sc]) { // 当前是路障，则需要清除
+      if (arr[row][col]) { // 当前是路障，则需要清除
         if (clear == 0) { // 无清除次数则失败
           return false;
         } else {
@@ -91,14 +91,8 @@ public class RoadToCompany {
         return false;
       }
       change--; // 拐弯，上下则可改成左右，左右改成上下。
-      if (dir < 2) {
-        if (move(2, row, col) || move(3, row, col)) {
-          return true;
-        }
-      } else {
-        if (move(0, row, col) || move(1, row, col)) {
-          return true;
-        }
+      if (move((dir + 1) % 4, row, col) || move((dir + 3) % 4, row, col)) {
+        return true;
       }
       change++; // 回溯
       if (arr[sr][sc]) { // 走到这里肯定清除了路障，进行回溯。

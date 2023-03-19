@@ -11,7 +11,7 @@ import java.util.Scanner;
 public class BestOpponent {
 
   /*
-  实力差距最小总和
+  实力差距最小总和、最佳对手
   输入：
   6 30
   81 87 47 59 81 18

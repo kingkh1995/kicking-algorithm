@@ -10,7 +10,7 @@ import java.util.Scanner;
 public class ElegantArray {
 
   /*
-  优雅数组
+  优雅子数组
   输入：
   7 2
   1 2 3 1 2 3 1

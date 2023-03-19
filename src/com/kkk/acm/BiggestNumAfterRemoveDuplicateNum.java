@@ -13,7 +13,7 @@ import java.util.Scanner;
  */
 public class BiggestNumAfterRemoveDuplicateNum {
   /*
-  移除重复数字后的最大数字
+  删除重复数字后的最大数字
   输入：
   54457950454
   输出：

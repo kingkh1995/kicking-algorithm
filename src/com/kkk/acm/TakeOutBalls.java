@@ -11,7 +11,7 @@ import java.util.Scanner;
 public class TakeOutBalls {
 
   /*
-  取出尽量少的球
+  开放日活动、取出尽量少的球
   输入：
   14 7
   2 3 2 5 5 1 4

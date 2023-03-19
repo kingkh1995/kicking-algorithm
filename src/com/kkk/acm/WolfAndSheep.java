@@ -10,7 +10,7 @@ import java.util.Scanner;
 public class WolfAndSheep {
 
   /*
-  狼羊过河
+  羊、狼、农夫过河
   输入：
   5 3 3
   输出：

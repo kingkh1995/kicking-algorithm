@@ -13,7 +13,7 @@ import java.util.Scanner;
 public class TaskDeploy {
 
   /*
-  任务混部
+  任务混部、最大化控制资源成本
   输入：
   3
   2 3 1

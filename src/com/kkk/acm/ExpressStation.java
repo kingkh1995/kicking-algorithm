@@ -14,7 +14,7 @@ import java.util.Scanner;
 public class ExpressStation {
 
   /*
-  至少需要多少个快递主站点
+  快递业务站
   输入：
   4
   1 1 1 1
@@ -35,7 +35,7 @@ public class ExpressStation {
     for (int i = 0; i < n; ++i) {
       for (int j = 0; j < n; ++j) {
         int t = in.nextInt();
-        if (i < j && t == 1) {
+        if (i < j && t == 1) { // 表示直接可达
           adj[i].add(j);
           adj[j].add(i);
         }
@@ -46,7 +46,7 @@ public class ExpressStation {
     for (int i = 0; i < n; ++i) {
       if (!marked[i]) {
         count++;
-        Queue<Integer> queue = new ArrayDeque<>();
+        Queue<Integer> queue = new ArrayDeque<>(); // bfs遍历
         queue.offer(i);
         marked[i] = true;
         while (!queue.isEmpty()) {
