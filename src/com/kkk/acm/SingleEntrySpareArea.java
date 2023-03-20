@@ -12,6 +12,7 @@ import java.util.Scanner;
 public class SingleEntrySpareArea {
 
   /*
+  查找单入口空闲区域
   输入：
   4 5
   X X X X
@@ -38,7 +39,11 @@ public class SingleEntrySpareArea {
     }
     int[] ans = countSpare(grid);
     if (ans != null) {
-      System.out.println(ans[0] + " " + ans[1] + " " + ans[2]);
+      if (ans[3] > 1) {
+        System.out.println(ans[2]);
+      } else {
+        System.out.println(ans[0] + " " + ans[1] + " " + ans[2]);
+      }
     } else {
       System.out.println("NULL");
     }
@@ -72,8 +77,13 @@ public class SingleEntrySpareArea {
               }
             }
           }
-          if (!flag && (ans == null || count > ans[2])) { // 更新结果
-            ans = new int[] {i, j, count};
+          if (!flag) { // 更新结果
+            if (ans == null || count > ans[2]) {
+              ans = new int[] {i, j, count, 1};
+
+            } else if (count == ans[2]) {
+              ans[3]++;
+            }
           }
         }
       }

@@ -11,6 +11,10 @@ import java.util.Scanner;
  */
 public class SimpleImageExpose {
 
+  /*
+  简单的自动曝光、平均像素值
+     */
+
   public static void main(String[] args) {
     Scanner in = new Scanner(System.in);
     String[] aux = in.nextLine().trim().split(" ");

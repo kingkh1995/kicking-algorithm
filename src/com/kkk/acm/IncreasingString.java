@@ -18,8 +18,7 @@ public class IncreasingString {
     */
 
   public static void main(String[] args) {
-    Scanner in = new Scanner(System.in);
-    while (in.hasNext()) {
+    try (Scanner in = new Scanner(System.in)) {
       String s = in.next();
       int[][] dp = new int[s.length()][2]; // 0以A结尾，1以B结尾
       if (s.charAt(0) == 'A') {

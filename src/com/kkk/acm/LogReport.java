@@ -9,22 +9,33 @@ import java.util.Scanner;
  */
 public class LogReport {
 
+  /*
+  日志采集系统、日志首次上报最多积分
+  输入：
+  1 98 1
+  输出：
+  98
+  输入：
+  50 60 1
+  输出：
+  50
+   */
+
   public static void main(String[] args) {
-    Scanner in = new Scanner(System.in);
-    String[] arr = in.nextLine().split(" ");
-    int max = Integer.MIN_VALUE;
-    for (int i = 0; i < arr.length; ++i) { // 遍历计算
-      int score = 0, sum = 0;
-      for (int j = 0; j <= i; ++j) { // 从t0时刻统计到ti时刻
-        int n = Integer.parseInt(arr[j]);
-        score += (j - i + 1) * Math.min(100 - sum, n); // 日志上限为100
-        sum = Math.min(sum + n, 100); // 日志上报数不能超过100
+    try (Scanner in = new Scanner(System.in)) {
+      String[] arr = in.nextLine().split(" ");
+      int max = Integer.MIN_VALUE, dp = 0, sum = 0;
+      for (int i = 0; i < arr.length; ++i) { // 遍历计算
+        int num = Integer.parseInt(arr[i]);
+        // dp[i] = dp[i-1] + arr[i] - sum[i-1]
+        dp = dp + Math.min(num, 100 - sum) - sum;
+        max = Integer.max(max, dp); // 更新结果
+        if (num + sum >= 100) { // 不能超过100条
+          break;
+        }
+        sum += num; // sum[i]
       }
-      max = Math.max(score, max); // 更新结果
-      if (sum == 100) { // 本轮收集日志数超过了100，则上报时间不能超过当前时刻。
-        break;
-      }
+      System.out.println(max);
     }
-    System.out.println(max);
   }
 }

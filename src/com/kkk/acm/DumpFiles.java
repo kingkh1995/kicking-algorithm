@@ -12,7 +12,7 @@ import java.util.Scanner;
 public class DumpFiles {
 
   /*
-  文件转储系统
+  最大连续文件之和、区块链文件转储系统
   输入：
   1000
   100 300 500 400 400 150 100

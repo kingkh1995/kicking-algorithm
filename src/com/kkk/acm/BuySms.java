@@ -1,7 +1,5 @@
 package com.kkk.acm;
 
-import java.util.Arrays;
-import java.util.Comparator;
 import java.util.Scanner;
 
 /**
@@ -26,8 +24,7 @@ public class BuySms {
     */
 
   public static void main(String[] args) {
-    Scanner in = new Scanner(System.in);
-    while (in.hasNextInt()) {
+    try (Scanner in = new Scanner(System.in)) {
       int m = in.nextInt();
       in.nextLine();
       String[] split = in.nextLine().trim().split(" ");
@@ -36,23 +33,15 @@ public class BuySms {
         arr[i][0] = i + 1;
         arr[i][1] = Integer.parseInt(split[i]);
       }
-      // 按性价比、售价从高到低排序
-      Arrays.sort(
-          arr,
-          Comparator.<int[]>comparingDouble(array -> -array[1] / (double) array[0])
-              .thenComparingInt(array -> -array[0]));
-      int ans = 0;
-      while (m > 0) {
-        for (int i = 0; i < arr.length; ++i) { // 选择能选的第一种
-          if (m >= arr[i][0]) {
-            m -= arr[i][0];
-            ans += arr[i][1];
-            break;
+      int[] dp = new int[m + 1];
+      for (int i = 1; i <= m; ++i) { // 总额从1开始一直顺序计算
+        for (int j = 0; j < arr.length; ++j) { // 选择一个能使用的优惠活动
+          if (arr[j][0] <= i) { // 更新结果
+            dp[i] = Math.max(dp[i], arr[j][1] + dp[i - arr[j][0]]);
           }
         }
       }
-
-      System.out.println(ans);
+      System.out.println(dp[m]);
     }
   }
 }

@@ -10,6 +10,10 @@ import java.util.Scanner;
  */
 public class RentBikes {
 
+  /*
+  租车骑绿岛
+   */
+
   public static void main(String[] args) {
     Scanner in = new Scanner(System.in);
     int m = in.nextInt(), n = in.nextInt();

@@ -11,6 +11,10 @@ import java.util.Scanner;
  */
 public class ArrangeNewEmployee {
 
+  /*
+  新员工座位、统计友好度最大值
+     */
+
   public static void main(String[] args) {
     Scanner in = new Scanner(System.in);
     String[] arr = in.nextLine().trim().split(" ");

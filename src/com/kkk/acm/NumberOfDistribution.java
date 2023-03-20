@@ -10,7 +10,7 @@ import java.util.Scanner;
 public class NumberOfDistribution {
 
   /*
-  发行版的数量
+  linux发行版的数量
   输入：
   4
   1 1 0 0

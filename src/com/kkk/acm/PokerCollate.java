@@ -11,6 +11,18 @@ import java.util.Scanner;
  */
 public class PokerCollate {
 
+  /*
+  整理扑克牌
+  输入：
+  1 3 3 3 2 1 5
+  输出：
+  3 3 3 1 1 5 2
+  输入：
+  4 4 2 1 2 1 3 3 3 4
+  输出：
+  4 4 4 3 3 2 2 1 1 3
+     */
+
   public static void main(String[] args) {
     Scanner in = new Scanner(System.in);
     String[] arr = in.nextLine().trim().split(" ");

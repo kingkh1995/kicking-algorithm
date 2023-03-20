@@ -30,8 +30,7 @@ public class ComputerRoomLayout {
      */
 
   public static void main(String[] args) {
-    Scanner in = new Scanner(System.in);
-    while (in.hasNext()) {
+    try (Scanner in = new Scanner(System.in)) {
       System.out.println(putElectricBox(in.next()));
     }
   }

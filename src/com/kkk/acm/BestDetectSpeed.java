@@ -11,6 +11,10 @@ import java.util.Scanner;
  */
 public class BestDetectSpeed {
 
+  /*
+  核酸总最快检测效率
+     */
+
   public static void main(String[] args) {
     Scanner in = new Scanner(System.in);
     int m = in.nextInt(), n = in.nextInt();

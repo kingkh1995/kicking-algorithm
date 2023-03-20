@@ -12,7 +12,7 @@ import java.util.Scanner;
 public class MinimumGoodsLimit {
 
   /*
-  限载货物数最小值
+  统一限载货物数最小值
   输入：
   4
   3 2 6 3

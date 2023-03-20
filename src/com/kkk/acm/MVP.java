@@ -10,6 +10,10 @@ import java.util.Scanner;
  */
 public class MVP {
 
+  /*
+  星际篮球争霸赛、MVP争夺战
+     */
+
   public static void main(String[] args) {
     Scanner in = new Scanner(System.in);
     int n = in.nextInt();

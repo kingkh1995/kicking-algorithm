@@ -1,7 +1,8 @@
 package com.kkk.acm;
 
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -27,49 +28,40 @@ public class EqualSumDisjointSubArray {
     */
 
   public static void main(String[] args) {
-    try (Scanner scanner = new Scanner(System.in)) {
-      int n = scanner.nextInt();
-      scanner.nextLine();
-      int[] seq = new int[n];
-      for (int i = 0; i < n; i++) {
-        seq[i] = scanner.nextInt();
+    try (Scanner in = new Scanner(System.in)) {
+      int n = in.nextInt();
+      int[] arr = new int[n];
+      for (int i = 0; i < n; ++i) {
+        arr[i] = in.nextInt();
       }
-      int res = solution(seq, n);
-      System.out.println(res);
-    }
-  }
-
-  private static int solution(int[] seq, int n) {
-    int max = 0;
-    int[] dp = new int[n]; // 使用dp优化子序列求和
-    Map<Integer, Integer> sumCount = new HashMap<>(); // 保存子序列和出现的频次
-    Map<Integer, HashSet<Integer>> sumPos = new HashMap<>(); // 记录子序列和及对应使用过的索引
-    for (int i = 0; i < n; i++) { // 子序列长度-1
-      for (int j = 0; j + i < n; j++) { // 从0位置开始
-        dp[j] = dp[j] + seq[j + i];
-        int sum = dp[j];
-        if (!sumCount.containsKey(sum)) {
-          sumCount.put(sum, 0);
-          sumPos.put(sum, new HashSet<>());
-        }
-        boolean exists = false;
-        HashSet<Integer> poss = sumPos.get(sum);
-        for (int k = j; k <= j + i; k++) { // 判断当前子序列是否已被使用过
-          if (exists = poss.contains(k)) {
-            break;
+      // 记录子序列的和以及其包含的区间
+      Map<Integer, List<int[]>> map = new HashMap<>();
+      int max = 0;
+      int[] dp = new int[n]; // 使用dp记录前缀和以优化求和
+      for (int i = 0; i < n; i++) { // 长度从1开始，这样才不会出错。
+        for (int j = 0; j + i < n; ++j) { // 每一列，当前区间为[j, j+i]
+          dp[j] += arr[j + i]; // 序列增加
+          int sum = dp[j];
+          if (!map.containsKey(sum)) {
+            map.put(sum, new ArrayList<>());
           }
-        }
-        if (!exists) { // 当前子序列未被使用，则可以作为一个结果
-          int newSum = sumCount.get(sum) + 1;
-          sumCount.put(sum, newSum);
-          max = Math.max(max, newSum); // 更新结果
-          for (int k = j; k <= j + i; k++) { // 将子序列所有的索引都加入
-            poss.add(k);
+          // 判断区间是否存在了
+          List<int[]> indexList = map.get(sum);
+          boolean flag = false;
+          for (int[] cover : indexList) {
+            if (cover[0] <= j + i && cover[1] >= j) {
+              flag = true;
+              break;
+            }
           }
+          if (flag) { // 存在了则不匹配
+            continue;
+          }
+          indexList.add(new int[] {j, j + i}); // 匹配，加入结果集
+          max = Math.max(max, indexList.size()); // 更新结果
         }
       }
+      System.out.println(max);
     }
-
-    return max;
   }
 }
