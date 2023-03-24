@@ -19,17 +19,12 @@ public class DynamicProgramingHot {
     int length = s.length();
     boolean[][] dp = new boolean[length][length]; // dp[i][j]表示从i至j的子串是否为回文字符串
     String res = "";
-    // dp遍历方向为从下至上，从左至右。
-    for (int i = length - 1; i >= 0; i--) {
+    for (int region, i = length - 1; i >= 0; i--) { // dp遍历方向为从下至上，从左至右。
       for (int j = i; j < length; j++) {
-        if (s.charAt(i) == s.charAt(j)) {
-          if (j - i > 2) {
-            dp[i][j] = dp[i + 1][j - 1];
-          } else {
-            dp[i][j] = true; // 区间长度小于等于3则直接为true
-          }
-          // 更新结果
-          if (dp[i][j] && j - i + 1 > res.length()) {
+        if (((region = j - i + 1) <= 3 || dp[i + 1][j - 1])
+            && s.charAt(i) == s.charAt(j)) { // 区间长度小于等于3则直接为true
+          dp[i][j] = true;
+          if (region > res.length()) {
             res = s.substring(i, j + 1);
           }
         }

@@ -44,10 +44,9 @@ public class ListHot {
    * 快慢指针法求解，只需要遍历一遍。
    */
   public ListNode removeNthFromEnd(ListNode head, int n) {
-    ListNode dummy = new ListNode(); // 虚拟头节点
+    ListNode dummy = new ListNode(), fast = dummy, slow = dummy; // 虚拟头节点
     dummy.next = head;
-    // 都从虚拟头节点出发，快指针先走n步。
-    ListNode fast = dummy, slow = dummy;
+    // 都从虚拟头节点出发，快指针先走n步，快指针走到最后一个结点时，慢指针在要被删除结点的前一个位置。
     while (fast.next != null) {
       fast = fast.next;
       if (--n < 0) {

@@ -22,42 +22,10 @@ import java.util.stream.Collectors;
  */
 public class StackAndQueueHot {
 
-  /**
-   * 7. 整数反转 <br>
-   * 使用栈，直接模拟即可，不需要使用真正的数据结构。
-   */
-  public int reverse(int x) {
-    int rev = 0;
-    while (x != 0) {
-      if (rev < Integer.MIN_VALUE / 10 || rev > Integer.MAX_VALUE / 10) { // 判断防止越界
-        return 0;
-      }
-      rev = rev * 10 + x % 10;
-      x = x / 10;
-    }
-    return rev;
-  }
-
-  /**
-   * 9. 回文数 <br>
-   * 类似【7题】，将整数反转一半后即可，如位数为偶数直接对比，如为奇数需要抹去最后一位。
-   */
-  public boolean isPalindrome(int x) {
-    if (x < 0 || (x % 10 == 0 && x != 0)) { // 需要先处理特殊情况【最后一位为0】，否则后面会判断为true。
-      return false;
-    }
-    int rev = 0;
-    while (x > rev) { // 终止条件
-      rev = rev * 10 + x % 10;
-      x = x / 10;
-    }
-    return x == rev || x == rev / 10;
-  }
-
   /** 20. 有效的括号 <br> */
   public boolean isValid(String s) {
     Map<Character, Character> map = Map.of(')', '(', '}', '{', ']', '[');
-    Deque<Character> stack = new ArrayDeque<>(s.length());
+    Deque<Character> stack = new ArrayDeque<>();
     for (char c : s.toCharArray()) { // 左括号入栈，右括号则对应左括号出栈。
       if (!map.containsKey(c)) {
         stack.push(c);

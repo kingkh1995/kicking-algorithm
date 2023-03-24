@@ -34,6 +34,23 @@ public class HashTableHot {
     return new int[0];
   }
 
+  /** 13. 罗马数字转整数 <br> */
+  public int romanToInt(String s) {
+    Map<Character, Integer> map =
+        Map.of('I', 1, 'V', 5, 'X', 10, 'L', 50, 'C', 100, 'D', 500, 'M', 1000);
+    int ans = 0;
+    int n = s.length();
+    for (int i = 0; i < n; ++i) {
+      int num = map.get(s.charAt(i));
+      if (i < n - 1 && num < map.get(s.charAt(i + 1))) { // 如果小的数字在大的数字左边了则要减去
+        ans -= num;
+      } else {
+        ans += num;
+      }
+    }
+    return ans;
+  }
+
   /**
    * 49. 字母异位词分组 <br>
    * 将单词拆分为字符并排序，也统计单词中的字符及其出现次数，最后使用哈希表收集即可。

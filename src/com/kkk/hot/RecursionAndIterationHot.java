@@ -65,10 +65,10 @@ public class RecursionAndIterationHot {
     for (int i = 1; i < nums.length; ++i) {
       ans[i] = ans[i - 1] * nums[i - 1];
     }
-    int m = 1; // 从右往左遍历使用辅助变量
-    for (int i = nums.length - 1; i >= 0; --i) {
-      ans[i] *= m;
-      m *= nums[i];
+    // 从右往左遍历时，直接使用nums数组作为辅助。
+    for (int i = nums.length - 2; i >= 0; --i) {
+      ans[i] *= nums[i + 1];
+      nums[i] *= nums[i + 1];
     }
     return ans;
   }

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Random;
 
 /**
@@ -192,6 +193,23 @@ public class HashTableExx {
       }
       return min == Integer.MAX_VALUE ? -1 : min - 1;
     }
+  }
+
+  /** 1814. 统计一个数组中好对子的数目 <br> */
+  public int countNicePairs(int[] nums) {
+    Map<Integer, Integer> map = new HashMap<>();
+    int ans = 0;
+    for (int n : nums) {
+      int temp = n, rev = 0; // 翻转数字
+      while (temp > 0) {
+        rev = rev * 10 + temp % 10;
+        temp /= 10;
+      }
+      int f = n - rev; // f(i) = nums[i] - rev(nums[i])，f(i)f(j)相等即可构成好对子
+      ans = (ans + map.getOrDefault(f, 0)) % 1000000007; // 不用担心溢出
+      map.put(f, map.getOrDefault(f, 0) + 1);
+    }
+    return ans;
   }
 
   // ===============================================================================================

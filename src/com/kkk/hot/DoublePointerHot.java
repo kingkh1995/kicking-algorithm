@@ -31,7 +31,7 @@ public class DoublePointerHot {
 
   /**
    * 15. 三数之和 <br>
-   * 解法：排序后，单重循环，再使用两数之和的解法查找。 <br>
+   * 排序后，单重循环双指针解法。 <br>
    */
   public List<List<Integer>> threeSum(int[] nums) {
     List<List<Integer>> ans = new ArrayList<>();
@@ -99,13 +99,13 @@ public class DoublePointerHot {
 
   /** 26. 删除有序数组中的重复项 <br> */
   public int removeDuplicates(int[] nums) {
-    int ans = 1; // 双指针，原地修改。
+    int index = 1; // 双指针，原地修改。
     for (int i = 1; i < nums.length; ++i) {
-      if (nums[i] != nums[ans - 1]) {
-        nums[ans++] = nums[i];
+      if (nums[i] != nums[index - 1]) {
+        nums[index++] = nums[i];
       }
     }
-    return ans;
+    return index;
   }
 
   /**

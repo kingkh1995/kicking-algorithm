@@ -52,39 +52,40 @@ public class BackTrackHot {
         return;
       }
       for (char c : dict[digits.charAt(i) - '2']) {
-        sb.append(c);
-        backTrack(i + 1);
-        sb.deleteCharAt(i);
+        sb.append(c); // 当前位置选择一个字符
+        backTrack(i + 1); // 继续下一个位置
+        sb.deleteCharAt(i); // 回退
       }
     }
   }
 
   /** 22. 括号生成 <br> */
   class generateParenthesisSolution {
+    int n;
     StringBuilder sb;
     List<String> ans;
 
     public List<String> generateParenthesis(int n) {
-      sb = new StringBuilder();
-      ans = new ArrayList<>();
-      backTrack(0, 0, n);
-      return ans;
+      this.n = n;
+      this.sb = new StringBuilder();
+      this.ans = new ArrayList<>();
+      backTrack(0, 0);
+      return this.ans;
     }
 
-    private void backTrack(int openCount, int closeCount, int n) {
+    private void backTrack(int openCount, int closeCount) {
       if (openCount == n && closeCount == n) {
         ans.add(sb.toString());
         return;
       }
-      if (openCount < n) {
+      if (openCount < n) { // 开括号未超过n则可以继续追加
         sb.append('(');
-        backTrack(openCount + 1, closeCount, n);
+        backTrack(openCount + 1, closeCount);
         sb.deleteCharAt(openCount + closeCount);
       }
-      // 闭括号个数小于开括号个数则可以追加闭括号
-      if (closeCount < openCount) {
+      if (closeCount < openCount) { // 闭括号个数不超过开括号个数才是有效的组合
         sb.append(')');
-        backTrack(openCount, closeCount + 1, n);
+        backTrack(openCount, closeCount + 1);
         sb.deleteCharAt(openCount + closeCount);
       }
     }

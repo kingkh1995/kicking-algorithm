@@ -1,6 +1,7 @@
 package com.kkk.acm;
 
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Scanner;
 
 /**
@@ -8,22 +9,22 @@ import java.util.Scanner;
  *
  * @author KaiKoo
  */
-public class MVP {
+public class EqualSubArrayMinimumSum {
 
   /*
-  星际篮球争霸赛、MVP争夺战
+  星际篮球争霸赛、MVP争夺战、等和子数组最小和
      */
 
   public static void main(String[] args) {
     Scanner in = new Scanner(System.in);
     int n = in.nextInt();
-    int[] score = new int[n];
+    Integer[] score = new Integer[n];
     int sum = 0;
     for (int i = 0; i < n; ++i) {
       score[i] = in.nextInt();
       sum += score[i];
     }
-    Arrays.sort(score);
+    Arrays.sort(score, Comparator.reverseOrder());
     for (int i = n; i >= 2; --i) { // 人数肯定不会超过n
       if (sum % i != 0) { // 无法除尽则直接失败
         continue;
@@ -37,14 +38,14 @@ public class MVP {
     System.out.println(sum); // 只派一个人得分，即结果为sum
   }
 
-  public static boolean canDivide(int[] score, int num, int avg) {
+  public static boolean canDivide(Integer[] score, int num, int avg) {
     for (int s : score) { // 快速失败
       if (s > avg) {
         return false;
       }
     }
     boolean[] mark = new boolean[score.length];
-    for (int k = 0; k < num; ++k) { // 寻找num次子数组
+    for (int k = 0; k < num; ++k) { // 寻找num次子数组，关键点是从大的数开始找。
       if (!dfs(score, mark, 0, avg)) { // 一次找不到则直接return
         return false;
       }
@@ -52,24 +53,22 @@ public class MVP {
     return true;
   }
 
-  public static boolean dfs(int[] score, boolean[] mark, int i, int target) { // 数组已排序，从前往后找即可。
-    if (i == score.length || score[i] > target) { // 数组找完，或后面数都大于target
-      return false;
+  public static boolean dfs(
+      Integer[] score, boolean[] mark, int index, int target) { // 数组已排序，需要从大的开始找。
+    if (target == 0) { // 找到
+      return true;
     }
-    if (mark[i]) { // 已被选取
-      return dfs(score, mark, i + 1, target);
-    } else if (score[i] == target) { // 数值匹配了则选取成功
-      mark[i] = true;
-      return true;
-    } else if (dfs(score, mark, i + 1, target)) { // 不选当前
-      return true;
-    } else { // 选当前
-      mark[i] = true;
+    // 从当前位置一直找
+    for (int i = index; i < score.length; ++i) {
+      if (mark[i] || score[i] > target) { // 已被选择则跳过
+        continue;
+      }
+      mark[i] = true; // 选择当前后，从下一个位置选择。
       if (dfs(score, mark, i + 1, target - score[i])) {
         return true;
       }
-      mark[i] = false; // 回退
-      return false;
+      mark[i] = false; // 回溯
     }
+    return false; // 最终返回失败
   }
 }

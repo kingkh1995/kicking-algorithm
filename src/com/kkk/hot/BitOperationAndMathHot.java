@@ -1,11 +1,43 @@
 package com.kkk.hot;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
- * 位运算和数字 <br>
+ * 位运算 & 数学模拟 <br>
  *
  * @author KaiKoo
  */
-public class BitOperationAndNumberHot {
+public class BitOperationAndMathHot {
+
+  /** 7. 整数反转 <br> */
+  public int reverse(int x) {
+    int rev = 0;
+    while (x != 0) {
+      if (rev < Integer.MIN_VALUE / 10 || rev > Integer.MAX_VALUE / 10) { // 判断防止越界
+        return 0;
+      }
+      rev = rev * 10 + x % 10;
+      x = x / 10;
+    }
+    return rev;
+  }
+
+  /**
+   * 9. 回文数 <br>
+   * 类似【7题】，将整数反转一半后即可，如位数为偶数直接对比，如为奇数需要抹去最后一位。
+   */
+  public boolean isPalindrome(int x) {
+    if (x < 0 || (x % 10 == 0 && x != 0)) { // 需要先处理特殊情况【最后一位为0】，否则后面会判断为true。
+      return false;
+    }
+    int rev = 0;
+    while (x > rev) { // 终止条件
+      rev = rev * 10 + x % 10;
+      x = x / 10;
+    }
+    return x == rev || x == rev / 10;
+  }
 
   /** 136. 只出现一次的数字 <br> */
   public int singleNumber(int[] nums) {
@@ -51,6 +83,51 @@ public class BitOperationAndNumberHot {
   }
 
   // ===============================================================================================
+
+  /**
+   * 29. 两数相除 <br>
+   * 需要求出 Z * Y < X < (Z + 1) * Y <br>
+   * 类似【50题】，Z可以拆分为2的幂的累加，因数为0或1。 <br>
+   * 考虑到溢出的问题，需要全部转为负数，负数最大为-2^32，能被2整除。
+   */
+  public int divide(int dividend, int divisor) {
+    if (dividend == Integer.MIN_VALUE) { // 被除数为最小值
+      if (divisor == 1) {
+        return Integer.MIN_VALUE;
+      }
+      if (divisor == -1) {
+        return Integer.MAX_VALUE;
+      }
+    }
+    if (divisor == Integer.MIN_VALUE) { // 除数为最小值的情况
+      return dividend == Integer.MIN_VALUE ? 1 : 0;
+    }
+    if (dividend == 0) { // 考虑除数为0
+      return 0;
+    }
+    boolean rev = false;
+    if (dividend > 0) {
+      dividend = -dividend;
+      rev = !rev;
+    }
+    if (divisor > 0) {
+      divisor = -divisor;
+      rev = !rev;
+    }
+    List<Integer> list = new ArrayList<>(); // 收集所有小于 X 的 Y * 2^i 的结果，用于查找。
+    list.add(divisor);
+    for (int i = 0, n; (n = list.get(i)) >= dividend - n; ++i) { // 注意溢出，使用减法
+      list.add(n + n);
+    }
+    int ans = 0;
+    for (int i = list.size() - 1; i >= 0; --i) { // 从最大值开始，判断因子是0还是1。
+      if (list.get(i) >= dividend) {
+        ans += 1 << i; // 当前因子为 2^i
+        dividend -= list.get(i); // 减去
+      }
+    }
+    return rev ? -ans : ans;
+  }
 
   /**
    * 287. 寻找重复数 <br>
