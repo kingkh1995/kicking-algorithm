@@ -88,7 +88,7 @@ public class BitOperationAndMathHot {
    * 29. 两数相除 <br>
    * 需要求出 Z * Y < X < (Z + 1) * Y <br>
    * 类似【50题】，Z可以拆分为2的幂的累加，因数为0或1。 <br>
-   * 考虑到溢出的问题，需要全部转为负数，负数最大为-2^32，能被2整除。
+   * 考虑到溢出的问题，需要全部转为负数，负数最小为-2^31，能被2整除。
    */
   public int divide(int dividend, int divisor) {
     if (dividend == Integer.MIN_VALUE) { // 被除数为最小值

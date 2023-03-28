@@ -38,7 +38,7 @@ public class DynamicProgramingHot {
    * 隐式动态规划，只使用一个变量即可。
    */
   public int maxSubArray(int[] nums) {
-    int ans = nums[0], max = nums[0];
+    int ans = nums[0], max = nums[0]; // 防止数字溢出，从第二个元素开始。
     for (int i = 1; i < nums.length; ++i) {
       ans = Math.max(ans, max = nums[i] + Math.max(max, 0));
     }
@@ -234,8 +234,8 @@ public class DynamicProgramingHot {
       sCharAt = s.toCharArray();
       pCharAt = p.toCharArray();
       int sl = sCharAt.length, pl = pCharAt.length;
-      // dp[i][j]表示s前i位匹配p前j位
-      boolean[][] dp = new boolean[sl + 1][pl + 1]; // 长度加一则不需要考虑数组越位情况。
+      // dp[i][j]表示s前i位匹配p前j位，长度加一则不需要考虑数组越位情况。
+      boolean[][] dp = new boolean[sl + 1][pl + 1];
       dp[0][0] = true;
       for (int i = 0; i <= sl; ++i) { // 从空字符串开始，因为空字符串也可能匹配模式串。
         for (int j = 1; j <= pl; ++j) {
@@ -308,6 +308,27 @@ public class DynamicProgramingHot {
   }
 
   /**
+   * 44. 通配符匹配 <br>
+   * 动态规划解法，较【10题】简单，注意s为空字串的处理。
+   */
+  public boolean isMatch(String s, String p) {
+    int sl = s.length(), pl = p.length();
+    boolean[][] dp = new boolean[sl + 1][pl + 1];
+    dp[0][0] = true;
+    for (int i = 0; i <= sl; ++i) {
+      for (int j = 1; j <= pl; ++j) {
+        char pc = p.charAt(j - 1);
+        if (pc == '*') { // 任意包括空字符串，即可以匹配0个字符或n个字符（1个字符），i为0时只能匹配0个字符。
+          dp[i][j] = i == 0 ? dp[i][j - 1] : dp[i - 1][j] || dp[i][j - 1];
+        } else if (i > 0 && (pc == '?' || pc == s.charAt(i - 1))) { // 匹配单个字符
+          dp[i][j] = dp[i - 1][j - 1];
+        }
+      }
+    }
+    return dp[sl][pl];
+  }
+
+  /**
    * 72. 编辑距离 <br>
    * 注意处理空字符串
    */
@@ -331,6 +352,25 @@ public class DynamicProgramingHot {
       }
     }
     return dp[m][n];
+  }
+
+  /** 91. 解码方法 <br> */
+  public int numDecodings(String s) {
+    int[] dp = new int[s.length() + 1];
+    dp[0] = 1;
+    for (int i = 0; i < s.length(); ++i) {
+      int n = s.charAt(i) - '0', nm = n + 10 * (i == 0 ? 0 : s.charAt(i - 1) - '0');
+      if (n > 0) { // 可选择一个字符
+        dp[i + 1] += dp[i];
+      }
+      if (nm >= 10 && nm <= 26) { // 可选择两个字符
+        dp[i + 1] += dp[i - 1];
+      }
+      if (dp[i + 1] == 0) { // 判断是否无法解码
+        return 0;
+      }
+    }
+    return dp[s.length()];
   }
 
   /**

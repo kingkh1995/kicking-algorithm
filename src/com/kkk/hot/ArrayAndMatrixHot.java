@@ -4,9 +4,7 @@ import com.kkk.supports.ArrayUtils;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.Deque;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -16,6 +14,29 @@ import java.util.Map;
  * @author KaiKoo
  */
 public class ArrayAndMatrixHot {
+
+  /**
+   * 41. 缺失的第一个正数 <br>
+   * 解法一：哈希表 <br>
+   * 解法二：最佳解法，用原数组表示[1, length]的范围，将每个元素置换到对应的位置上，nums[i] = i + 1。
+   */
+  public static int firstMissingPositive(int[] nums) {
+    for (int i = 0; i < nums.length; ) {
+      int pos = nums[i] - 1; // 每个元素应该放置的位置
+      if (pos >= 0 && pos < nums.length && nums[pos] != pos + 1) { // 防止无限循环，已置换好了则继续
+        nums[i] = nums[pos];
+        nums[pos] = pos + 1;
+      } else { // 继续下一位，如果发生了置换则继续判断当前位置。
+        i++;
+      }
+    }
+    for (int i = 0; i < nums.length; ++i) { // 置换完成后，从小到大找到第一个不存在的正数。
+      if (nums[i] != i + 1) {
+        return i + 1;
+      }
+    }
+    return nums.length + 1; // 最坏情况下，数组刚好为[1, length]范围。
+  }
 
   /**
    * 48. 旋转图像 <br>
@@ -68,13 +89,13 @@ public class ArrayAndMatrixHot {
    */
   public int[][] merge(int[][] intervals) {
     Arrays.sort(intervals, Comparator.comparingInt(i -> i[0])); // 按左端将数组排序
-    Deque<int[]> ans = new LinkedList<>();
+    List<int[]> ans = new ArrayList<>();
     int[] last;
     for (int[] i : intervals) { // 遍历，拓展最后一个区间，或插入新区间。
-      if (!ans.isEmpty() && (last = ans.peekLast())[1] >= i[0]) {
+      if (!ans.isEmpty() && (last = ans.get(ans.size() - 1))[1] >= i[0]) {
         last[1] = Math.max(last[1], i[1]);
       } else {
-        ans.offer(i);
+        ans.add(i);
       }
     }
     return ans.toArray(new int[0][0]);
@@ -104,14 +125,15 @@ public class ArrayAndMatrixHot {
 
   /**
    * 75. 颜色分类 <br>
-   * 实际上就是三向切分快速排序，选择1作为切分，同时指针从0位置出发，只需要排序一次即可。
+   * 实际上就是三向切分快速排序，选择1作为切分，同时指针从0位置出发，只需要遍历一次即可。
    */
   public void sortColors(int[] nums) {
-    int lt = 0, i = 0, gt = nums.length - 1, cmp;
-    while (i <= gt) { // 未排序区间为[i,gt]
-      if ((cmp = nums[i] - 1) < 0) {
+    int lt = 0, i = 0, gt = nums.length - 1;
+    // (0, lt)区间为0，[lt, i)为1，未排序区间为[i,gt]，(gt, n-1]为2
+    while (i <= gt) {
+      if (nums[i] == 0) { // 将lt换到i位置，lt为0或1，可直接处理下一个
         ArrayUtils.swap(nums, lt++, i++);
-      } else if (cmp > 0) {
+      } else if (nums[i] == 2) { // 将gt换到i的位置，gt属于未排序区间，则其值不确定，需要在当前位置再次判断
         ArrayUtils.swap(nums, gt--, i);
       } else {
         i++;
@@ -337,6 +359,33 @@ public class ArrayAndMatrixHot {
     }
     // 反转递减序列，如果i=-1则会重置。
     ArrayUtils.reverse(nums, i + 1, nums.length - 1);
+  }
+
+  /** 73. 矩阵置零 <br> */
+  public void setZeroes(int[][] matrix) {
+    int m = matrix.length, n = matrix[0].length;
+    // 使用常数空间，将第一列用于标记每一行，使用额外变量标记第一列，第一行的其他位置用于标记其他列。
+    boolean flag = false;
+    for (int i = 0; i < m; ++i) { // 按行遍历
+      if (matrix[i][0] == 0) { // 当前行第一列处理
+        flag = true;
+      }
+      for (int j = 1; j < n; ++j) { // 当前行其他列处理
+        if (matrix[i][j] == 0) {
+          matrix[i][0] = matrix[0][j] = 0;
+        }
+      }
+    }
+    for (int i = m - 1; i >= 0; --i) { // 按行遍历处理，需要从最后一行开始，因为第一行用于标记每一列。
+      for (int j = 1; j < n; ++j) { // 需要从第二列开始处理，因为第一列用于标记每一行。
+        if (matrix[i][0] == 0 || matrix[0][j] == 0) {
+          matrix[i][j] = 0;
+        }
+      }
+      if (flag) { // 最后处理第一列，因为该行已经处理完成，所以可以覆盖。
+        matrix[i][0] = 0;
+      }
+    }
   }
 
   /**

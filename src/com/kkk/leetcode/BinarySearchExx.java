@@ -36,7 +36,7 @@ public class BinarySearchExx {
         hi = mid - 1;
       }
     }
-    return hi; // 退出循环时lo=hi+1，因为返回结果是FLOOR，故返回hi。
+    return hi; // 退出循环时lo=hi+1，因为返回结果是FLOOR，故返回小值hi。
   }
 
   /**

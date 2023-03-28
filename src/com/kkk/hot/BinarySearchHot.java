@@ -60,14 +60,14 @@ public class BinarySearchHot {
       if (cmp == 0) {
         return mid;
       } else if (nums[mid] >= nums[0]) { // 确定出必定是有序的半区后，判断target是否位于该半区。
-        // mid左半边区间为有序的，且target位于该半区，则移动h。
+        // mid左半边区间为有序的，且target位于该半区，则移动hi，否则移动lo。
         if (target >= nums[0] && cmp > 0) {
           hi = mid - 1;
         } else {
           lo = mid + 1;
         }
       } else {
-        // mid右半边区间为有序的，且target位于该半区，则移动l。
+        // mid右半边区间为有序的，且target位于该半区，则移动lo，否则移动hi。
         if (target <= nums[n - 1] && cmp < 0) {
           lo = mid + 1;
         } else {

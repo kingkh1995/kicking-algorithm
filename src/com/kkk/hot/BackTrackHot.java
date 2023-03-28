@@ -129,13 +129,13 @@ public class BackTrackHot {
     int[] nums;
     List<List<Integer>> ans;
     Deque<Integer> deque;
-    boolean[] marked; // 标记数字是否可用，数字不重复且范围为-10到10，则使用长度21的boolean数组。
+    boolean[] marked;
 
     public List<List<Integer>> permute(int[] nums) {
       this.nums = nums;
       this.ans = new ArrayList<>();
-      this.deque = new ArrayDeque<>(nums.length); // list最大容量固定
-      this.marked = new boolean[21];
+      this.deque = new ArrayDeque<>();
+      this.marked = new boolean[21]; // 数字不重复且范围为-10到10，则使用长度21的boolean数组。
       for (int n : nums) {
         this.marked[n + 10] = true;
       }
@@ -147,13 +147,13 @@ public class BackTrackHot {
       if (i == nums.length) {
         ans.add(new ArrayList<>(deque));
       }
-      for (int n : nums) {
-        if (marked[n + 10]) { // 要求数字可用
+      for (int n : nums) { // 选择任意一个可用的数字
+        if (marked[n + 10]) {
           marked[n + 10] = false; // 标记为不可用
           deque.push(n);
           backTrack(i + 1);
           deque.pop();
-          marked[n + 10] = true; // 重新标记为不可用
+          marked[n + 10] = true; // 重新标记为可用
         }
       }
     }

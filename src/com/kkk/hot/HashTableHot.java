@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -56,12 +57,12 @@ public class HashTableHot {
    * 将单词拆分为字符并排序，也统计单词中的字符及其出现次数，最后使用哈希表收集即可。
    */
   public List<List<String>> groupAnagrams(String[] strs) {
-    HashMap<String, List<String>> map = new HashMap<>();
+    Map<String, List<String>> map = new HashMap<>();
     for (String s : strs) {
       char[] arr = s.toCharArray();
       Arrays.sort(arr); // 字母异位词将字符排序后必然都相同
       String key = new String(arr);
-      List<String> list = map.getOrDefault(key, new ArrayList<>());
+      List<String> list = map.getOrDefault(key, new LinkedList<>());
       list.add(s);
       map.put(key, list);
     }

@@ -205,4 +205,36 @@ public class RecursionAndIterationHot {
     }
     return ans;
   }
+
+  /**
+   * 50. Pow(x, n) <br>
+   * 递归解法：将n二分后，结果自乘，如果n为奇数，则需要再乘上一个x；<br>
+   * 迭代解法：根据n的二进制表示，某一位为1，则乘上x^(2^i)，从最低位开始累乘。
+   */
+  class myPowSolution {
+    public double myPow(double x, int n) {
+      return n >= 0 ? pow(x, n) : 1D / pow(x, -(long) n); // 处理-2^31，先转为long，再转为转为正数
+    }
+
+    private double pow(double x, long n) { // 递归解法
+      if (n == 0) {
+        return 1D;
+      }
+      double ans = pow(x, n / 2);
+      ans *= ans;
+      return (n & 1) == 1 ? ans * x : ans;
+    }
+
+    private double pow0(double x, long n) { // 迭代解法
+      double ans = 1, temp = x; // temp为x^(2^i)的结果
+      while (n > 0) {
+        if ((n & 1) == 1) {
+          ans *= temp;
+        }
+        temp *= temp;
+        n >>= 1;
+      }
+      return ans;
+    }
+  }
 }
