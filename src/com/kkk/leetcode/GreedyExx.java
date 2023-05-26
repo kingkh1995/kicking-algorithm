@@ -23,29 +23,6 @@ public class GreedyExx {
   // ===============================================================================================
 
   /**
-   * 134. 加油站 <br>
-   * 只需要一次遍历即可，统计出每站之间的实际油耗，遍历累加值不能小于0，【注意指针只需要前进不用后退】。
-   */
-  public int canCompleteCircuit(int[] gas, int[] cost) {
-    int n = gas.length;
-    for (int i = 0; i < n; ++i) {
-      gas[i] -= cost[i];
-    }
-    for (int i = 0; i < n; ++i) {
-      int t = i;
-      for (int sum = 0; i < t + n; ++i) {
-        if ((sum += gas[i % n]) < 0) {
-          break;
-        }
-      }
-      if (i == t + n) {
-        return t;
-      }
-    }
-    return -1;
-  }
-
-  /**
    * 334. 递增的三元子序列 <br>
    * 【维护前两个数】，尝试一直将first和second变小，一旦遇到大于second的数则表示存在。<br>
    */

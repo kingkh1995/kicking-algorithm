@@ -4,7 +4,6 @@ import com.kkk.supports.ListNode;
 
 /**
  * 链表 <br>
- * 148、430
  *
  * @author KaiKoo
  */

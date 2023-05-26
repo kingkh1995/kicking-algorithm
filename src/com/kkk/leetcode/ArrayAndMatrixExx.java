@@ -129,6 +129,24 @@ public class ArrayAndMatrixExx {
   }
 
   /**
+   * 696. 计数二进制子串 <br>
+   * 分组统计，连续的0和1的个数，然后再从统计结果计算，只需要遍历一次即可。
+   */
+  public int countBinarySubstrings(String s) {
+    int ans = 0, lastCount = 0, i = 0; // lastCount为上一段连续0或1区间的长度，初始值0处理边界问题。
+    while (i < s.length()) {
+      char c = s.charAt(i);
+      int count = 1;
+      while (++i < s.length() && c == s.charAt(i)) {
+        count++;
+      }
+      ans += Math.min(lastCount, count); // 更新结果，两段区间长度之中的小值是符合条件的子串的个数。
+      lastCount = count;
+    }
+    return ans;
+  }
+
+  /**
    * 1392. 最长快乐前缀 <br>
    * 使用KMP算法计算出辅助数组aux，结果即为aux[n-1]+1。
    */
@@ -256,20 +274,20 @@ public class ArrayAndMatrixExx {
   // ===============================================================================================
   /** 困难题 */
 
-  // 找到第k大的元素 使用快速三向切分快排
+  // 215. 找到第k大的元素 使用快速三向切分快排
   public static int findKthLargest0(int[] arr, int k) {
     if (k < 1 || k > arr.length) {
       throw new IllegalArgumentException();
     }
-    var lo = 0;
-    var hi = arr.length - 1;
-    var index = arr.length - k;
+    int lo = 0;
+    int hi = arr.length - 1;
+    int index = arr.length - k;
     while (true) {
       // 小于等于5个元素直接插入排序
       if (hi - lo < 5) {
-        for (var i = lo + 1; i <= hi; i++) {
-          var j = i;
-          var n = arr[j];
+        for (int i = lo + 1; i <= hi; i++) {
+          int j = i;
+          int n = arr[j];
           for (; j > lo && arr[j - 1] > n; j--) {
             arr[j] = arr[j - 1];
           }
@@ -280,11 +298,11 @@ public class ArrayAndMatrixExx {
       // 将index处的值作为pivot
       ArrayUtils.swap(arr, index, lo);
       // l--p--i--j--q--h
-      var i = lo;
-      var j = hi + 1;
-      var p = lo; // 左边等于区间至少是[l,l]包含一个元素
-      var q = hi + 1; // 右边等于区间可能没有元素 [h+1,h]
-      var pivot = arr[lo];
+      int i = lo;
+      int j = hi + 1;
+      int p = lo; // 左边等于区间至少是[l,l]包含一个元素
+      int q = hi + 1; // 右边等于区间可能没有元素 [h+1,h]
+      int pivot = arr[lo];
       while (true) {
         // 从左边找到第一个大于等于切分值的数
         while (arr[++i] < pivot) {
@@ -316,17 +334,17 @@ public class ArrayAndMatrixExx {
       i = j + 1;
       // 此时(p, j]区间小于pivot [i, q)区间大于pivot
       // 先计算出交换后等于pivot的区间
-      var left = lo + (j - p); // 左端点
-      var right = hi - (q - i); // 右断点
+      int left = lo + (j - p); // 左端点
+      int right = hi - (q - i); // 右断点
       // 如果index在等于区间内 可以直接返回结果
       if (index >= left && index <= right) {
         return pivot;
       }
       // 交换等于的区间到中间
-      for (var t = lo; t <= p; t++) {
+      for (int t = lo; t <= p; t++) {
         ArrayUtils.swap(arr, t, j--);
       }
-      for (var t = hi; t >= q; t--) {
+      for (int t = hi; t >= q; t--) {
         ArrayUtils.swap(arr, t, i++);
       }
       // 交换完之后，[l, j]小于pivot [i, h]大于pivot

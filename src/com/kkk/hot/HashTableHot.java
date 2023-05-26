@@ -71,6 +71,17 @@ public class HashTableHot {
 
   /** 146. LRU 缓存 <br> */
   class LRUCache {
+    private Map<Integer, Node> map;
+    private int capacity;
+    private Node head, tail;
+
+    public LRUCache(int capacity) {
+      this.map = new HashMap<>(capacity);
+      this.capacity = capacity;
+      head = tail = new Node(0, 0); // 可以使用同一个虚拟节点
+      head.next = tail;
+      tail.prev = head;
+    }
 
     class Node {
       int key;
@@ -82,18 +93,6 @@ public class HashTableHot {
         this.key = key;
         this.val = val;
       }
-    }
-
-    private Map<Integer, Node> map;
-    private int capacity, size;
-    private Node head, tail;
-
-    public LRUCache(int capacity) {
-      this.map = new HashMap<>(capacity);
-      this.capacity = capacity;
-      head = tail = new Node(0, 0); // 可以使用同一个虚拟节点
-      head.next = tail;
-      tail.prev = head;
     }
 
     public int get(int key) {
@@ -111,9 +110,8 @@ public class HashTableHot {
         node = new Node(key, value);
         map.put(key, node);
         addToHead(node);
-        if (++size > capacity) {
-          size--;
-          map.remove(removeTail().key);
+        if (map.size() > capacity) {
+          removeTail();
         }
       } else {
         node.val = value;
@@ -138,10 +136,9 @@ public class HashTableHot {
       addToHead(node);
     }
 
-    private Node removeTail() {
-      Node last = tail.prev;
-      removeNode(last);
-      return last;
+    private void removeTail() {
+      map.remove(tail.prev.key);
+      removeNode(tail.prev);
     }
   }
 
@@ -200,20 +197,21 @@ public class HashTableHot {
       int ans = 0;
       Map<Integer, Integer> map = new HashMap<>(nums.length); // 使用map记录数字和其所在连续区间的长度
       for (int n : nums) {
-        if (!map.containsKey(n)) { // 数组中存在重复数字，保证只被访问一次。
-          // 查看n-1和n+1，确定当前数字要连接的左边和右边区间。
-          int left = map.getOrDefault(n - 1, 0), right = map.getOrDefault(n + 1, 0);
-          int sum = left + right + 1; // 左右区间连接后新的区间长度
-          // 更新数字所在区间的长度，且只需要更新区间的左右端即可，因为只有区间两端才会被查看，即只需把区间的长度更新到区间两端即可。
-          if (left > 0) {
-            map.put(n - left, sum);
-          }
-          if (right > 0) {
-            map.put(n + right, sum);
-          }
-          map.put(n, sum);
-          ans = Math.max(sum, ans); // 更新结果
+        if (map.containsKey(n)) { // 数组中存在重复数字，防止重复处理。
+          continue;
         }
+        // 查看n-1和n+1，确定当前数字要连接的左边和右边区间。
+        int left = map.getOrDefault(n - 1, 0), right = map.getOrDefault(n + 1, 0);
+        int sum = left + right + 1; // 左右区间连接后新的区间长度
+        // 更新数字所在区间的长度，且只需要更新区间的左右端即可，因为只有区间两端才会被查看，即只需把区间的长度更新到区间两端即可。
+        if (left > 0) {
+          map.put(n - left, sum);
+        }
+        if (right > 0) {
+          map.put(n + right, sum);
+        }
+        map.put(n, sum); // 将当前元素插入，防止重复处理。
+        ans = Math.max(sum, ans); // 更新结果
       }
       return ans;
     }
@@ -235,6 +233,63 @@ public class HashTableHot {
         }
       }
       return ans;
+    }
+  }
+
+  /**
+   * 149. 直线上最多的点数 <br>
+   * 哈希表解法，类似【两数之和】，最重要的是计算斜率，要将斜率分数x/y转化为最简分数记录；<br>
+   * 需要找出x和y的最大公约数，由于题设斜率绝对值最大为20000，可以转换为x*20001+y，且考虑到存在负数，要保证负数只能是x。
+   */
+  class maxPointsSolution {
+    public int maxPoints(int[][] points) {
+      int len = points.length;
+      if (len < 2) {
+        return len;
+      }
+      int ans = 0;
+      for (int i = 0; i < len - 1; ++i) {
+        if (ans > len / 2 || ans + i >= len) { // 提前终止条件
+          break;
+        }
+        Map<Integer, Integer> map = new HashMap<>();
+        for (int j = i + 1; j < len; ++j) {
+          int x = points[i][0] - points[j][0], y = points[i][1] - points[j][1];
+          if (x == 0) { // 处理0的场景
+            y = 1;
+          } else if (y == 0) {
+            x = 1;
+          } else { // 求最大公约数，简化分数。
+            int gcd = gcd(Math.abs(x), Math.abs(y));
+            x = x / gcd;
+            y = y / gcd;
+          }
+          if (y < 0) { // y始终为正数
+            x = -x;
+            y = -y;
+          }
+          int key = x * 20001 + y;
+          int count = map.getOrDefault(key, 1) + 1; // 初始值是1
+          map.put(key, count);
+          ans = Math.max(ans, count); // 更新结果，则后续不需要再次遍历求最大值。
+        }
+      }
+      return ans;
+    }
+
+    // 求最大公约数，迭代解法。
+    public int gcd(int a, int b) {
+      while (b != 0) {
+        int t = a % b;
+        a = b;
+        b = t;
+      }
+      return a;
+    }
+
+    // 求最大公约数，递归解法。
+    public int gcd0(int a, int b) {
+      return b != 0 ? gcd(b, a % b) : a;
     }
   }
 

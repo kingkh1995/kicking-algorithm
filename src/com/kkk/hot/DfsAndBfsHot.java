@@ -16,6 +16,47 @@ import java.util.Set;
 public class DfsAndBfsHot {
   static final int[][] dirs = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
 
+  /** 130. 被围绕的区域 <br> */
+  class solveSolution {
+    private int m, n;
+    private char[][] board;
+
+    public void solve(char[][] board) {
+      this.board = board;
+      this.m = board.length;
+      this.n = board[0].length;
+      // 从边界上的O出发，能dfs到的所有O则不需要被修改。
+      for (int i = 0; i < m; ++i) { // 边界列
+        dfs(i, 0); // 列0
+        dfs(i, n - 1); // 列n-1
+      }
+      for (int i = 1; i < n - 1; ++i) { // 边界行
+        dfs(0, i); // 行0
+        dfs(m - 1, i); // 行m-1
+      }
+      for (int i = 0; i < m; ++i) {
+        for (int j = 0; j < n; ++j) {
+          if ('A' == board[i][j]) { // 将A修改回O
+            board[i][j] = 'O';
+          } else if ('O' == board[i][j]) { // 需要修改的O则修改为X
+            board[i][j] = 'X';
+          }
+        }
+      }
+    }
+
+    private void dfs(int col, int row) {
+      if (col < 0 || col >= m || row < 0 || row >= n || 'O' != board[col][row]) {
+        return;
+      }
+      // 将需要保留的O先修改为A
+      board[col][row] = 'A';
+      for (int[] dir : dirs) {
+        dfs(col + dir[0], row + dir[1]);
+      }
+    }
+  }
+
   /**
    * 200. 岛屿数量 <br>
    * DFS & BFS都可以，并将给定数组作为标记数组。

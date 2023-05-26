@@ -233,6 +233,56 @@ public class BackTrackHot {
     }
   }
 
+  /**
+   * 131. 分割回文串 <br>
+   * 使用【动态规划】或【记忆化搜索】判断子串是否是回文串，然后使用回溯法枚举所有方案即可。
+   */
+  class partitionSolution {
+    private String s;
+    private int[][] f; // 0表示未搜索过，1表示是回文串，-1表示不是。
+    private List<List<String>> ans;
+    private List<String> list;
+
+    public List<List<String>> partition(String s) {
+      this.s = s;
+      this.f = new int[s.length()][s.length()];
+      this.ans = new ArrayList<>();
+      this.list = new LinkedList<>();
+      backTrack(0);
+      return ans;
+    }
+
+    private void backTrack(int index) {
+      if (index == s.length()) {
+        ans.add(new ArrayList<>(list));
+        return;
+      }
+      // 找从index作为起点的回文串
+      for (int i = index; i < s.length(); ++i) {
+        if (isPalindrome(index, i) == 1) {
+          list.add(s.substring(index, i + 1));
+          backTrack(i + 1);
+          list.remove(list.size() - 1);
+        }
+      }
+    }
+
+    // 记忆化搜索
+    private int isPalindrome(int i, int j) {
+      if (f[i][j] != 0) {
+        return f[i][j];
+      }
+      if (i >= j) {
+        f[i][j] = 1;
+      } else if (s.charAt(i) == s.charAt(j)) {
+        f[i][j] = isPalindrome(i + 1, j - 1);
+      } else {
+        f[i][j] = -1;
+      }
+      return f[i][j];
+    }
+  }
+
   // ===============================================================================================
 
   /**

@@ -1,6 +1,7 @@
 package com.kkk.hot;
 
 import com.kkk.supports.ListNode;
+import com.kkk.supports.Node;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -121,6 +122,38 @@ public class ListHot {
     head = node.next;
     node.next = null; // 断开环
     return head;
+  }
+
+  /**
+   * 138. 复制带随机指针的链表 <br>
+   * 如果使用哈希表，则只需要遍历两遍，先遍历创建新链表并保存节点到哈希表，然后遍历设置随机节点即可。
+   */
+  public Node copyRandomList(Node head) {
+    if (head == null) {
+      return null;
+    }
+    // 1. 插入新节点
+    for (Node node = head; node != null; node = node.next.next) {
+      Node copy = new Node(node.val);
+      copy.next = node.next;
+      node.next = copy;
+    }
+    // 2.设置random节点
+    for (Node node = head; node != null; node = node.next.next) {
+      if (node.random != null) {
+        node.next.random = node.random.next;
+      }
+    }
+    // 3.拆分并还原
+    Node ans = head.next;
+    for (Node node = head; node != null; node = node.next) {
+      Node copy = node.next;
+      node.next = copy.next;
+      if (node.next != null) {
+        copy.next = node.next.next;
+      }
+    }
+    return ans;
   }
 
   /** 141. 环形链表 <br> */
