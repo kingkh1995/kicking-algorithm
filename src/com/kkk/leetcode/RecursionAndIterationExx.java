@@ -70,15 +70,4 @@ public class RecursionAndIterationExx {
 
   // ===============================================================================================
 
-  /**
-   * 172. 阶乘后的零 <br>
-   * 即 N! 有多少个质因数 5
-   */
-  public int trailingZeroes(int n) {
-    if (n < 5) {
-      return 0;
-    }
-    // n/5到n之间数的乘积，可能导致后面出现0的个数等于n/5。
-    return n / 5 + trailingZeroes(n / 5);
-  }
 }

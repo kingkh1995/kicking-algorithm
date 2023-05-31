@@ -56,6 +56,19 @@ public class RecursionAndIterationHot {
   }
 
   /**
+   * 171. Excel 表列序号 <br>
+   * 从右往左遍历，模拟26进制即可。
+   */
+  public int titleToNumber(String columnTitle) {
+    int n = 0;
+    for (int i = columnTitle.length() - 1, sign = 1; i >= 0; --i) {
+      n = sign * (columnTitle.charAt(i) - 'A' + 1) + n;
+      sign *= 26;
+    }
+    return n;
+  }
+
+  /**
    * 238. 除自身以外数组的乘积 <br>
    * 先从左往右遍历，求出前缀元素乘积，再从右往左遍历，累乘上所有后缀元素。
    */
@@ -236,5 +249,21 @@ public class RecursionAndIterationHot {
       }
       return ans;
     }
+  }
+
+  /**
+   * 172. 阶乘后的零 <br>
+   * 即求1到n总共有多个5因子。<br>
+   * 如果是5的倍数，则该数有一个5因子，n范围内有n/5个数是5的倍数; <br>
+   * 如果是25的倍数，则该数有两个5因子，n范围内有n/25个数是25的倍数; <br>
+   * 因为统计5的倍数时已经加了一次次数，则统计25的倍数时☞加一次倍数; <br>
+   * 同理继续统计125的倍数，一直到无法统计为止。; <br>
+   */
+  public int trailingZeroes(int n) {
+    int ans = 0;
+    for (int i = 5; i <= n; i *= 5) {
+      ans += (n / i);
+    }
+    return ans;
   }
 }

@@ -118,6 +118,47 @@ public class StackAndQueueAndHeapExx {
   }
 
   /**
+   * 358. K 距离间隔重排字符串 <br>
+   * 【优先队列】，每次都选择次数最多的字母，同时使用队列维护一个K长度的窗口，保证不取到重复的字母。
+   */
+  public String rearrangeString(String s, int k) {
+    if (k < 2 || s.length() < 2) {
+      return s;
+    }
+    int[] freq = new int[26];
+    for (char c : s.toCharArray()) {
+      freq[c - 'a']++;
+    }
+    // 构建基于频次的大顶堆
+    PriorityQueue<Integer> pq = new PriorityQueue<>((i1, i2) -> freq[i2] - freq[i1]);
+    // 统计完频次后加入堆内，不然会有问题
+    for (int i = 0; i < 26; ++i) {
+      if (freq[i] > 0) {
+        pq.offer(i);
+      }
+    }
+    StringBuilder sb = new StringBuilder();
+    // 使用队列记录K距离内选择的字母
+    java.util.Queue<Integer> queue = new ArrayDeque<>(k);
+    // 循环直到大顶堆内不存在字母可选择
+    while (!pq.isEmpty()) {
+      Integer poll = pq.poll();
+      sb.append((char) (poll + 'a'));
+      freq[poll]--; // 当前字母频次减少
+      queue.offer(poll); // 当前字母进入窗口
+      // 移除窗口左端超出的字母，加入大顶堆内表示可以再次选择该字母
+      if (queue.size() == k) {
+        Integer remove = queue.poll();
+        if (freq[remove] > 0) {
+          pq.offer(remove);
+        }
+      }
+    }
+    // 字母已经全部选择完则表示存在结果
+    return sb.length() == s.length() ? sb.toString() : "";
+  }
+
+  /**
    * 456. 132 模式 <br>
    * 单调栈，从右往左维护一个单调递减栈，其作为2元素的候选，并找出2元素的最大值。
    */

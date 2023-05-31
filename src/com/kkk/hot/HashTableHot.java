@@ -294,6 +294,46 @@ public class HashTableHot {
   }
 
   /**
+   * 166. 分数到小数 <br>
+   * 模拟除法，使用【哈希表】查找循环小数。
+   */
+  public String fractionToDecimal(int numerator, int denominator) {
+    long n = numerator;
+    long d = denominator;
+    StringBuilder sb = new StringBuilder();
+    // 处理符号
+    if (n * d < 0L) {
+      sb.append("-");
+    }
+    n = Math.abs(n);
+    d = Math.abs(d);
+    // 处理整数部分
+    sb.append(n / d);
+    n %= d;
+    // 判断是否已经除尽
+    if (n == 0L) {
+      return sb.toString();
+    }
+    // 处理小数部分
+    sb.append(".");
+    // 使用哈希表记录余数和index
+    Map<Long, Integer> map = new HashMap<>();
+    while (n != 0L) {
+      // 余数已经出现过，则表示是循环小数。
+      if (map.containsKey(n)) {
+        sb.insert(map.get(n), "(");
+        sb.append(")");
+        break;
+      }
+      map.put(n, sb.length());
+      n *= 10L;
+      sb.append(n / d);
+      n %= d;
+    }
+    return sb.toString();
+  }
+
+  /**
    * 437. 路径总和 III <br>
    * 最佳解法：回溯法，并记录前缀和进行优化，【前缀和是从根节点出发到任一节点的路径和】。
    */

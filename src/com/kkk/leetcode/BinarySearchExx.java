@@ -59,23 +59,6 @@ public class BinarySearchExx {
     return false;
   }
 
-  /**
-   * 162. 寻找峰值 <br>
-   * 模板二解法，将大值保留在区间内，不断的缩小区间，直到退出循环。
-   */
-  public int findPeakElement(int[] nums) {
-    int lo = 0, hi = nums.length - 1;
-    while (lo < hi) {
-      int mid = lo + ((hi - lo) >> 1);
-      if (nums[mid] > nums[mid + 1]) {
-        hi = mid;
-      } else {
-        lo = mid + 1;
-      }
-    }
-    return lo; // 退出时lo=hi
-  }
-
   // ===============================================================================================
 
   /**

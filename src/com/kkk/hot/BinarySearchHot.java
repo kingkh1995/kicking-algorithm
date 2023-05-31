@@ -87,6 +87,23 @@ public class BinarySearchHot {
     return i1 == i2 ? new int[] {-1, -1} : new int[] {i1, i2 - 1};
   }
 
+  /**
+   * 162. 寻找峰值 <br>
+   * 模板二解法，mid与mid+1对比，将大值保留在区间内，不断的缩小区间，直到退出循环。
+   */
+  public int findPeakElement(int[] nums) {
+    int lo = 0, hi = nums.length - 1;
+    while (lo < hi) {
+      int mid = lo + ((hi - lo) >> 1);
+      if (nums[mid] < nums[mid + 1]) {
+        lo = mid + 1;
+      } else {
+        hi = mid;
+      }
+    }
+    return lo; // 退出时lo=hi
+  }
+
   // ===============================================================================================
 
   /**
